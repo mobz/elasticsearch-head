@@ -1,0 +1,73 @@
+BODY {
+	font-family: Verdana, sans-serif;
+	font-size: 73%;
+	padding: 0;
+	margin: 0;
+	overflow-y: scroll;
+}
+
+.es-left { float: left; }
+.es-right { float: right; }
+
+#es-header {
+	background: #eee;
+	position: fixed;
+	width: 100%;
+}
+
+.es-header-top {
+	padding: 3px 10px;
+}
+
+.es-header H1 {
+	margin: 0;
+	float: left;
+	padding-right: 25px;
+	margin-top: -2px;
+}
+
+.es-header-clusterName, .es-header-clusterStatus {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 0 10px;
+}
+
+.es-header-uri {
+	width: 280px;
+}
+
+.es-header-menu {
+	border-bottom: 1px solid #bbb;
+	padding: 0px 3px;
+	height: 22px;
+}
+
+.es-header-menu .active {
+	background: white;
+	border-bottom-color: white;
+}
+
+.es-header-menu-item {
+	border: 1px solid #bbb;
+	padding: 4px 8px 1px ;
+	margin: 2px 1px 0;
+}
+
+#es-body {
+	padding: 5px;
+	padding-top:  60px;
+}
+
+.es-conf INPUT {
+	width: 405px;
+}
+
+.es-conf TEXTAREA {
+	width: 511px;
+}
+
+.es-out {
+	font-size: 1.4em;
+	min-height: 30px;
+	border: 1px solid #dadde6;
+}
