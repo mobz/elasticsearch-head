@@ -6,6 +6,19 @@ BODY {
 	overflow-y: scroll;
 }
 
+INPUT, SELECT, TEXTAREA {
+    border: 1px solid #cecece;
+    padding: 1px 3px;
+    background: white;
+    *margin: -1px 0px;
+}
+SELECT {
+    padding: 0;
+    *text-indent: -1px;
+}
+.saf SELECT { margin-top: 0px; margin-bottom: 0px; }
+
+
 .es-left { float: left; }
 .es-right { float: right; }
 
@@ -70,4 +83,14 @@ BODY {
 	font-size: 1.4em;
 	min-height: 30px;
 	border: 1px solid #dadde6;
+}
+
+.es-filterBrowser-row * {
+	margin-right: 0.4em;
+}
+
+.es-filterBrowser-row BUTTON {
+	height: 22px;
+	position: relative;
+	top: 1px;
 }
