@@ -105,5 +105,9 @@ SPAN.jsonPretty-string:before { content: '"'; }
 SPAN.jsonPretty-string:after { content: '"'; }
 SPAN.jsonPretty-number { color: blue; }
 SPAN.jsonPretty-null { color: red; }
-SPAN.jsonPretty-boolean { color: gray; }
-
+SPAN.jsonPretty-boolean { color: purple; }
+.jsonPretty-name { cursor: pointer; }
+.jsonPretty-name:hover { text-decoration: underline; }
+.jsonPretty-minimised { white-space: nowrap; overflow: hidden; }
+.jsonPretty-minimised > UL { opacity: 0.5; }
+.jsonPretty-minimised UL, .jsonPretty-minimised LI { display: inline; padding: 0; }
