@@ -93,3 +93,17 @@ SELECT {
 	position: relative;
 	top: 1px;
 }
+
+DIV.jsonPretty { font-size: 0.9em; font-family: monospace; }
+UL.jsonPretty-object, UL.jsonPretty-array { margin: 0; padding: 0 0 0 2em; list-style: none; }
+UL.jsonPretty-object LI, UL.jsonPretty-array LI { padding: 0; margin: 0; }
+UL.jsonPretty-object LI:after, UL.jsonPretty-array LI:after { content: ','; }
+UL.jsonPretty-object LI:last-child:after, UL.jsonPretty-array LI:last-child:after { content: ''; }
+SPAN.jsonPretty-string, SPAN.jsonPretty-string A { color: green; }
+SPAN.jsonPretty-string A { text-decoration: underline;}
+SPAN.jsonPretty-string:before { content: '"'; }
+SPAN.jsonPretty-string:after { content: '"'; }
+SPAN.jsonPretty-number { color: blue; }
+SPAN.jsonPretty-null { color: red; }
+SPAN.jsonPretty-boolean { color: gray; }
+
