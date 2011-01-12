@@ -109,5 +109,6 @@ SPAN.jsonPretty-boolean { color: purple; }
 .jsonPretty-name { cursor: pointer; }
 .jsonPretty-name:hover { text-decoration: underline; }
 .jsonPretty-minimised { white-space: nowrap; overflow: hidden; }
-.jsonPretty-minimised > UL { opacity: 0.5; }
+.jsonPretty-minimised > UL { opacity: 0.6; }
+.jsonPretty-minimised .jsonPretty-minimised > UL { opacity: 1; }
 .jsonPretty-minimised UL, .jsonPretty-minimised LI { display: inline; padding: 0; }
