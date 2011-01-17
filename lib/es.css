@@ -79,9 +79,7 @@ SELECT {
 }
 
 .es-out {
-	font-size: 1.4em;
 	min-height: 30px;
-	border: 1px solid #dadde6;
 }
 
 .es-filterBrowser-row * {
@@ -94,7 +92,22 @@ SELECT {
 	top: 1px;
 }
 
-DIV.jsonPretty { font-size: 0.9em; font-family: monospace; }
+.tableResults {
+	border-collapse: collapse;
+	border: 1px solid #dadde6;
+}
+
+.tableResults TD, .tableResults TH {
+	padding: 2px 4px;
+	text-align: left;
+}
+
+.tableResults TR:nth-child(even) {
+	background: #f3f3f3;
+}
+
+
+DIV.jsonPretty { font-size: 1.26em; font-family: monospace; border: 1px solid #dadde6; }
 UL.jsonPretty-object, UL.jsonPretty-array { margin: 0; padding: 0 0 0 2em; list-style: none; }
 UL.jsonPretty-object LI, UL.jsonPretty-array LI { padding: 0; margin: 0; }
 UL.jsonPretty-object LI:after, UL.jsonPretty-array LI:after { content: ','; }
