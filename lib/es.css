@@ -107,9 +107,12 @@ SELECT {
 }
 
 
-DIV.jsonPretty { font-size: 1.26em; font-family: monospace; border: 1px solid #dadde6; }
+DIV.jsonPretty { font-size: 1.26em; font-family: monospace; }
 UL.jsonPretty-object, UL.jsonPretty-array { margin: 0; padding: 0 0 0 2em; list-style: none; }
 UL.jsonPretty-object LI, UL.jsonPretty-array LI { padding: 0; margin: 0; }
+.expando > SPAN.jsonPretty-name:before { content: "\25bc\a0"; color: #555; position: relative; top: 2px; }
+.expando.jsonPretty-minimised > SPAN.jsonPretty-name:before { content: "\25ba\a0"; top: 0; }
+.jsonPretty-minimised > UL SPAN.jsonPretty-name:before { content: ""; }
 UL.jsonPretty-object LI:after, UL.jsonPretty-array LI:after { content: ','; }
 UL.jsonPretty-object LI:last-child:after, UL.jsonPretty-array LI:last-child:after { content: ''; }
 SPAN.jsonPretty-string, SPAN.jsonPretty-string A { color: green; }
@@ -119,8 +122,8 @@ SPAN.jsonPretty-string:after { content: '"'; }
 SPAN.jsonPretty-number { color: blue; }
 SPAN.jsonPretty-null { color: red; }
 SPAN.jsonPretty-boolean { color: purple; }
-.jsonPretty-name { cursor: pointer; }
-.jsonPretty-name:hover { text-decoration: underline; }
+.expando > .jsonPretty-name { cursor: pointer; }
+.expando > .jsonPretty-name:hover { text-decoration: underline; }
 .jsonPretty-minimised { white-space: nowrap; overflow: hidden; }
 .jsonPretty-minimised > UL { opacity: 0.6; }
 .jsonPretty-minimised .jsonPretty-minimised > UL { opacity: 1; }
