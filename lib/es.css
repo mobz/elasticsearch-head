@@ -106,13 +106,13 @@ SELECT {
 	background: #f3f3f3;
 }
 
-
 DIV.jsonPretty { font-size: 1.26em; font-family: monospace; }
 UL.jsonPretty-object, UL.jsonPretty-array { margin: 0; padding: 0 0 0 2em; list-style: none; }
 UL.jsonPretty-object LI, UL.jsonPretty-array LI { padding: 0; margin: 0; }
 .expando > SPAN.jsonPretty-name:before { content: "\25bc\a0"; color: #555; position: relative; top: 2px; }
 .expando.jsonPretty-minimised > SPAN.jsonPretty-name:before { content: "\25ba\a0"; top: 0; }
-.jsonPretty-minimised > UL SPAN.jsonPretty-name:before { content: ""; }
+.jsonPretty-minimised > UL SPAN.jsonPretty-name:before,
+.expando .jsonPretty-minimised > UL SPAN.jsonPretty-name:before { content: ""; }
 UL.jsonPretty-object LI:after, UL.jsonPretty-array LI:after { content: ','; }
 UL.jsonPretty-object LI:last-child:after, UL.jsonPretty-array LI:last-child:after { content: ''; }
 SPAN.jsonPretty-string, SPAN.jsonPretty-string A { color: green; }
