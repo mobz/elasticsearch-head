@@ -96,6 +96,7 @@ SELECT {
 	width: 340px;
 	background: #b68686;
 	padding: 5px 5px 5px 10px;
+	float: left;
 }
 
 .es-browserFilter .es-title {
@@ -105,17 +106,26 @@ SELECT {
 	color: #382929;
 }
 
+.es-browserResults {
+  margin-left: 360px;
+}
+
 .es-filterBrowserIndexSelector {
 	width: 100%;
 	margin-bottom: 5px;
 }
 
-.es-filterBrowserDocType {
+.es-filterBrowserType {
 	cursor: pointer;
 	border: 1px solid #ae8080;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+	padding: 0px 3px;
+}
+
+.es-filterBrowserType.es-selected {
+	background-color: #dda3a3;
 }
 
 .tableResults {
