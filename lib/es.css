@@ -106,7 +106,7 @@ SELECT {
 	color: #382929;
 }
 
-.es-browserResults {
+.es-browser .es-tableResults {
   margin-left: 360px;
 }
 
@@ -128,17 +128,17 @@ SELECT {
 	background-color: #dda3a3;
 }
 
-.tableResults {
+.es-tableResults TABLE {
 	border-collapse: collapse;
 	border: 1px solid #dadde6;
 }
 
-.tableResults TD, .tableResults TH {
+.es-tableResults TABLE TD, .es-tableResults TABLE TH {
 	padding: 2px 4px;
 	text-align: left;
 }
 
-.tableResults TR:nth-child(even) {
+.es-tableResults TABLE TR:nth-child(even) {
 	background: #f3f3f3;
 }
 
