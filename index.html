@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 
 <html>
- <head>
-  <meta charset="UTF-8">
-  <title>ElasticSearch Head</title>
-  <link rel="stylesheet" href="lib/es.css">
-  <script src="lib/jquery.js"></script>
-  <script src="lib/jsacx.js"></script>
-  <script src="lib/jsacx-widgets.js"></script>
-  <script src="lib/es-widgets.js"></script>
-  <script> $(function() { new es.ElasticSearchHead("body", { id: "es" }); }); </script>
- </head>
- 
- <body></body>
+	<head>
+		<meta charset="UTF-8">
+		<title>ElasticSearch Head</title>
+		<link rel="stylesheet" href="lib/es.css">
+		<script src="lib/jquery.js"></script>
+		<script src="lib/jsacx.js"></script>
+		<script src="lib/lang/en_strings.js"></script>
+		<script src="lib/jsacx-widgets.js"></script>
+		<script src="lib/es-widgets.js"></script>
+		<script>
+			args = location.search.substring(1).split("&").reduce(function(r, p) {
+				r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
+			}, {});
+			$(function() { new es.ElasticSearchHead("body", { id: "es", base_uri: args["base_uri"] }); });
+		</script>
+	</head>
+	<body></body>
 </html>
  
