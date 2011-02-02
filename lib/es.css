@@ -106,7 +106,7 @@ SELECT {
 	color: #382929;
 }
 
-.es-browser .es-tableResults {
+.es-browserTable {
   margin-left: 360px;
 }
 
@@ -128,17 +128,45 @@ SELECT {
 	background-color: #dda3a3;
 }
 
-.es-tableResults TABLE {
-	border-collapse: collapse;
-	border: 1px solid #dadde6;
+.uiTable {
+	border: 1px solid #bbb;
 }
 
-.es-tableResults TABLE TD, .es-tableResults TABLE TH {
-	padding: 2px 4px;
+.uiTable-header-row {
+	background: #ddd;
+	background: -moz-linear-gradient(top, #eee, #ccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc)); 
+}
+
+.uiTable-headercell-text {
+	margin-right: 20px;
+}
+
+.uiTable-headercell-menu {
+	display: none;
+}
+
+.uiTable-header-row TH {
+	border-right: 1px solid #bbb;
+	padding: 0;
 	text-align: left;
 }
 
-.es-tableResults TABLE TR:nth-child(even) {
+.uiTable-header-row TH > DIV {
+	padding: 3px 4px;
+	border-right: 1px solid #eee;
+}
+
+.uiTable-headerEndCap > DIV {
+	width: 19px;
+}
+
+.uiTable TABLE TD {
+	border-right: 1px solid transparent;
+	padding: 3px 4px;
+}
+
+.uiTable-body TABLE TR:nth-child(even) {
 	background: #f3f3f3;
 }
 
