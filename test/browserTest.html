@@ -23,6 +23,7 @@
 					cluster: cluster,
 					onReady: function(metadata) {
 						console.log("ready", metadata);
+						new es.ui.QueryFilter({ metadata: metadata }).appendTo("body");
 					}
 				})
 			});
