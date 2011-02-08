@@ -19,11 +19,14 @@
 			}, {});
 			$(function() {
 				var cluster = new es.Cluster({ base_uri: args['base_uri']});
+				var query = new es.Query({ cluster: cluster, onChange: function(q) {
+					console.log("change", q.indices.join(","), q.types.join(","), q.getData());
+				}});
 				new es.MetaDataFactory({
 					cluster: cluster,
 					onReady: function(metadata) {
 						console.log("ready", metadata);
-						new es.ui.QueryFilter({ metadata: metadata }).appendTo("body");
+						new es.ui.QueryFilter({ metadata: metadata, query: query }).appendTo("body");
 					}
 				})
 			});
