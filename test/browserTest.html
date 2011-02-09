@@ -9,8 +9,8 @@
 		<script src="../lib/jquery.js"></script>
 		<script src="../lib/jsacx.js"></script>
 		<script src="../lib/lang/en_strings.js"></script>
-		<script src="../lib/jsacx-data.js"></script>
 		<script src="../lib/jsacx-widgets.js"></script>
+		<script src="../lib/jsacx-data.js"></script>
 		<script src="../lib/es-core.js"></script>
 		<script src="../lib/es-widgets.js"></script>
 		<script>
@@ -19,16 +19,7 @@
 			}, {});
 			$(function() {
 				var cluster = new es.Cluster({ base_uri: args['base_uri']});
-				var query = new es.Query({ cluster: cluster, onChange: function(q) {
-					console.log("change", q.indices.join(","), q.types.join(","), q.getData());
-				}});
-				new es.MetaDataFactory({
-					cluster: cluster,
-					onReady: function(metadata) {
-						console.log("ready", metadata);
-						new es.ui.QueryFilter({ metadata: metadata, query: query }).appendTo("body");
-					}
-				})
+				new es.ui.Browser({ cluster: cluster }).appendTo("body");
 			});
 		</script>
 	</head>

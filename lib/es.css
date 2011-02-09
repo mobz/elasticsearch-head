@@ -256,3 +256,13 @@ SPAN.jsonPretty-boolean { color: purple; }
 .queryFilter-filters LABEL INPUT {
 	width: 90%;
 }
+
+/* es-ui-Browser */
+
+.browser-filter {
+	float: left;
+}
+
+.browser-table {
+	margin-left: 365px;
+}
