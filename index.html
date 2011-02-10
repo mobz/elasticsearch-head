@@ -14,10 +14,12 @@
 		<script src="lib/es-core.js"></script>
 		<script src="lib/es-widgets.js"></script>
 		<script>
-			args = location.search.substring(1).split("&").reduce(function(r, p) {
-				r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
-			}, {});
-			$(function() { new es.ElasticSearchHead("body", { id: "es", base_uri: args["base_uri"] }); });
+			$(function() {
+				var args = location.search.substring(1).split("&").reduce(function(r, p) {
+					r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
+				}, {});
+				new es.ElasticSearchHead("body", { id: "es", base_uri: args["base_uri"] });
+			});
 		</script>
 	</head>
 	<body></body>
