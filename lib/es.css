@@ -213,7 +213,6 @@ SPAN.jsonPretty-boolean { color: purple; }
 	font-variant: small-caps;
 	font-weight: bold;
 	margin: 5px 0;
-
 }
 
 .queryFilter-aliases SELECT {
@@ -257,7 +256,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	width: 90%;
 }
 
-/* es-ui-Browser */
+/* es.ui.Browser */
 
 .browser-filter {
 	float: left;
@@ -266,3 +265,25 @@ SPAN.jsonPretty-boolean { color: purple; }
 .browser-table {
 	margin-left: 365px;
 }
+
+/* es.ui.PreviewPanel */
+.previewPanel {
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	bottom: 30px;
+	right: 30px;
+	background: #000;
+	opacity: 0.7;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	color: white;
+	padding: 30px;
+	overflow: auto;
+}
+
+.previewPanel span.jsonPretty-string { color: #6F6; }
+.previewPanel span.jsonPretty-number { color: #66F; }
+.previewPanel span.jsonPretty-null { color: #F66; }
+.previewPanel span.jsonPretty-boolean { color: #F6F; }
