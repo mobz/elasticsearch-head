@@ -199,7 +199,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 .queryFilter {
 	width: 350px;
 	padding: 5px;
-	background: #e8f1ff;
+	background: #d8e7ff;
 	background: -moz-linear-gradient(left, #d8e7ff, #e8f1ff);
 	background: -webkit-gradient(linear, left top, right top), from(#d8e7ff), to(#e8f1ff);
 }
@@ -238,24 +238,12 @@ SPAN.jsonPretty-boolean { color: purple; }
 	border-right: 1px solid #ffffff;
 }
 
-.queryFilter-filters > DIV {
-	display: table;
-	width: 100%;
+.queryFilter-filterName {
+	background-color: #cbdfff;
+	margin-bottom: 4px;
+	padding: 3px;
+	cursor: pointer;
 }
-
-.queryFilter-filters LABEL {
-	display: table-row;
-}
-
-.queryFilter-filters LABEL > SPAN {
-	display: table-cell;
-	padding: 1px 4px;
-}
-
-.queryFilter-filters LABEL INPUT {
-	width: 90%;
-}
-
 /* es.ui.Browser */
 
 .browser-filter {
