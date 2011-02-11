@@ -70,14 +70,6 @@ SELECT {
 	padding-top:  60px;
 }
 
-.es-conf INPUT {
-	width: 405px;
-}
-
-.es-conf TEXTAREA {
-	width: 511px;
-}
-
 .es-out {
 	min-height: 30px;
 }
@@ -275,3 +267,31 @@ SPAN.jsonPretty-boolean { color: purple; }
 .previewPanel span.jsonPretty-number { color: #66F; }
 .previewPanel span.jsonPretty-null { color: #F66; }
 .previewPanel span.jsonPretty-boolean { color: #F6F; }
+
+/* es.ui.AnyRequest */
+
+.anyRequest-request {
+	float: left;
+	width: 350px;
+	padding: 5px;
+	background: #d8e7ff;
+	background: -moz-linear-gradient(left, #d8e7ff, #e8f1ff);
+	background: -webkit-gradient(linear, left top, right top), from(#d8e7ff), to(#e8f1ff);
+}
+
+.anyRequest-request INPUT[type=text],
+.anyRequest-request TEXTAREA {
+	width: 340px;
+}
+
+.anyRequest INPUT[name=path] {
+	width: 259px;
+}
+
+.anyRequest-out {
+	margin-left: 365px;
+}
+
+.anyRequest-jsonErr {
+	color: red;
+}
