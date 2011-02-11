@@ -18,6 +18,11 @@ SELECT {
 }
 .saf SELECT { margin-top: 0px; margin-bottom: 0px; }
 
+TEXTAREA, CODE {
+	font-family: monospace;
+	font-size: 13px;
+}
+
 .es-left { float: left; }
 .es-right { float: right; }
 
@@ -292,6 +297,27 @@ SPAN.jsonPretty-boolean { color: purple; }
 	margin-left: 365px;
 }
 
+.anyRequest-out P {
+	margin-top: 0;
+}
+
 .anyRequest-jsonErr {
 	color: red;
 }
+
+.sidebar-section {
+	margin-bottom: 10px;
+}
+
+.sidebar-subhead {
+	background-color: #cbdfff;
+	margin-bottom: 4px;
+	padding: 3px;
+	cursor: pointer;
+}
+
+.sidebar-subbody {
+	display: none;
+}
+
+
