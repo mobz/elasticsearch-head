@@ -68,6 +68,7 @@ TEXTAREA, CODE {
 	padding: 4px 8px 1px ;
 	margin: 2px 1px 0;
 	height: 14px;
+	cursor: pointer;
 }
 
 #es-body {
