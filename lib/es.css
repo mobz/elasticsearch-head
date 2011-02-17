@@ -129,6 +129,10 @@ TEXTAREA, CODE {
 	border: 1px solid #bbb;
 }
 
+.uiTable-tools {
+	padding: 2px 4px;
+}
+
 .uiTable-header-row {
 	background: #ddd;
 	background: -moz-linear-gradient(top, #eee, #ccc);
@@ -156,6 +160,19 @@ TEXTAREA, CODE {
 
 .uiTable-headerEndCap > DIV {
 	width: 19px;
+}
+
+.uiTable-header-row .uiTable-sort {
+	background: #ccc;
+	background: -moz-linear-gradient(top, #bebebe, #ccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#bebebe), to(#ccc));
+}
+.uiTable-header-row TH.uiTable-sort > DIV {
+	border-right: 1px solid #ccc;
+}
+
+.uiTable-sort .uiTable-headercell-menu {
+	display: block;
 }
 
 .uiTable TABLE TD {
