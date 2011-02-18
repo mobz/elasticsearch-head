@@ -185,6 +185,11 @@ TEXTAREA, CODE {
 	background: #f3f3f3;
 }
 
+.uiTable-body TABLE TR.selected {
+	color: white;
+	background: #6060f1;
+}
+
 DIV.jsonPretty { font-size: 1.26em; font-family: monospace; }
 UL.jsonPretty-object, UL.jsonPretty-array { margin: 0; padding: 0 0 0 2em; list-style: none; }
 UL.jsonPretty-object LI, UL.jsonPretty-array LI { padding: 0; margin: 0; }
