@@ -328,4 +328,12 @@ SPAN.jsonPretty-boolean { color: purple; }
 	display: none;
 }
 
-
+/* es.ui.NodeVisualiser */
+.nodeVisualiser > DIV {
+	margin: 10px;
+	text-align: center;
+}
+.nodeVisualiser TABLE { width: 100%; }
+.nodeVisualiser-name { background: #aa1; padding: 10px; }
+.nodeVisualiser-nodes { background: #a1a; }
+.nodeVisualiser-nodes TD { background: #1aa; }
