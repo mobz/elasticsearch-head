@@ -1,0 +1,12 @@
+h1. elasticsearch-head
+
+h2. A web front end for an ElasticSearch cluster
+
+h3. "http://mobz.github.com/elasticsearch-head"
+
+h2. Installing and Running
+
+* @git clone git://github.com/mobz/elasticsearch-head.git@
+* @cd elasticsearch-head@
+* @open index.html@
+
