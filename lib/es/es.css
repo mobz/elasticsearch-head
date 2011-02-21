@@ -264,6 +264,11 @@ SPAN.jsonPretty-boolean { color: purple; }
 	padding: 3px;
 	cursor: pointer;
 }
+
+.queryFilter-filters INPUT  {
+	width: 300px;
+}
+
 /* es.ui.Browser */
 
 .browser-filter {
