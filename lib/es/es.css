@@ -26,6 +26,14 @@ TEXTAREA, CODE {
 .es-left { float: left; }
 .es-right { float: right; }
 
+.textLink {
+	color: blue;
+	cursor: pointer;
+}
+.textLink:hover {
+	text-decoration: underline;
+}
+
 #es-header {
 	background: #eee;
 	position: fixed;
@@ -318,19 +326,30 @@ SPAN.jsonPretty-boolean { color: purple; }
 	color: red;
 }
 
-.sidebar-section {
-	margin-bottom: 10px;
+.sidebarSection {
 }
 
-.sidebar-subhead {
-	background-color: #cbdfff;
-	margin-bottom: 4px;
-	padding: 3px;
+.sidebarSection-head {
+	background-color: #b9cfff;
+	background-image: url(images/expando.png);
+	background-repeat: no-repeat;
+	background-position: 2px 5px;
+	margin-bottom: 1px;
+	padding: 3px 3px 3px 17px;
 	cursor: pointer;
 }
 
-.sidebar-subbody {
+.shown .sidebarSection-head {
+	background-position: 2px -13px;
+}
+
+.sidebarSection-body {
+	margin-bottom: 3px;
 	display: none;
+}
+
+.sidebarSection-help {
+	text-shadow: #228 1px 1px 2px;
 }
 
 /* es.ui.NodeVisualiser */
