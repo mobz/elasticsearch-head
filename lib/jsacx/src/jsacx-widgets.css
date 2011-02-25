@@ -82,4 +82,5 @@
 	-webkit-border-bottom-right-radius: 8px;
 	-webkit-border-bottom-left-radius: 8px;
 	border: 1px solid #222;
+	overflow: auto;
 }
