@@ -39,6 +39,12 @@ TEXTAREA, CODE {
 	opacity: 0.75;
 }
 
+.loading  {
+	background-image: url(images/loading.gif);
+	background-repeat: no-repeat;
+	text-indent: 20px;
+}
+
 #es-header {
 	background: #eee;
 	position: fixed;
@@ -366,3 +372,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 .nodeVisualiser-name { background: #aa1; padding: 10px; }
 .nodeVisualiser-nodes { background: #a1a; }
 .nodeVisualiser-nodes TD { background: #1aa; }
+
+/* es.ui.DateHistogram */
+.dateHistogram {
+}
