@@ -258,7 +258,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	width: 100%;
 }
 
-.queryFilter .booble {
+.booble {
 	cursor: pointer;
 	background: #e8f1ff;
 	border: 1px solid #e8f1ff;
@@ -267,9 +267,11 @@ SPAN.jsonPretty-boolean { color: purple; }
 	border-radius: 5px;
 	padding: 1px 4px;
 	margin-bottom: 1px;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
-.queryFilter .booble.selected {
+.booble.selected {
 	background: #dae3f0;
 	border-top: 1px solid #c8d4e6;
 	border-left: 1px solid #c8d4e6;
@@ -335,6 +337,15 @@ SPAN.jsonPretty-boolean { color: purple; }
 
 .anyRequest-jsonErr {
 	color: red;
+}
+
+.anyRequest-history {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-height: 100px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .sidebarSection {
