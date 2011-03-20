@@ -394,6 +394,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 }
 .clusterOverview-cluster TH,
 .clusterOverview-cluster TD {
+	vertical-align: top;
 	padding: 2px 20px;
 }
 
@@ -431,3 +432,5 @@ SPAN.jsonPretty-boolean { color: purple; }
 }
 
 .clusterOverview-replica.state-STARTED { background: #efe; }
+.clusterOverview-replica.state-INITIALIZING { background: #fca; }
+.clusterOverview-replica.state-UNASSIGNED { background: #eee; color: #999; }
