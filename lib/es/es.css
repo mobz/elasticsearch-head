@@ -415,22 +415,24 @@ SPAN.jsonPretty-boolean { color: purple; }
 }
 .clusterOverview-nullReplica,
 .clusterOverview-replica {
+	cursor: pointer;
 	float: left;
 	height: 40px;
 	width: 30px;
 	margin: 4px;
-	border: 2px solid #44f;
+	border: 2px solid #444;
 	font-size: 32px;
 	text-align: center;
 }
 .clusterOverview-replica.primary {
-	border-color: #2a2;
+	border-width: 4px;
+	margin: 2px;
 }
 
 .clusterOverview-nullReplica {
 	border-color: transparent;
 }
 
-.clusterOverview-replica.state-STARTED { background: #efe; }
+.clusterOverview-replica.state-STARTED { background: #9d8; }
 .clusterOverview-replica.state-INITIALIZING { background: #fca; }
-.clusterOverview-replica.state-UNASSIGNED { background: #eee; color: #999; }
+.clusterOverview-replica.state-UNASSIGNED { background: #eee; color: #999; border-color: #666; }
