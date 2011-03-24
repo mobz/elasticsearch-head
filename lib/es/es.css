@@ -3,7 +3,6 @@ BODY {
 	font-size: 73%;
 	padding: 0;
 	margin: 0;
-	overflow-y: scroll;
 }
 
 INPUT, SELECT, TEXTAREA {
@@ -91,8 +90,7 @@ TEXTAREA, CODE {
 }
 
 #es-body {
-	padding: 5px;
-	padding-top:  60px;
+	padding: 51px 0px 0px 0px;
 }
 
 .es-out {
@@ -145,12 +143,9 @@ TEXTAREA, CODE {
 	background-color: #dda3a3;
 }
 
-.uiTable {
-	border: 1px solid #bbb;
-}
-
 .uiTable-tools {
-	padding: 2px 4px;
+	padding: 3px 4px;
+	height: 14px;
 }
 
 .uiTable-header-row {
@@ -433,6 +428,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	border-color: transparent;
 }
 
-.clusterOverview-replica.state-STARTED { background: #9d8; }
-.clusterOverview-replica.state-INITIALIZING { background: #fca; }
-.clusterOverview-replica.state-UNASSIGNED { background: #eee; color: #999; border-color: #666; }
+.clusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; }
+.clusterOverview-replica.state-INITIALIZING { background: #dddc88; }
+.clusterOverview-replica.state-STARTED { background: #99dd88; }
+.clusterOverview-replica.state-RELOCATING { background: #dc88dd; }

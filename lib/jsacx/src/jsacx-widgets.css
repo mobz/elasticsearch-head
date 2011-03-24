@@ -1,3 +1,79 @@
+.ui-left { float: left; }
+.ui-right { float: right; }
+
+.uiToolbar {
+	height: 28px;
+	background: #fdfefe;
+	background: -moz-linear-gradient(top, #fdfefe, #eaedef);
+	background: -webkit-gradient(linear, left top, left bottom), from(#fdfefe), to(#eaedef);
+	border-bottom: 1px solid #d2d5d7;
+	padding: 3px 10px;
+}
+
+.uiToolbar H2 {
+	display: inline-block;
+	font-size: 120%;
+	margin: 0;
+	padding: 5px 20px 5px 0;
+}
+
+.uiButton {
+	padding: 0;
+	border: 0;
+	margin: 3px;
+	width: auto;
+	overflow: visible;
+	cursor: pointer;
+	background: transparent;
+}
+
+.uiButton-content {
+	height: 20px;
+	min-width: 73px;
+	border: 1px solid #668dc6;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	background: #96c6eb;
+	background: -moz-linear-gradient(top, #96c6eb, #5296c7);
+	background: -webkit-gradient(linear, left top, left bottom), from(#96c6eb), to(#5296c7);
+	color: white;
+	font-weight: bold;
+}
+
+.moz .uiButton-content { margin: 0 -2px; }
+
+.uiButton-label {
+    padding: 2px 6px;
+    white-space: nowrap;
+}
+BUTTON:hover .uiButton-content {
+	background: #2777ba;
+	background: -moz-linear-gradient(top, #6aaadf, #2777ba);
+	background: -webkit-gradient(linear, left top, left bottom), from(#6aaadf), to(#2777ba);
+}
+BUTTON:active .uiButton-content {
+	background: #2575b7;
+	background: -moz-linear-gradient(top, #2576b8, #2575b7);
+	background: -webkit-gradient(linear, left top, left bottom), from(#2576b8), to(#2575b7);
+}
+BUTTON.disabled .uiButton-content,
+BUTTON.over.disabled .uiButton-content,
+BUTTON.disabled:active .uiButton-content {
+    border-color: #c6c6c6;
+    color: #999999;
+}
+
+BUTTON.disabled {
+    cursor: default;
+}
+
+BUTTON::-moz-focus-inner {
+    border: none;
+}
+
+/* acx.ui.Table */
+
 .uiTable TABLE {
 	border-collapse: collapse;
 }
