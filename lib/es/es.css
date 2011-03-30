@@ -427,7 +427,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 .clusterOverview-nullReplica {
 	border-color: transparent;
 }
-
+.clusterOverview-hasAlias { background: #f99; }
 .clusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; }
 .clusterOverview-replica.state-INITIALIZING { background: #dddc88; }
 .clusterOverview-replica.state-STARTED { background: #99dd88; }
