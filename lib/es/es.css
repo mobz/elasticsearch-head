@@ -427,7 +427,25 @@ SPAN.jsonPretty-boolean { color: purple; }
 .clusterOverview-nullReplica {
 	border-color: transparent;
 }
-.clusterOverview-hasAlias { background: #f99; }
+.clusterOverview-hasAlias {
+	text-align: center;
+}
+.clusterOverview-hasAlias.max {
+	-webkit-border-top-right-radius: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-moz-border-radius-bottomright: 8px;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+.clusterOverview-hasAlias.min {
+	-webkit-border-top-left-radius: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
 .clusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; }
 .clusterOverview-replica.state-INITIALIZING { background: #dddc88; }
 .clusterOverview-replica.state-STARTED { background: #99dd88; }
