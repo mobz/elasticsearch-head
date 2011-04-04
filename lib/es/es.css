@@ -297,10 +297,10 @@ SPAN.jsonPretty-boolean { color: purple; }
 
 /* acx.ui.DraggablePanel + es.JsonPretty overrides */
 
-.uiPanel span.jsonPretty-string { color: #6F6; }
-.uiPanel span.jsonPretty-number { color: #66F; }
-.uiPanel span.jsonPretty-null { color: #F66; }
-.uiPanel span.jsonPretty-boolean { color: #F6F; }
+.dark span.jsonPretty-string { color: #6F6; }
+.dark span.jsonPretty-number { color: #66F; }
+.dark span.jsonPretty-null { color: #F66; }
+.dark span.jsonPretty-boolean { color: #F6F; }
 
 /* es.ui.AnyRequest */
 
