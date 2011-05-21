@@ -94,7 +94,7 @@ BUTTON::-moz-focus-inner {
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	height: auto;
-	min-width: auto;
+	min-width: 0;
 }
 .uiMenuButton .uiButton-label {
 	padding-right: 20px;
@@ -102,6 +102,7 @@ BUTTON::-moz-focus-inner {
 	background-position: right 50%;
 	background-repeat: no-repeat;
 	padding: 0px 17px 0px 5px;
+	text-align: left;
 }
 
 /* acx.ui.Table */
