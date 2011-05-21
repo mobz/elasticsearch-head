@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<base href="../../src/">
+		<meta charset="UTF-8">
+		<title>Quick-Look Widget CSS/DOM Test</title>
+		<link rel="stylesheet" href="jsacx-widgets.css">
+		<script src="jquery.js"></script>
+		<script src="jsacx.js"></script>
+		<script src="jsacx-widgets.js"></script>
+		<script src="jsacx-data.js"></script>
+		<script>
+			$(function() {
+				window.mb = new acx.ui.MenuButton("body", {
+					label: "Actions",
+					menu: new acx.ui.MenuPanel({
+						items: [
+							{ text: "Refresh Now", onclick: function() { alert("hello") } },
+							{ text: "Optimize Index", onclick: function() { alert("hello") } },
+							{ text: "Flush Index", onclick: function() { alert("hello") } },
+							{ text: "Clear Cache", onclick: function() { alert("hello") } },
+							{ text: "Delete Index...", onclick: function() { prompt("type 'DELETE' to delete this index (this can not be undone)") } },
+							{ text: "Close Index", onclick: function() { alert("hello") } }
+						]
+					})
+				});
+			})
+		</script>
+		<style>
+		BODY {
+			font-family: Verdana, sans-serif;
+			font-size: 73%;
+		}
+		</style>
+	</head>
+	
+	<body>
+		
+	</body>
+</html>

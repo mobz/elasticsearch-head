@@ -53,13 +53,13 @@ BUTTON:hover .uiButton-content {
 	background: -moz-linear-gradient(top, #6aaadf, #2777ba);
 	background: -webkit-gradient(linear, left top, left bottom), from(#6aaadf), to(#2777ba);
 }
+BUTTON.active .uiButton-content,
 BUTTON:active .uiButton-content {
 	background: #2575b7;
 	background: -moz-linear-gradient(top, #2576b8, #2575b7);
 	background: -webkit-gradient(linear, left top, left bottom), from(#2576b8), to(#2575b7);
 }
 BUTTON.disabled .uiButton-content,
-BUTTON.over.disabled .uiButton-content,
 BUTTON.disabled:active .uiButton-content {
     border-color: #c6c6c6;
     color: #999999;
@@ -71,6 +71,37 @@ BUTTON.disabled {
 
 BUTTON::-moz-focus-inner {
     border: none;
+}
+
+/* acx.ui.MenuButton */
+.uiMenuButton {
+	display: inline-block;
+}
+
+.uiMenuButton.active .uiButton-content,
+.uiMenuButton:active .uiButton-content {
+	-webkit-border-bottom-right-radius: 0px;
+	-webkit-border-bottom-left-radius: 0px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+.uiMenuButton .uiButton-content {
+	padding-right: 3px;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	height: auto;
+	min-width: auto;
+}
+.uiMenuButton .uiButton-label {
+	padding-right: 20px;
+	background-image: url('images/menu-button.gif');
+	background-position: right 50%;
+	background-repeat: no-repeat;
+	padding: 0px 17px 0px 5px;
 }
 
 /* acx.ui.Table */
@@ -210,3 +241,36 @@ BUTTON::-moz-focus-inner {
 	padding: 3px 7px;
 	text-align: right;
 }
+
+.uiMenuPanel {
+	border: 1px solid #668dc6;
+	position: absolute;
+	background: #96c6eb;
+	color: white;
+}
+
+.uiMenuPanel LI {
+	list-style: none;
+	border-bottom: 1px solid #668dc6;
+}
+
+.uiMenuPanel LI:hover {
+	background: #2575b7;
+}
+
+.uiMenuPanel LI:last-child {
+	border-bottom: 0;
+} 
+
+.uiMenuPanel-label {
+	padding: 2px 10px 2px 10px;
+	cursor: pointer;
+}
+/*
+border: 1px solid #668dc6;
+border-radius: 2px;
+-moz-border-radius: 2px;
+-webkit-border-radius: 2px;
+background: #96c6eb;
+background: -moz-linear-gradient(top, #96c6eb, #5296c7);
+background: -webkit-gradient(linear, left top, left bottom), from(#96c6eb), to(#5296c7);*/
