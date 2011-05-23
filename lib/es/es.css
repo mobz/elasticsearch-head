@@ -397,6 +397,13 @@ SPAN.jsonPretty-boolean { color: purple; }
 	font-weight: normal;
 	text-align: left;
 }
+
+.clusterOverview TH.close,
+.clusterOverview TD.close {
+	color: #888;
+	background: #f2f2f2;
+}
+
 .clusterOverview-node.master {
 	background: #fff8dd;
 }
