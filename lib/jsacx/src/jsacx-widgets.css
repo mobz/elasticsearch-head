@@ -267,6 +267,12 @@ BUTTON::-moz-focus-inner {
 	padding: 2px 10px 2px 10px;
 	cursor: pointer;
 }
+
+.disabled .uiMenuPanel-label {
+	cursor: auto;
+	color: #888;
+}
+
 /*
 border: 1px solid #668dc6;
 border-radius: 2px;
