@@ -48,6 +48,7 @@ TEXTAREA, CODE {
 	background: #eee;
 	position: fixed;
 	width: 100%;
+	z-index: 9;
 }
 
 .es-header-top {
