@@ -454,6 +454,11 @@ SPAN.jsonPretty-boolean { color: purple; }
 	border-top-left-radius: 8px;
 	border-bottom-left-radius: 8px;
 }
+.clusterOverview-hasAlias-remove {
+	float: right;
+	font-weight: bold;
+	cursor: pointer;
+}
 .clusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; }
 .clusterOverview-replica.state-INITIALIZING { background: #dddc88; }
 .clusterOverview-replica.state-STARTED { background: #99dd88; }
