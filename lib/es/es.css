@@ -152,7 +152,7 @@ TEXTAREA, CODE {
 .uiTable-header-row {
 	background: #ddd;
 	background: -moz-linear-gradient(top, #eee, #ccc);
-	background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc)); 
+	background: -webkit-linear-gradient(top, #eee, #ccc);
 }
 
 .uiTable-headercell-text {
@@ -181,7 +181,7 @@ TEXTAREA, CODE {
 .uiTable-header-row .uiTable-sort {
 	background: #ccc;
 	background: -moz-linear-gradient(top, #bebebe, #ccc);
-	background: -webkit-gradient(linear, left top, left bottom, from(#bebebe), to(#ccc));
+	background: -webkit-linear-gradient(top, #bebebe, #ccc);
 }
 .uiTable-header-row TH.uiTable-sort > DIV {
 	border-right: 1px solid #ccc;
@@ -236,7 +236,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	padding: 5px;
 	background: #d8e7ff;
 	background: -moz-linear-gradient(left, #d8e7ff, #e8f1ff);
-	background: -webkit-gradient(linear, left top, right top), from(#d8e7ff), to(#e8f1ff);
+	background: -webkit-linear-gradient(left, #d8e7ff, #e8f1ff);
 }
 
 .queryFilter DIV.section {
@@ -311,7 +311,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	padding: 5px;
 	background: #d8e7ff;
 	background: -moz-linear-gradient(left, #d8e7ff, #e8f1ff);
-	background: -webkit-gradient(linear, left top, right top), from(#d8e7ff), to(#e8f1ff);
+	background: -webkit-linear-gradient(left, #d8e7ff, #e8f1ff);
 }
 
 .anyRequest-request INPUT[type=text],

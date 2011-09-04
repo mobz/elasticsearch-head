@@ -6,7 +6,7 @@
 	height: 28px;
 	background: #fdfefe;
 	background: -moz-linear-gradient(top, #fdfefe, #eaedef);
-	background: -webkit-gradient(linear, left top, left bottom), from(#fdfefe), to(#eaedef);
+	background: -webkit-linear-gradient(top, #fdfefe, #eaedef);
 	border-bottom: 1px solid #d2d5d7;
 	padding: 3px 10px;
 }
@@ -37,7 +37,7 @@
 	-webkit-border-radius: 2px;
 	background: #96c6eb;
 	background: -moz-linear-gradient(top, #96c6eb, #5296c7);
-	background: -webkit-gradient(linear, left top, left bottom), from(#96c6eb), to(#5296c7);
+	background: -webkit-linear-gradient(top, #96c6eb, #5296c7);
 	color: white;
 	font-weight: bold;
 }
@@ -51,13 +51,13 @@
 BUTTON:hover .uiButton-content {
 	background: #2777ba;
 	background: -moz-linear-gradient(top, #6aaadf, #2777ba);
-	background: -webkit-gradient(linear, left top, left bottom), from(#6aaadf), to(#2777ba);
+	background: -webkit-linear-gradient(top, #6aaadf, #2777ba);
 }
 BUTTON.active .uiButton-content,
 BUTTON:active .uiButton-content {
 	background: #2575b7;
 	background: -moz-linear-gradient(top, #2576b8, #2575b7);
-	background: -webkit-gradient(linear, left top, left bottom), from(#2576b8), to(#2575b7);
+	background: -webkit-linear-gradient(top, #2576b8, #2575b7);
 }
 BUTTON.disabled .uiButton-content,
 BUTTON.disabled:active .uiButton-content {
@@ -65,7 +65,7 @@ BUTTON.disabled:active .uiButton-content {
     color: #999999;
     background: #ddd;
     background: -moz-linear-gradient(top, #ddd, #ddd);
-    background: -webkit-gradient(linear, left top, left bottom), from(#ddd), to(#ddd);
+    background: -webkit-linear-gradient(top, #ddd, #ddd);
 }
 
 BUTTON.disabled {
@@ -160,8 +160,7 @@ BUTTON::-moz-focus-inner {
 	padding: 2px 0;
 	background: rgba(223, 223, 223, 0.75);
 	background: -moz-linear-gradient(top, rgba(223, 223, 223, 0.75), rgba(193, 193, 193, 0.75), rgba(223, 223, 223, 0.75));
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, rgba(223, 223, 223, 0.75)),
-                color-stop(0.5, rgba(193, 193, 193, 0.75)), color-stop(1.0, rgba(223, 223, 223, 0.75)));
+	background: -webkit-linear-gradient(top, rgba(223, 223, 223, 0.75), rgba(193, 193, 193, 0.75), rgba(223, 223, 223, 0.75));
 	border-bottom: 1px solid #bbb;
 }
 
@@ -198,8 +197,7 @@ BUTTON::-moz-focus-inner {
 .dark .uiPanel-titleBar {
 	background: rgba(74, 74, 74, 0.75);
 	background: -moz-linear-gradient(top, rgba(84, 84, 84, 0.75), rgba(54, 54, 54, 0.75), rgba(64, 64, 64, 0.75));
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, rgba(84, 84, 84, 0.75)),
-                color-stop(0.5, rgba(54, 54, 54, 0.75)), color-stop(1.0, rgba(64, 64, 64, 0.75)));
+	background: -webkit-linear-gradient(top, rgba(84, 84, 84, 0.75), rgba(54, 54, 54, 0.75), rgba(64, 64, 64, 0.75));
 	-moz-border-radius: 8px 8px 0px 0px;
 	-webkit-border-top-right-radius: 8px;
 	-webkit-border-top-left-radius: 8px;
@@ -276,11 +274,3 @@ BUTTON::-moz-focus-inner {
 	color: #888;
 }
 
-/*
-border: 1px solid #668dc6;
-border-radius: 2px;
--moz-border-radius: 2px;
--webkit-border-radius: 2px;
-background: #96c6eb;
-background: -moz-linear-gradient(top, #96c6eb, #5296c7);
-background: -webkit-gradient(linear, left top, left bottom), from(#96c6eb), to(#5296c7);*/
