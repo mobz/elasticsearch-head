@@ -6,7 +6,34 @@ h3. "http://mobz.github.com/elasticsearch-head":http://mobz.github.com/elasticse
 
 h2. Installing and Running
 
+There are two ways of running and installing elasticsearch-head
+
+h4. Running as a plugin of ElasticSearch (this is the preferred method)
+
+* @elasticsearch/bin/plugin -install mobz/elasticsearch-head@
+* @open http://localhost:9200/_plugin/head/@
+
+This will automatically download the latest version of elasticsearch-head from github and run it as a plugin within the elasticsearch cluster. In this mode;
+* elasticsearch provides a simple webserver to run head
+* elasticsearch-head automatically connects to the node that is running it
+* is available at "http://localhost:9200/_plugin/head/":http://localhost:9200/_plugin/head/ (or whatever the address of your cluster is)
+* Will not work with elasticsearch prior to version 0.17
+
+h4. Running as a standalone webapp
+
 * @git clone git://github.com/mobz/elasticsearch-head.git@
 * @cd elasticsearch-head@
 * @open index.html@
 
+This will manually download the latest version of elasticsearch-head from github and run it standalone. In this mode;
+* elasticsearch-head is running from the file system and some features will not work
+* may have trouble connecting to the node if the node is protected by some security measures
+* works with any version of elasticsearch
+
+h4. Alternatives
+
+elastisearch-head is a standalone webapp written in good-ol' html5. This means, you can put it up on any webserver, run it directly from the filesystem, use it on an ipad, or put it on a floppy disk and carry it with you.
+
+
+
+!http://mobz.github.com/elasticsearch-head/screenshots/clusterOverview.png(ClusterOverview Screenshot)!
