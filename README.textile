@@ -10,6 +10,8 @@ There are two ways of running and installing elasticsearch-head
 
 h4. Running as a plugin of ElasticSearch (this is the preferred method)
 
+If you've installed the .deb package, then the plugin exectuable will be available at /usr/share/elasticsearch/bin/plugin.
+
 * @elasticsearch/bin/plugin -install mobz/elasticsearch-head@
 * @open http://localhost:9200/_plugin/head/@
 
