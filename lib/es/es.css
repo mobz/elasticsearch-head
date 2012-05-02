@@ -437,6 +437,8 @@ SPAN.jsonPretty-boolean { color: purple; }
 }
 .clusterOverview-hasAlias {
 	text-align: center;
+	padding: 2px 20px;
+	margin-bottom: 5px;
 }
 .clusterOverview-hasAlias.max {
 	-webkit-border-top-right-radius: 8px;
