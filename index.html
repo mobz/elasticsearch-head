@@ -10,6 +10,19 @@
 		<script src="lib/jsacx/src/jsacx.js"></script>
 		<script src="lib/nohtml/jquery.acx-nohtml.js"></script>
 		<script src="lib/lang/en_strings.js"></script>
+		<script>
+			(function() {
+				var script0 = document.getElementsByTagName('script')[0];
+				var userLang = window.navigator.language || window.navigator.userLanguage;
+				userLang && ['fr'].forEach( function( lang ) {
+					if( userLang.indexOf( lang ) === 0 ) {
+						var s = document.createElement("script");
+						s.src = 'lib/lang/' + lang + '_strings.js';
+						script0.parentNode.insertBefore(s, script0);
+					}
+				});
+			}());
+		</script>
 		<script src="lib/jsacx/src/jsacx-widgets.js"></script>
 		<script src="lib/jsacx/src/jsacx-fields.js"></script>
 		<script src="lib/jsacx/src/jsacx-data.js"></script>
