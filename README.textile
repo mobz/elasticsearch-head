@@ -18,7 +18,7 @@ If you've installed the .deb package, then the plugin exectuable will be availab
 This will automatically download the latest version of elasticsearch-head from github and run it as a plugin within the elasticsearch cluster. In this mode;
 * elasticsearch provides a simple webserver to run head
 * elasticsearch-head automatically connects to the node that is running it
-* is available at "http://localhost:9200/_plugin/head/":http://localhost:9200/_plugin/head/ (or whatever the address of your cluster is)
+* is available at "http://localhost:9200/_plugin/head/index.html":http://localhost:9200/_plugin/head/index.html (or whatever the address of your cluster is)
 * Will not work with elasticsearch prior to version 0.17
 
 h4. Running as a standalone webapp
