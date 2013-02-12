@@ -100,7 +100,6 @@ BUTTON::-moz-focus-inner {
 	min-width: 0;
 }
 .uiMenuButton .uiButton-label {
-	padding-right: 20px;
 	background-image: url('images/menu-button.gif');
 	background-position: right 50%;
 	background-repeat: no-repeat;
