@@ -421,11 +421,13 @@ SPAN.jsonPretty-boolean { color: purple; }
 	cursor: pointer;
 	float: left;
 	height: 40px;
-	width: 30px;
+	width: 31px;
 	margin: 4px;
 	border: 2px solid #444;
 	font-size: 32px;
 	text-align: center;
+	letter-spacing: -5px;
+	text-indent: -7px;
 }
 .clusterOverview-replica.primary {
 	border-width: 4px;
