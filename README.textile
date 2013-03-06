@@ -21,6 +21,15 @@ This will automatically download the latest version of elasticsearch-head from g
 * is available at "http://localhost:9200/_plugin/head/":http://localhost:9200/_plugin/head/ (or whatever the address of your cluster is)
 * Will not work with elasticsearch prior to version 0.17
 
+h5. URL Parameters
+
+Parameters may be appended to the url set some initial state eg. @head/index.html?base_uri=http://node-01.example.com:9200@
+
+* @base_uri@ force elasticsearch-head to connect to a particular node.
+* @auth_user@ adds basic auth credentials to http requests ( requires "elasticsearch-http-basic":https://github.com/karussell/elasticsearch-http-basic plugin)
+* @auth_password@ basic auth password as above (note: without "additional security layers":http://security.stackexchange.com/questions/988/is-basic-auth-secure-if-done-over-https, passwords are sent over the network *in the clear* )
+
+
 h4. Running as a standalone webapp
 
 * @git clone git://github.com/mobz/elasticsearch-head.git@
