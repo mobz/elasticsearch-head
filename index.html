@@ -38,7 +38,12 @@
 				var args = location.search.substring(1).split("&").reduce(function(r, p) {
 					r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
 				}, {});
-				new es.ElasticSearchHead("body", { id: "es", base_uri: args["base_uri"] || base_uri });
+				new es.ElasticSearchHead("body", 
+                                {   id: "es", 
+                                    base_uri: args["base_uri"] || base_uri,
+                                    login : args["auth_login"] || "",
+                                    password : args["auth_password"]
+                                });
 			});
 		</script>
 		<link rel="icon" href="lib/es/images/favicon.png" type="image/png">
