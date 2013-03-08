@@ -109,7 +109,7 @@ BUTTON::-moz-focus-inner {
 
 /* acx.ui.SplitButton */
 
-.uiSplitButton: {
+.uiSplitButton {
 	white-space: nowrap;
 }
 
