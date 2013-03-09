@@ -357,8 +357,17 @@ SPAN.jsonPretty-boolean { color: purple; }
 	cursor: pointer;
 }
 
-.shown .sidebarSection-head {
+/*
+ * Using the child selector so only the most immediate child
+ * is selected for this. Sub-childs should remain un-shown,
+ * as they occur in the case of multi_field properties.
+ */
+.shown > .sidebarSection-head {
 	background-position: 2px -13px;
+}
+
+.subMultiFields {
+	padding-left: 10px;
 }
 
 .sidebarSection-body {
