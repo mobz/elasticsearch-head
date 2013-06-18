@@ -400,22 +400,26 @@ SPAN.jsonPretty-boolean { color: purple; }
 .clusterOverview-cluster TH,
 .clusterOverview-cluster TD {
 	vertical-align: top;
-	padding: 2px 20px;
+	padding: 2px 10px;
 }
-
 .clusterOverview TH {
 	font-weight: normal;
 	text-align: left;
 }
-
+.clusterOverview TH,
+.clusterOverview TD {
+	border-left: 1px solid silver
+}
 .clusterOverview TH.close,
 .clusterOverview TD.close {
 	color: #888;
 	background: #f2f2f2;
 }
-
+.clusterOverview-node:nth-child(odd) {
+	background: #bde0ff;
+}
 .clusterOverview-node.master {
-	background: #fff8dd;
+	background: #fff8dd !important;
 }
 
 .clusterOverview-title {
@@ -431,7 +435,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	float: left;
 	height: 40px;
 	width: 31px;
-	margin: 4px;
+	margin: 2px;
 	border: 2px solid #444;
 	font-size: 32px;
 	text-align: center;
@@ -445,25 +449,26 @@ SPAN.jsonPretty-boolean { color: purple; }
 
 .clusterOverview-nullReplica {
 	border-color: transparent;
+	display: none;
 }
 .clusterOverview-hasAlias {
 	text-align: center;
 }
 .clusterOverview-hasAlias.max {
-	-webkit-border-top-right-radius: 8px;
-	-webkit-border-bottom-right-radius: 8px;
-	-moz-border-radius-topright: 8px;
-	-moz-border-radius-bottomright: 8px;
-	border-top-right-radius: 8px;
-	border-bottom-right-radius: 8px;
+	-webkit-border-top-right-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	-moz-border-radius-bottomright: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
 }
 .clusterOverview-hasAlias.min {
-	-webkit-border-top-left-radius: 8px;
-	-webkit-border-bottom-left-radius: 8px;
-	-moz-border-radius-topleft: 8px;
-	-moz-border-radius-bottomleft: 8px;
-	border-top-left-radius: 8px;
-	border-bottom-left-radius: 8px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
 }
 .clusterOverview-hasAlias-remove {
 	float: right;
