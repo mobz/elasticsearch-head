@@ -3,3 +3,4 @@
 *.tmproj
 *.sublime-workspace
 .project
+node_modules

@@ -45,6 +45,20 @@ h4. Alternatives
 
 elastisearch-head is a standalone webapp written in good-ol' html5. This means, you can put it up on any webserver, run it directly from the filesystem, use it on an ipad, or put it on a floppy disk and carry it with you.
 
+h4. Contributing
 
+To contribute to elasticsearch-head you will need the following developer tools
+
+# git and a "github":https://github.com/ account
+# "node ( including npm )":http://nodejs.org/download
+# "grunt-cli":http://gruntjs.com/getting-started
+
+Then
+
+# create a fork of elasticsearch-head on github
+# clone your fork to your machine
+# @cd elasticsearch-head@
+# @npm install@ # downloads node dev dependencies
+# @grunt@ # builds the distribution files, you will need to run this command after each edit
 
 !http://mobz.github.com/elasticsearch-head/screenshots/clusterOverview.png(ClusterOverview Screenshot)!
