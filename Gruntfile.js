@@ -36,13 +36,26 @@ module.exports = function(grunt) {
 					spawn: false
 				}
 			}
+		},
+
+		connect: {
+			server: {
+				options: {
+					port: 9100,
+					base: '.',
+					keepalive: true
+				}
+			}
 		}
+
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-connect');
 
 	// Default task(s).
 	grunt.registerTask('default', ['concat']);
+	grunt.registerTask('server', ['connect:server']);
 
 };
