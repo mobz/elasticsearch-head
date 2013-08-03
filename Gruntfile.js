@@ -26,10 +26,21 @@ module.exports = function(grunt) {
 				],
 				dest: 'dist/ui.js'
 			}
+		},
+
+		watch: {
+			scripts: {
+				files: ['lib/**/*.js'],
+				tasks: ['concat'],
+				options: {
+					spawn: false
+				}
+			}
 		}
 	});
-	// Load the plugin that provides the "uglify" task.
+
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	// Default task(s).
 	grunt.registerTask('default', ['concat']);

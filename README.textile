@@ -59,6 +59,8 @@ Then
 # clone your fork to your machine
 # @cd elasticsearch-head@
 # @npm install@ # downloads node dev dependencies
-# @grunt@ # builds the distribution files, you will need to run this command after each edit
+# @grunt default watch@ # builds the distribution files, then watches the src directory for changes
+
+Changes to both dist and src directories changes should be committed, to allow people to run head without running dev tools
 
 !http://mobz.github.com/elasticsearch-head/screenshots/clusterOverview.png(ClusterOverview Screenshot)!
