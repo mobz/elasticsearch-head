@@ -33,7 +33,7 @@
 		<script>
 			$(function() {
 				if(location.href.contains("/_plugin/")) {
-					var base_uri = location.protocol + "//" + location.host + "/";
+					var base_uri = location.href.replace(/_plugin\/.*/, '');
 				}
 				var args = location.search.substring(1).split("&").reduce(function(r, p) {
 					r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
