@@ -24,13 +24,13 @@
 				};
 			}, this );
 			this.value = null;
-			this.button = new acx.ui.Button({
+			this.button = new ui.Button({
 				label: this.config.label,
 				onclick: function() {
 					this.fire("click", this, { value: this.value } );
 				}.bind(this)
 			});
-			this.menuButton = new acx.ui.MenuButton({
+			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
 				menu: new (acx.ui.MenuPanel.extend({
 					baseClass: "uiSplitMenuPanel uiMenuPanel",

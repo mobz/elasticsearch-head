@@ -239,58 +239,6 @@ acx.ui.Toolbar = acx.ui.Widget.extend({
 });
 
 /**
- * Button widget
- */
-acx.ui.Button = acx.ui.Widget.extend({
-	defaults : {
-		label: "",                 // the label text
-		disabled: false,           // create a disabled button
-		autoDisable: false         // automatically disable the button when clicked
-	},
-
-	baseClass: "uiButton",
-
-	init: function(parent) {
-		this._super();
-		this.el = $(this.button_template())
-			.bind("click", this.click_handler);
-		this.config.disabled && this.disable();
-		this.appendTo(parent);
-	},
-
-	click_handler: function(jEv) {
-		if(! this.disabled) {
-			this.fire("click", jEv, this);
-			this.config.autoDisable && this.disable();
-		}
-	},
-
-	enable: function() {
-		this.el.removeClass("disabled");
-		this.disabled = false;
-		return this;
-	},
-
-	disable: function(disable) {
-		if(disable === false) {
-				return this.enable();
-		}
-		this.el.addClass("disabled");
-		this.disabled = true;
-		return this;
-	},
-
-	button_template: function() { return (
-		{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this.baseClass, children: [
-			{ tag: 'DIV', cls: 'uiButton-content', child:
-				{ tag: 'DIV', cls: 'uiButton-label', text: this.config.label }
-			}
-		] }
-	); }
-});
-
-
-/**
  * base abstract class for all modal panels,
  * provides open, close, modal and panel stacking
  */
@@ -431,8 +379,8 @@ acx.ui.DialogPanel = acx.ui.DraggablePanel.extend({
 	},
 	_actionsBar_template: function() {
 		return { tag: "DIV", cls: "ui-right", children: [
-			new acx.ui.Button({ label: "Cancel", onclick: this._close_handler }),
-			new acx.ui.Button({ label: "OK", onclick: this._commit_handler })
+			new app.ui.Button({ label: "Cancel", onclick: this._close_handler }),
+			new app.ui.Button({ label: "OK", onclick: this._commit_handler })
 		]};
 	}
 });
@@ -467,23 +415,6 @@ acx.ui.MenuPanel = acx.ui.AbstractPanel.extend({
 		return parent.vOffset()
 			.addY(parent.vSize().y)
 			.asOffset();
-	}
-});
-
-acx.ui.MenuButton = acx.ui.Button.extend({
-	defaults: {
-		menu: null
-	},
-	baseClass: "uiButton uiMenuButton",
-	init: function(parent) {
-		this._super(parent);
-		this.menu = this.config.menu;
-		this.on("click", this.openMenu_handler);
-		this.menu.on("open", function() { this.el.addClass("active"); }.bind(this));
-		this.menu.on("close", function() { this.el.removeClass("active"); }.bind(this));
-	},
-	openMenu_handler: function(jEv) {
-		this.menu && this.menu.open(jEv);
 	}
 });
 
@@ -1635,7 +1566,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 			this._super();
 			this.cluster = this.config.cluster;
 			this.query = new es.Query( { cluster: this.cluster } );
-			this._refreshButton = new acx.ui.Button({
+			this._refreshButton = new app.ui.Button({
 				label: acx.text("General.RefreshResults"),
 				onclick: function( btn ) {
 					this.query.query();
@@ -2228,7 +2159,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 					]},
 					{ tag: "DIV", text: node.cluster.http_address },
 					{ tag: "DIV", cls: "clusterOverview-controls", children: [
-						new acx.ui.MenuButton({
+						new app.ui.MenuButton({
 							label: acx.text("NodeInfoMenu.Title"),
 							menu: new acx.ui.MenuPanel({
 								items: [
@@ -2237,7 +2168,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 								]
 							})
 						}),
-						new acx.ui.MenuButton({
+						new app.ui.MenuButton({
 							label: acx.text("NodeActionsMenu.Title"),
 							menu: new acx.ui.MenuPanel({
 								items: [
@@ -2258,7 +2189,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
 				{ tag: "DIV", cls: "clusterOverview-controls", children: [
-					new acx.ui.MenuButton({
+					new app.ui.MenuButton({
 						label: acx.text("IndexInfoMenu.Title"),
 						menu: new acx.ui.MenuPanel({
 							items: [
@@ -2267,7 +2198,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 							]
 						})
 					}),
-					new acx.ui.MenuButton({
+					new app.ui.MenuButton({
 						label: acx.text("IndexActionsMenu.Title"),
 						menu: new acx.ui.MenuPanel({
 							items: [
@@ -2343,7 +2274,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 				new acx.ui.Toolbar({
 					label: acx.text("Overview.PageTitle"),
 					left: [
-						new acx.ui.Button({
+						new app.ui.Button({
 							label: acx.text("ClusterOverview.NewIndex"),
 							onclick: this._newIndex_handler
 						})
@@ -8420,6 +8351,83 @@ under the License.
 
 	var ui = app.ns("ui");
 
+	ui.Button = acx.ui.Widget.extend({
+		defaults : {
+			label: "",                 // the label text
+			disabled: false,           // create a disabled button
+			autoDisable: false         // automatically disable the button when clicked
+		},
+
+		baseClass: "uiButton",
+
+		init: function(parent) {
+			this._super();
+			this.el = $(this.button_template())
+				.bind("click", this.click_handler);
+			this.config.disabled && this.disable();
+			this.appendTo(parent);
+		},
+
+		click_handler: function(jEv) {
+			if(! this.disabled) {
+				this.fire("click", jEv, this);
+				this.config.autoDisable && this.disable();
+			}
+		},
+
+		enable: function() {
+			this.el.removeClass("disabled");
+			this.disabled = false;
+			return this;
+		},
+
+		disable: function(disable) {
+			if(disable === false) {
+					return this.enable();
+			}
+			this.el.addClass("disabled");
+			this.disabled = true;
+			return this;
+		},
+
+		button_template: function() { return (
+			{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this.baseClass, children: [
+				{ tag: 'DIV', cls: 'uiButton-content', child:
+					{ tag: 'DIV', cls: 'uiButton-label', text: this.config.label }
+				}
+			] }
+		); }
+	});
+
+})( this.jQuery, this.app );
+
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.MenuButton = app.ui.Button.extend({
+		defaults: {
+			menu: null
+		},
+		baseClass: "uiButton uiMenuButton",
+		init: function(parent) {
+			this._super(parent);
+			this.menu = this.config.menu;
+			this.on("click", this.openMenu_handler);
+			this.menu.on("open", function() { this.el.addClass("active"); }.bind(this));
+			this.menu.on("close", function() { this.el.removeClass("active"); }.bind(this));
+		},
+		openMenu_handler: function(jEv) {
+			this.menu && this.menu.open(jEv);
+		}
+	});
+
+})( this.jQuery, this.app );
+
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
 	ui.SplitButton = acx.ui.Widget.extend({
 		defaults: {
 			items: [],
@@ -8442,13 +8450,13 @@ under the License.
 				};
 			}, this );
 			this.value = null;
-			this.button = new acx.ui.Button({
+			this.button = new ui.Button({
 				label: this.config.label,
 				onclick: function() {
 					this.fire("click", this, { value: this.value } );
 				}.bind(this)
 			});
-			this.menuButton = new acx.ui.MenuButton({
+			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
 				menu: new (acx.ui.MenuPanel.extend({
 					baseClass: "uiSplitMenuPanel uiMenuPanel",
