@@ -424,7 +424,7 @@ acx.ui.MenuPanel = acx.ui.AbstractPanel.extend({
  */
 acx.ui.Table = acx.ui.Widget.extend({
 	defaults: {
-		store: null, // (required) implements interface acx.data.DataSourceInterface
+		store: null, // (required) implements interface app.data.DataSourceInterface
 		height: 0,
 		width: 0
 	},
@@ -619,22 +619,26 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		]}
 	}
 });
-acx.data = {};
+(function( app ) {
 
-/**
- * An abstract interface for delivering async data to a data consumer (eg acx.ui.Table)
- */
-acx.data.DataSourceInterface = acx.ux.Observable.extend({
-	/*
-	properties
-	  meta = { total: 0 },
-	  headers = [ { name: "" } ],
-	  data = [ { column: value, column: value } ],
-	  sort = { column: "name", dir: "desc" }
-	events
-		data: function( DataSourceInterface )
+	var data = app.ns("data");
+
+	/**
+	 * An abstract interface for delivering async data to a data consumer (eg acx.ui.Table)
 	 */
-});
+	data.DataSourceInterface = acx.ux.Observable.extend({
+		/*
+		properties
+			meta = { total: 0 },
+			headers = [ { name: "" } ],
+			data = [ { column: value, column: value } ],
+			sort = { column: "name", dir: "desc" }
+		events
+			data: function( DataSourceInterface )
+		 */
+	});
+
+})( this.app );
 (function( acx ) {
 	var es = window.es = {};
 
@@ -1010,7 +1014,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 		}
 	});
 
-	es.AbstractDataSourceInterface = acx.data.DataSourceInterface.extend({
+	es.AbstractDataSourceInterface = app.data.DataSourceInterface.extend({
 		_getSummary: function(res) {
 			this.summary = acx.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
 		},

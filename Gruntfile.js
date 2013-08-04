@@ -20,7 +20,9 @@ module.exports = function(grunt) {
 				src: [
 					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
-					'lib/jsacx/src/jsacx-data.js',
+
+					'src/app/data/dataSourceInterface.js',
+
 					'lib/es/core.js',
 					'lib/es/widgets.js',
 					'lib/graphael/g.raphael.standalone.js',
