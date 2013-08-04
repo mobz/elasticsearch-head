@@ -32,6 +32,7 @@
 				var s = document.createElement("script");
 				s.src = '../src/' + args['demo'];
 				script0.parentNode.insertBefore(s, script0);
+				document.title = args['demo'].match(/([^\/]+)(\.js)$/)[1]
 			} );
 		</script>
 		<link rel="icon" href="lib/es/images/favicon.png" type="image/png">
