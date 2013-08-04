@@ -1,14 +1,3 @@
-(function() {
-
-	function ns( namespace ) {
-		return (namespace || "").split(".").reduce( function( space, name ) {
-			return space[ name ] || ( space[ name ] = { ns: ns } );
-		}, this );
-	}
-
-	var app = ns("app");
-
-})();
 /*!
  * jQuery JavaScript Library v1.6.1
  * http://jquery.com/
@@ -8945,6 +8934,17 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 
 window.jQuery = window.$ = jQuery;
 })(window);
+(function() {
+
+	function ns( namespace ) {
+		return (namespace || "").split(".").reduce( function( space, name ) {
+			return space[ name ] || ( space[ name ] = { ns: ns } );
+		}, this );
+	}
+
+	var app = ns("app");
+
+})();
 /**
  * jsacx.js
  * @author the regents of aconex ui

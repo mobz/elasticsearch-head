@@ -8,9 +8,10 @@ module.exports = function(grunt) {
 			},
 			setup: {
 				src: [
+					'src/vendor/jquery/jquery.js',
+
 					'src/app/boot.js',
 
-					'lib/jsacx/src/jquery.js',
 					'lib/jsacx/src/jsacx.js',
 					'lib/nohtml/jquery.acx-nohtml.js'
 				],
