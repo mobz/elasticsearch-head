@@ -487,65 +487,6 @@ acx.ui.MenuButton = acx.ui.Button.extend({
 	}
 });
 
-acx.ui.SplitButton = acx.ui.Widget.extend({
-	defaults: {
-		items: [],
-		label: ""
-	},
-	baseClass: "uiSplitButton",
-	init: function( parent ) {
-		this._super( parent );
-		this.items = this.config.items.map( function( item ) {
-			return {
-				text: item.label,
-				selected: item.selected,
-				onclick: function( jEv ) {
-					var el = $( jEv.target ).closest("LI");
-					el.parent().children().removeClass("selected");
-					el.addClass("selected");
-					this.fire( "select", this, { value: item.value } );
-					this.value = item.value;
-				}.bind(this)
-			};
-		}, this );
-		this.value = null;
-		this.button = new acx.ui.Button({
-			label: this.config.label,
-			onclick: function() {
-				this.fire("click", this, { value: this.value } );
-			}.bind(this)
-		});
-		this.menuButton = new acx.ui.MenuButton({
-			label: "\u00a0",
-			menu: new (acx.ui.MenuPanel.extend({
-				baseClass: "uiSplitMenuPanel uiMenuPanel",
-				_getPosition: function( jEv ) {
-					var parent = $(jEv.target).closest("BUTTON");
-					return parent.vOffset()
-						.add(parent.vSize())
-						.addX( -this.el.vOuterSize().x )
-						.asOffset();
-				}
-			}))({
-				items: this.items
-			})
-		});
-		this.el = $(this._main_template());
-	},
-	disable: function() {
-		this.button.disable();
-	},
-	enable: function() {
-		this.button.enable();
-	},
-	_main_template: function() {
-		return { tag: "DIV", cls: this.baseClass, children: [
-			this.button, this.menuButton
-		] };
-	}
-});
-
-
 /**
  * widget for showing tabular data
  * @constructor
@@ -1999,7 +1940,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 			this._super();
 			this._resetTimer = null;
 			this._redrawValue = -1;
-			this._refreshButton = new acx.ui.SplitButton({
+			this._refreshButton = new app.ui.SplitButton({
 				label: acx.text("General.RefreshResults"),
 				items: [
 					{ label: acx.text("General.ManualRefresh"), value: -1, selected: true },
@@ -8449,6 +8390,130 @@ under the License.
 		throw "could not process value " + v;
 	};
 })();
+(function( $, app ) {
+
+	var services = app.ns("services");
+
+	services.Cluster = acx.Class.extend({
+		defaults: {
+			base_uri: "http://localhost:9200/"
+		},
+		request: function( params ) {
+			return $.ajax( acx.extend({
+				url: this.config.base_uri + params.path,
+				dataType: "json",
+				error: function(xhr, type, message) {
+					if("console" in window) {
+						console.log({ "XHR Error": type, "message": message });
+					}
+				}
+			},  params) );
+		},
+		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
+		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
+		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
+		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
+	});
+
+})( this.jQuery, this.app );
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.SplitButton = acx.ui.Widget.extend({
+		defaults: {
+			items: [],
+			label: ""
+		},
+		baseClass: "uiSplitButton",
+		init: function( parent ) {
+			this._super( parent );
+			this.items = this.config.items.map( function( item ) {
+				return {
+					text: item.label,
+					selected: item.selected,
+					onclick: function( jEv ) {
+						var el = $( jEv.target ).closest("LI");
+						el.parent().children().removeClass("selected");
+						el.addClass("selected");
+						this.fire( "select", this, { value: item.value } );
+						this.value = item.value;
+					}.bind(this)
+				};
+			}, this );
+			this.value = null;
+			this.button = new acx.ui.Button({
+				label: this.config.label,
+				onclick: function() {
+					this.fire("click", this, { value: this.value } );
+				}.bind(this)
+			});
+			this.menuButton = new acx.ui.MenuButton({
+				label: "\u00a0",
+				menu: new (acx.ui.MenuPanel.extend({
+					baseClass: "uiSplitMenuPanel uiMenuPanel",
+					_getPosition: function( jEv ) {
+						var parent = $(jEv.target).closest("BUTTON");
+						return parent.vOffset()
+							.add(parent.vSize())
+							.addX( -this.el.vOuterSize().x )
+							.asOffset();
+					}
+				}))({
+					items: this.items
+				})
+			});
+			this.el = $(this._main_template());
+		},
+		disable: function() {
+			this.button.disable();
+		},
+		enable: function() {
+			this.button.enable();
+		},
+		_main_template: function() {
+			return { tag: "DIV", cls: this.baseClass, children: [
+				this.button, this.menuButton
+			] };
+		}
+	});
+
+})( this.jQuery, this.app );
+
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.Connect = ui.SplitButton.extend({
+		defaults: {
+			label: "Connect",
+			items: [
+				{ label: "localhost:9200", value: "http://localhost:9200", selected: true },
+				{ label: "Connection Manager...", value: -1 }
+			]
+		}
+	});
+
+})( this.jQuery, this.app );
+
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.Header = acx.ui.Widget.extend({
+		init: function() {
+			this._super();
+			this.el = $( this._main_template() );
+		},
+		_main_template: function() { return (
+			{ tag: "DIV", cls: "uiHeader", children: [
+				{ tag: "H1", text: "elasticsearch" },
+				new ui.Connect({})
+			] }
+		); }
+	});
+
+})( this.jQuery, this.app );
 (function( app ) {
 
 	var ui = app.ns("ui");
@@ -8609,68 +8674,3 @@ under the License.
 	});
 
 })( this.app );
-
-(function() {
-
-	function ns( namespace ) {
-		return (namespace || "").split(".").reduce( function( space, name ) {
-			return space[ name ] || ( space[ name ] = { ns: ns } );
-		}, this );
-	}
-
-	var app = ns("app");
-
-})();
-(function( $, app ) {
-
-	var services = app.ns("services");
-
-	services.Cluster = acx.Class.extend({
-		defaults: {
-			base_uri: "http://localhost:9200/"
-		},
-		request: function( params ) {
-			return $.ajax( acx.extend({
-				url: this.config.base_uri + params.path,
-				dataType: "json",
-				error: function(xhr, type, message) {
-					if("console" in window) {
-						console.log({ "XHR Error": type, "message": message });
-					}
-				}
-			},  params) );
-		},
-		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
-		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
-		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
-		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
-	});
-
-})( this.jQuery, this.app );
-(function( $, app ) {
-
-	var ui = app.ns("ui");
-
-	ui.Header = acx.ui.Widget.extend({
-		init: function() {
-			this._super();
-			this.el = $( this._main_template() );
-		},
-		_main_template: function() { return (
-			{ tag: "DIV", cls: "uiHeader", children: [
-				{ tag: "H1", text: "elasticsearch" },
-				{ tag: "INPUT", type: "text", plcaeholder: "connect..." },
-				new acx.ui.SplitButton({
-					label: "Connect",
-					items: [
-						{ label: acx.text("General.ManualRefresh"), value: -1, selected: true },
-						{ label: acx.text("General.RefreshQuickly"), value: 100 },
-						{ label: acx.text("General.Refresh5seconds"), value: 5000 },
-						{ label: acx.text("General.Refresh1minute"), value: 60000 }
-					]
-				})
-			] }
-		); }
-	});
-
-})( this.jQuery, this.app );

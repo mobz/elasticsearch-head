@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 				],
 				dest: 'dist/core.js'
 			},
-			ui: {
+			uijs: {
 				src: [
 					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
@@ -24,9 +24,20 @@ module.exports = function(grunt) {
 					'lib/es/widgets.js',
 					'lib/graphael/g.raphael.standalone.js',
 					'lib/dateRangeParser/date-range-parser.js',
-					'src/app/**/*.js'
+					'src/app/services/cluster.js',
+					'src/app/ui/splitButton/splitButton.js',
+					'src/app/ui/connect/connect.js',
+					'src/app/ui/header/header.js',
+					'src/app/app.js'
 				],
 				dest: 'dist/ui.js'
+			},
+			uicss: {
+				src: [
+					'src/app/ui/splitButton/splitButton.css',
+					'src/app/ui/header/header.css'
+				],
+				dest: 'dist/ui.css'
 			}
 		},
 
