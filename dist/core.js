@@ -1,3 +1,14 @@
+(function() {
+
+	function ns( namespace ) {
+		return (namespace || "").split(".").reduce( function( space, name ) {
+			return space[ name ] || ( space[ name ] = { ns: ns } );
+		}, this );
+	}
+
+	var app = ns("app");
+
+})();
 /*!
  * jQuery JavaScript Library v1.6.1
  * http://jquery.com/
@@ -8942,15 +8953,15 @@ window.jQuery = window.$ = jQuery;
 ( function() {
 
 var window = this,
-	$ = jQuery,
-	acx = {};
+	$ = jQuery;
 
-/**
- * global acx namespace
- * @namespace
- * @name acx
- */
-window.acx = acx;
+function ns( namespace ) {
+    return (namespace || "").split(".").reduce( function( space, name ) {
+        return space[ name ] || ( space[ name ] = { ns: ns } );
+    }, this );
+}
+
+var acx = ns("acx");
 
 /**
  * generic object iterator

@@ -18,7 +18,7 @@
 				r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
 			}, {});
 			$(function() {
-				var cluster = new es.Cluster({ base_uri: args['base_uri']});
+				var cluster = new acx.app.services.Cluster({ base_uri: args['base_uri']});
 				new es.ui.Browser({ cluster: cluster }).appendTo("body");
 			});
 		</script>

@@ -837,27 +837,6 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 		"multi_field" : { }
 	};
 
-	es.Cluster = acx.Class.extend({
-		defaults: {
-			base_uri: "http://localhost:9200/"
-		},
-		request: function(params) {
-			return $.ajax(acx.extend({
-				url: this.config.base_uri + params.path,
-				dataType: "json",
-				error: function(xhr, type, message) {
-					if("console" in window) {
-						console.log({ "XHR Error": type, "message": message });
-					}
-				}
-			},  params));
-		},
-		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
-		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
-		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
-		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
-	});
-
 	// parses metatdata from a cluster, into a bunch of useful data structures
 	es.MetaData = acx.ux.Observable.extend({
 		defaults: {
@@ -956,7 +935,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 
 	es.MetaDataFactory = acx.ux.Observable.extend({
 		defaults: {
-			cluster: null // (required) an es.Cluster
+			cluster: null // (required) an app.services.Cluster
 		},
 		init: function() {
 			this._super();
@@ -969,7 +948,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 
 	es.Query = acx.ux.Observable.extend({
 		defaults: {
-			cluster: null,  // (required) instanceof es.Cluster
+			cluster: null,  // (required) instanceof app.services.Cluster
 			size: 50		    // size of pages to return
 		},
 		init: function() {
@@ -1709,7 +1688,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 
 	es.ui.Browser = es.ui.Page.extend({
 		defaults: {
-			cluster: null  // (required) instanceof es.Cluster
+			cluster: null  // (required) instanceof app.services.Cluster
 		},
 		init: function() {
 			this._super();
@@ -1761,7 +1740,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 
 	es.ui.AnyRequest = es.ui.Page.extend({
 		defaults: {
-			cluster: null,       // (required) instanceof es.Cluster
+			cluster: null,       // (required) instanceof app.services.Cluster
 			path: "_search",     // default uri to send a request to
 			query: { query: { match_all: { }}},
 			transform: "  return root;" // default transformer function (does nothing)
@@ -1991,7 +1970,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 	
 	es.ui.SimpleGetQuery = acx.ui.Widget.extend({
 		defaults: {
-//		cluster: null,	// (required) instance of es.Cluster
+//		cluster: null,	// (required) instance of app.services.Cluster
 //		path: "",					// (required) path to request
 		},
 		
@@ -2014,7 +1993,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 
 	es.ui.ClusterOverview = es.ui.Page.extend({
 		defaults: {
-			cluster: null // (reqired) an instanceof es.Cluster
+			cluster: null // (reqired) an instanceof app.services.Cluster
 		},
 		init: function() {
 			this._super();
@@ -2685,161 +2664,6 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 		}
 	});
 
-	es.ElasticSearchHead = acx.ui.Widget.extend({
-		defaults: {
-			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default ElasticSearch host
-		},
-		init: function(parent) {
-			this._super();
-			this.base_uri = this.config.base_uri;
-			if( this.base_uri.charAt( this.base_uri.length - 1 ) !== "/" ) {
-				// XHR request fails if the URL is not ending with a "/"
-				this.base_uri += "/";
-			}
-			if( this.config.auth_user ) {
-				var credentials = window.btoa( this.config.auth_user + ":" + this.config.auth_password );
-				$.ajaxSetup({
-					headers: {
-						"Authorization": "Basic " + credentials
-					}
-				});
-			}
-			this.cluster = new es.Cluster({ base_uri: this.base_uri });
-			this._initElements(parent);
-			this.instances = {};
-			this.quicks = {};
-		},
-
-		quick: function(title, path) {
-			this.quicks[path] && this.quicks[path].remove();
-			this.cluster.get(path, function(data) {
-				this.quicks[path] = new es.ui.JsonPanel({ title: title, json: data });
-			}.bind(this));
-		},
-		
-		show: function(type, config, jEv) {
-			if(! this.instances[type]) {
-				var page = this.instances[type] = new es.ui[type](config);
-				this.el.find("#"+this.id("body")).append( page );
-			}
-			$(jEv.target).closest("DIV.es-header-menu-item").addClass("active").siblings().removeClass("active");
-			for(var p in this.instances) {
-				this.instances[p][ p === type ? "show" : "hide" ]();
-			}
-		},
-
-		showNew: function(type, config, jEv, tab_text) {
-			var that = this,
-				type_name = '',
-				type_index = 0,
-				page, $tab;
-
-			// Loop through until we find an unused type name
-			while (type_name === '') {
-				type_index++;
-				if (!this.instances[type + type_index.toString()]) {
-					// Found an available type name, so put it together and add it to the UI
-					type_name = type + type_index.toString();
-					page = this.instances[type_name] = new es.ui[type](config);
-					this.el.find("#"+this.id("body")).append( page );
-				}
-			}
-
-			// Make sure we have text for the tab
-			if (tab_text) {
-				tab_text += ' ' + type_index.toString();
-			} else {
-				tab_text = type_name;
-			}
-
-			// Add the tab and its click handlers
-			$tab = this.newTab(tab_text, {
-				click: function (jEv) {
-					that.show(type_name, config, jEv);
-				},
-				close_click: function (jEv) {
-					$tab.remove();
-					$(page).remove();
-					delete that.instances[type_name];
-				}
-			});
-			
-			// Click the new tab to make it show
-			$tab.trigger('click');
-		},
-
-		_openAnyRequest_handler: function(jEv) { this.show("AnyRequest", { cluster: this.cluster }, jEv); },
-		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, acx.text("Nav.AnyRequest")); return false; },
-		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv); },
-		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, acx.text("Nav.StructuredQuery")); return false; },
-		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterHealth_handler: function(jEv) { this.quick( acx.text("Nav.ClusterHealth"), "_cluster/health" ); },
-		_openClusterState_handler: function(jEv) { this.quick( acx.text("Nav.ClusterState"), "_cluster/state" ); },
-		_openClusterNodes_handler: function(jEv) { this.quick( acx.text("Nav.ClusterNodes"), "_cluster/nodes" ); },
-		_openClusterNodesStats_handler: function(jEv) { this.quick( acx.text("Nav.NodeStats"), "_cluster/nodes/stats" ); },
-		_openStatus_handler: function(jEv) { this.quick( acx.text("Nav.Status"), "_status" ); },
-		_openInfo_handler: function(jEv) { this.quick( acx.text("Nav.Info"), "" ); },
-		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
-
-		_initElements: function(parent) {
-			this.el = $(this._main_template());
-			this.appendTo(parent);
-		},
-
-		_main_template: function() {
-			return { tag: "DIV", cls: "es", children: [
-				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
-					{ tag: "DIV", cls: "es-header-top", children: [
-						new es.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
-						{ tag: "H1", text: acx.text("General.ElasticSearch") }
-					]},
-					{ tag: "DIV", cls: "es-header-menu", children: [
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.Browser"), onclick: this._openBrowser_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
-							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}
-						] },
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
-							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
-						] },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.Status"), onclick: this._openStatus_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
-					]}
-				]},
-				{ tag: "DIV", id: this.id("body") }
-			]};
-		},
-
-		newTab: function(text, events) {
-			var $el = $({tag: 'DIV', cls: 'es-header-menu-item es-left', text: text, children: [
-				{tag: 'A', text: ' [-]'}
-			]});
-
-			// Apply the events to the tab as given
-			$.each(events || {}, function (event_name, fn) {
-				if (event_name === 'close_click') {
-					$('a',$el).bind('click', fn);
-				} else {
-					$el.bind(event_name, fn);
-				}
-			});
-
-			$('.es-header-menu').append($el);
-			return $el;
-		},
-		
-		_status_handler: function(status) {
-			this.el.find(".es-header-menu-item:first").click();
-		},
-		_reconnect_handler: function() {
-			localStorage["base_uri"] = this.base_uri;
-		}
-	});
-	
 	es.AbstractQuery = acx.ui.Widget.extend({
 		defaults: {
 			base_uri: "http://localhost:9200/"   // the default ElasticSearch host
@@ -2893,7 +2717,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 		
 		_reconnect_handler: function() {
 			var base_uri = this.el.find(".es-header-uri").val();
-			$("body").empty().append(new es.ElasticSearchHead("body", { id: "es", base_uri: base_uri }));
+			$("body").empty().append(new acx.head.App("body", { id: "es", base_uri: base_uri }));
 		},
 		
 		_main_template: function() {
@@ -2920,7 +2744,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 
 	es.StructuredQuery = es.AbstractQuery.extend({
 		defaults: {
-			cluster: null  // (required) instanceof es.Cluster
+			cluster: null  // (required) instanceof app.services.Cluster
 		},
 		init: function(parent) {
 			this._super();
@@ -2993,7 +2817,7 @@ acx.data.DataSourceInterface = acx.ux.Observable.extend({
 
 	es.FilterBrowser = es.AbstractQuery.extend({
 		defaults: {
-			cluster: null,  // (required) instanceof es.Cluster
+			cluster: null,  // (required) instanceof app.services.Cluster
 			index: "" // (required) name of the index to query
 		},
 
@@ -8625,3 +8449,228 @@ under the License.
 		throw "could not process value " + v;
 	};
 })();
+(function( app ) {
+
+	var ui = app.ns("ui");
+	var es = window.es;
+	var acx = window.acx;
+
+	app.App = acx.ui.Widget.extend({
+		defaults: {
+			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default ElasticSearch host
+		},
+		init: function(parent) {
+			this._super();
+			this.base_uri = this.config.base_uri;
+			if( this.base_uri.charAt( this.base_uri.length - 1 ) !== "/" ) {
+				// XHR request fails if the URL is not ending with a "/"
+				this.base_uri += "/";
+			}
+			if( this.config.auth_user ) {
+				var credentials = window.btoa( this.config.auth_user + ":" + this.config.auth_password );
+				$.ajaxSetup({
+					headers: {
+						"Authorization": "Basic " + credentials
+					}
+				});
+			}
+			this.cluster = new app.services.Cluster({ base_uri: this.base_uri });
+			this.el = $(this._main_template());
+			this.appendTo(parent);
+			this.instances = {};
+			this.quicks = {};
+		},
+
+		quick: function(title, path) {
+			this.quicks[path] && this.quicks[path].remove();
+			this.cluster.get(path, function(data) {
+				this.quicks[path] = new es.ui.JsonPanel({ title: title, json: data });
+			}.bind(this));
+		},
+		
+		show: function(type, config, jEv) {
+			if(! this.instances[type]) {
+				var page = this.instances[type] = new es.ui[type](config);
+				this.el.find("#"+this.id("body")).append( page );
+			}
+			$(jEv.target).closest("DIV.es-header-menu-item").addClass("active").siblings().removeClass("active");
+			for(var p in this.instances) {
+				this.instances[p][ p === type ? "show" : "hide" ]();
+			}
+		},
+
+		showNew: function(type, config, jEv, tab_text) {
+			var that = this,
+				type_name = '',
+				type_index = 0,
+				page, $tab;
+
+			// Loop through until we find an unused type name
+			while (type_name === '') {
+				type_index++;
+				if (!this.instances[type + type_index.toString()]) {
+					// Found an available type name, so put it together and add it to the UI
+					type_name = type + type_index.toString();
+					page = this.instances[type_name] = new es.ui[type](config);
+					this.el.find("#"+this.id("body")).append( page );
+				}
+			}
+
+			// Make sure we have text for the tab
+			if (tab_text) {
+				tab_text += ' ' + type_index.toString();
+			} else {
+				tab_text = type_name;
+			}
+
+			// Add the tab and its click handlers
+			$tab = this.newTab(tab_text, {
+				click: function (jEv) {
+					that.show(type_name, config, jEv);
+				},
+				close_click: function (jEv) {
+					$tab.remove();
+					$(page).remove();
+					delete that.instances[type_name];
+				}
+			});
+			
+			// Click the new tab to make it show
+			$tab.trigger('click');
+		},
+
+		_openAnyRequest_handler: function(jEv) { this.show("AnyRequest", { cluster: this.cluster }, jEv); },
+		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, acx.text("Nav.AnyRequest")); return false; },
+		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv); },
+		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, acx.text("Nav.StructuredQuery")); return false; },
+		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
+		_openClusterHealth_handler: function(jEv) { this.quick( acx.text("Nav.ClusterHealth"), "_cluster/health" ); },
+		_openClusterState_handler: function(jEv) { this.quick( acx.text("Nav.ClusterState"), "_cluster/state" ); },
+		_openClusterNodes_handler: function(jEv) { this.quick( acx.text("Nav.ClusterNodes"), "_cluster/nodes" ); },
+		_openClusterNodesStats_handler: function(jEv) { this.quick( acx.text("Nav.NodeStats"), "_cluster/nodes/stats" ); },
+		_openStatus_handler: function(jEv) { this.quick( acx.text("Nav.Status"), "_status" ); },
+		_openInfo_handler: function(jEv) { this.quick( acx.text("Nav.Info"), "" ); },
+		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
+
+		_main_template: function() {
+			return { tag: "DIV", cls: "es", children: [
+				new ui.Header({}),
+				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
+					{ tag: "DIV", cls: "es-header-top", children: [
+						new es.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
+						{ tag: "H1", text: acx.text("General.ElasticSearch") }
+					]},
+					{ tag: "DIV", cls: "es-header-menu", children: [
+						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
+						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.Browser"), onclick: this._openBrowser_handler },
+						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
+							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}
+						] },
+						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
+							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
+						] },
+						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
+						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
+						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
+						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
+						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.Status"), onclick: this._openStatus_handler },
+						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
+					]}
+				]},
+				{ tag: "DIV", id: this.id("body") }
+			]};
+		},
+
+		newTab: function(text, events) {
+			var $el = $({tag: 'DIV', cls: 'es-header-menu-item es-left', text: text, children: [
+				{tag: 'A', text: ' [-]'}
+			]});
+
+			// Apply the events to the tab as given
+			$.each(events || {}, function (event_name, fn) {
+				if (event_name === 'close_click') {
+					$('a',$el).bind('click', fn);
+				} else {
+					$el.bind(event_name, fn);
+				}
+			});
+
+			$('.es-header-menu').append($el);
+			return $el;
+		},
+		
+		_status_handler: function(status) {
+			this.el.find(".es-header-menu-item:first").click();
+		},
+		_reconnect_handler: function() {
+			localStorage["base_uri"] = this.base_uri;
+		}
+
+	});
+
+})( this.app );
+
+(function() {
+
+	function ns( namespace ) {
+		return (namespace || "").split(".").reduce( function( space, name ) {
+			return space[ name ] || ( space[ name ] = { ns: ns } );
+		}, this );
+	}
+
+	var app = ns("app");
+
+})();
+(function( $, app ) {
+
+	var services = app.ns("services");
+
+	services.Cluster = acx.Class.extend({
+		defaults: {
+			base_uri: "http://localhost:9200/"
+		},
+		request: function( params ) {
+			return $.ajax( acx.extend({
+				url: this.config.base_uri + params.path,
+				dataType: "json",
+				error: function(xhr, type, message) {
+					if("console" in window) {
+						console.log({ "XHR Error": type, "message": message });
+					}
+				}
+			},  params) );
+		},
+		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
+		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
+		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
+		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
+	});
+
+})( this.jQuery, this.app );
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.Header = acx.ui.Widget.extend({
+		init: function() {
+			this._super();
+			this.el = $( this._main_template() );
+		},
+		_main_template: function() { return (
+			{ tag: "DIV", cls: "uiHeader", children: [
+				{ tag: "H1", text: "elasticsearch" },
+				{ tag: "INPUT", type: "text", plcaeholder: "connect..." },
+				new acx.ui.SplitButton({
+					label: "Connect",
+					items: [
+						{ label: acx.text("General.ManualRefresh"), value: -1, selected: true },
+						{ label: acx.text("General.RefreshQuickly"), value: 100 },
+						{ label: acx.text("General.Refresh5seconds"), value: 5000 },
+						{ label: acx.text("General.Refresh1minute"), value: 60000 }
+					]
+				})
+			] }
+		); }
+	});
+
+})( this.jQuery, this.app );

@@ -8,6 +8,7 @@ module.exports = function(grunt) {
 			},
 			setup: {
 				src: [
+					'src/app/boot.js',
 					'lib/jsacx/src/jquery.js',
 					'lib/jsacx/src/jsacx.js',
 					'lib/nohtml/jquery.acx-nohtml.js'
@@ -22,7 +23,8 @@ module.exports = function(grunt) {
 					'lib/es/core.js',
 					'lib/es/widgets.js',
 					'lib/graphael/g.raphael.standalone.js',
-					'lib/dateRangeParser/date-range-parser.js'
+					'lib/dateRangeParser/date-range-parser.js',
+					'src/app/**/*.js'
 				],
 				dest: 'dist/ui.js'
 			}
@@ -30,7 +32,7 @@ module.exports = function(grunt) {
 
 		watch: {
 			scripts: {
-				files: ['lib/**/*.js'],
+				files: ['lib/**/*.js','src/**/*.js'],
 				tasks: ['concat'],
 				options: {
 					spawn: false
