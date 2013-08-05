@@ -2,7 +2,7 @@
 
 	var ui = app.ns("ui");
 
-	ui.SplitButton = acx.ui.Widget.extend({
+	ui.SplitButton = ui.AbstractWidget.extend({
 		defaults: {
 			items: [],
 			label: ""

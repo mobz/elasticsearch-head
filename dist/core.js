@@ -9480,7 +9480,7 @@ acx.text = acx.i18n.formatKey;
 				return undefined;
 			} else if(obj.nodeType === 1) {
 				el = obj;
-			} else if(obj instanceof acx.ui.Widget) {
+			} else if(obj instanceof app.ui.AbstractWidget) {
 				el = obj.el[0];
 			} else {
 				if($.support.useHTMLForInputType && obj.tag && obj.tag.match(/input|button/i)) {
@@ -9509,14 +9509,14 @@ acx.text = acx.i18n.formatKey;
 
 	$.clean = function( elems, context, fragment, scripts ) {
 		for(var i = 0; i < elems.length; i++) {
-			if( elems[i].tag || elems[i] instanceof acx.ui.Widget )
+			if( elems[i].tag || elems[i] instanceof app.ui.AbstractWidget )
 				elems[i] = create( elems[i], null, context );
 		}
 		return clean( elems, context, fragment, scripts );
 	};
 
 	$.fn.init = function( selector, context, rootjQuery ) {
-		if ( selector && ( selector.tag || selector instanceof acx.ui.Widget )) {
+		if ( selector && ( selector.tag || selector instanceof app.ui.AbstractWidget )) {
 			selector = create( selector, null, context );
 		}
 		return init.call( this, selector, context, rootjQuery );

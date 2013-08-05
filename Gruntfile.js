@@ -19,6 +19,8 @@ module.exports = function(grunt) {
 			},
 			uijs: {
 				src: [
+					'src/app/ux/observable.js',
+					'src/app/ui/abstractWidget/abstractWidget.js',
 					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
 

@@ -1,3 +1,91 @@
+(function( app ) {
+
+	var ux = app.ns("ux");
+
+	ux.Observable = acx.Class.extend((function() {
+		return {
+			init: function() {
+				this.observers = {};
+				for( var opt in this.config ) { // automatically install observers that are defined in the configuration
+					if( opt.indexOf( 'on' ) === 0 ) {
+						this.on( opt.substring(2) , this.config[ opt ] );
+					}
+				}
+			},
+			_getObs: function( type ) {
+				return ( this.observers[ type.toLowerCase() ] || ( this.observers[ type.toLowerCase() ] = [] ) );
+			},
+			on: function( type, fn, params, thisp ) {
+				this._getObs( type ).push( { "cb" : fn, "args" : params || [] , "cx" : thisp || this } );
+				return this;
+			},
+			fire: function( type ) {
+				var params = Array.prototype.slice.call( arguments, 1 );
+				this._getObs( type ).slice().forEach( function( ob ) {
+					ob["cb"].apply( ob["cx"], ob["args"].concat( params ) );
+				} );
+				return this;
+			},
+			removeAllObservers: function() {
+				this.observers = {};
+			},
+			removeObserver: function( type, fn ) {
+				var obs = this._getObs( type ),
+					index = obs.reduce( function(p, t, i) { return (t.cb === fn) ? i : p; }, -1 );
+				if(index !== -1) {
+					obs.splice( index, 1 );
+				}
+				return this; // make observable functions chainable
+			},
+			hasObserver: function( type ) {
+				return !! this._getObs( type ).length;
+			}
+		};
+	})());
+
+})( this.app );
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+	var ux = app.ns("ux");
+
+	ui.AbstractWidget = ux.Observable.extend({
+		defaults : {
+			id: null     // the id of the widget
+		},
+
+		el: null,       // this is the jquery wrapped dom element(s) that is the root of the widget
+
+		init: function() {
+			this._super();
+			for(var prop in this) {       // automatically bind all the event handlers
+				if(prop.contains("_handler")) {
+					this[prop] = this[prop].bind(this);
+				}
+			}
+		},
+
+		id: function(suffix) {
+			return this.config.id ? (this.config.id + (suffix ? "-" + suffix : "")) : undefined;
+		},
+
+		attach: function( parent, method ) {
+			if( parent ) {
+				this.el[ method || "appendTo"]( parent );
+			}
+			this.fire("attached", this );
+			return this;
+		},
+
+		remove: function() {
+			this.el.remove();
+			this.fire("removed", this );
+			this.removeAllObservers();
+			return this;
+		}
+	});
+
+})( this.jQuery, this.app );
 var acx = window.acx || {};
 
 /**
@@ -13,48 +101,6 @@ acx.ut.require_template = function(f) { return f.require ? { tag: "SPAN", cls: "
  * @namespace
  */
 acx.ux = {};
-
-/**
- * a class for generating custom events in widgets
- */
-acx.ux.Observable = acx.Class.extend((function() {
-	function getObs(type) { return ( this.observers[type] || ( this.observers[type] = [] ) ); }
-	function toLower(a) { return a.toLowerCase(); }
-	return {
-		init: function() {
-			this.observers = {};
-			for(var opt in this.config) { // automatically install observers that are defined in the configuration
-				if(opt.indexOf('on') === 0) {
-					this.on(opt.substring(2).replace(/^[A-Z]/, toLower ), this.config[opt]);
-				}
-			}
-		},
-		on: function(type, fn, params, thisp) { // on: synonymous with addEvent, addObserver, subscribe
-			getObs.call(this, type).push( { cb : fn, args : params || [] , cx : thisp || this } );
-			return this; // make observable functions chainable
-		},
-		fire: function(type) { // fire: synonymous with fireEvent, observe, publish
-			var params = Array.prototype.slice.call(arguments, 1);
-			getObs.call(this, type).slice().forEach(function(ob) {
-				ob.cb.apply(ob.cx, ob.args.concat(params));
-			});
-			return this; // make observable functions chainable
-		},
-		removeAllObservers: function() {
-			this.observers = {};
-		},
-		removeObserver: function(type, fn) {
-			var obs = getObs.call(this, type), index = obs.reduce( function(p, t, i) { return (t.cb === fn) ? i : p; }, -1 );
-			if(index !== -1) {
-				obs.splice(index, 1);
-			}
-			return this; // make observable functions chainable
-		},
-		hasObserver: function(type) {
-			return !!getObs.call(this, type).length;
-		}
-	};
-})());
 
 /**
  * Provides drag and drop functionality<br>
@@ -87,7 +133,7 @@ acx.ux.Observable = acx.Class.extend((function() {
  * <dt>dragStop</dt>
  *   <dd>a callback when we stop dragging<br><code>function(jEv)</code></dd>
  */
-acx.ux.DragDrop = acx.ux.Observable.extend({
+acx.ux.DragDrop = app.ux.Observable.extend({
     defaults : {
         targetsSelector : null,
         pickupSelector:   null,
@@ -179,46 +225,8 @@ acx.ux.DragDrop = acx.ux.Observable.extend({
  */
 acx.ui = {};
 
-/**
- * base class for all widgets
- * provides: base element definition, automatic observable creation, bound function handlers
- * @constructor
- */
-acx.ui.Widget = acx.ux.Observable.extend({
-	defaults : {
-		id: null     // the id of the widget
-	},
 
-	el: null,       // this is the jquery wrapped dom element(s) that is the root of the widget
-
-	init: function() {
-		this._super();
-		for(var prop in this) {       // automatically bind all the event handlers
-			if(prop.contains("_handler")) {
-				this[prop] = this[prop].bind(this);
-			}
-		}
-	},
-
-	id: function(suffix) {
-		return this.config.id ? (this.config.id + (suffix ? "-" + suffix : "")) : undefined;
-	},
-
-	appendTo: function(parent) {
-		if(parent) {
-			this.el.appendTo(parent);
-		}
-		return this;
-	},
-
-	remove: function() {
-		this.el.remove();
-		this.removeAllObservers();
-		return this;
-	}
-});
-
-acx.ui.Toolbar = acx.ui.Widget.extend({
+acx.ui.Toolbar = app.ui.AbstractWidget.extend({
 	defaults: {
 		label: "",
 		left: [],
@@ -242,7 +250,7 @@ acx.ui.Toolbar = acx.ui.Widget.extend({
  * base abstract class for all modal panels,
  * provides open, close, modal and panel stacking
  */
-acx.ui.AbstractPanel = acx.ui.Widget.extend({
+acx.ui.AbstractPanel = app.ui.AbstractWidget.extend({
 	defaults: {
 		body: null,            // initial content of the body
 		modal: true,           // create a modal panel - creates a div that blocks interaction with page
@@ -422,7 +430,7 @@ acx.ui.MenuPanel = acx.ui.AbstractPanel.extend({
  * widget for showing tabular data
  * @constructor
  */
-acx.ui.Table = acx.ui.Widget.extend({
+acx.ui.Table = app.ui.AbstractWidget.extend({
 	defaults: {
 		store: null, // (required) implements interface app.data.DataSourceInterface
 		height: 0,
@@ -433,7 +441,7 @@ acx.ui.Table = acx.ui.Widget.extend({
 		this.initElements(parent);
 		this.config.store.on("data", this._data_handler);
 	},
-	appendTo: function(parent) {
+	attach: function(parent) {
 		if(parent) {
 			this._super(parent);
 			this._reflow();
@@ -444,7 +452,7 @@ acx.ui.Table = acx.ui.Widget.extend({
 		this.body = this.el.find(".uiTable-body");
 		this.headers = this.el.find(".uiTable-headers");
 		this.tools = this.el.find(".uiTable-tools");
-		this.appendTo(parent);
+		this.attach( parent );
 	},
 	_data_handler: function(store) {
 		this.tools.text(store.summary);
@@ -534,7 +542,7 @@ acx.ui.Table = acx.ui.Widget.extend({
 
 })();
 
-acx.ui.AbstractField = acx.ui.Widget.extend({
+acx.ui.AbstractField = app.ui.AbstractWidget.extend({
 	defaults: {
 		name : "", 			// (required) - name of the field
 		require: false,	// validation requirements (false, true, regexp, function)
@@ -548,7 +556,7 @@ acx.ui.AbstractField = acx.ui.Widget.extend({
 		this.require = this.config.require;
 		this.name = this.config.name;
 		this.val(this.config.value);
-		this.appendTo(parent);
+		this.attach( parent );
 	},
 	val: function(val) {
 		if(val === undefined) {
@@ -580,7 +588,7 @@ acx.ui.TextField = acx.ui.AbstractField.extend({
 	}
 });
 
-acx.ux.FieldCollection = acx.ux.Observable.extend({
+acx.ux.FieldCollection = app.ux.Observable.extend({
 	defaults: {
 		fields: []	// the collection of fields
 	},
@@ -600,14 +608,14 @@ acx.ux.FieldCollection = acx.ux.Observable.extend({
 	}
 });
 
-acx.ui.PanelForm = acx.ui.Widget.extend({
+acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 	defaults: {
 		fields: null	// (required) instanceof acx.ux.FieldCollection
 	},
 	init: function(parent) {
 		this._super();
 		this.el = $(this._main_template());
-		this.appendTo(parent);
+		this.attach( parent );
 	},
 	_main_template: function() {
 		return { tag: "DIV", id: this.id(), cls: "uiPanelForm", children: this.config.fields.fields.map(this._field_template, this) };
@@ -622,11 +630,12 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 (function( app ) {
 
 	var data = app.ns("data");
+	var ux = app.ns("ux");
 
 	/**
 	 * An abstract interface for delivering async data to a data consumer (eg acx.ui.Table)
 	 */
-	data.DataSourceInterface = acx.ux.Observable.extend({
+	data.DataSourceInterface = ux.Observable.extend({
 		/*
 		properties
 			meta = { total: 0 },
@@ -714,7 +723,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 	};
 
 	// parses metatdata from a cluster, into a bunch of useful data structures
-	es.MetaData = acx.ux.Observable.extend({
+	es.MetaData = app.ux.Observable.extend({
 		defaults: {
 			state: null // (required) response from a /_cluster/state request
 		},
@@ -809,7 +818,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 
-	es.MetaDataFactory = acx.ux.Observable.extend({
+	es.MetaDataFactory = app.ux.Observable.extend({
 		defaults: {
 			cluster: null // (required) an app.services.Cluster
 		},
@@ -822,7 +831,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 
-	es.Query = acx.ux.Observable.extend({
+	es.Query = app.ux.Observable.extend({
 		defaults: {
 			cluster: null,  // (required) instanceof app.services.Cluster
 			size: 50		    // size of pages to return
@@ -1192,7 +1201,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 
-	es.ui.SidebarSection = acx.ui.Widget.extend({
+	es.ui.SidebarSection = app.ui.AbstractWidget.extend({
 		defaults: {
 			title: "",
 			help: null,
@@ -1243,7 +1252,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 			$(document).unbind("keydown", this._nav_handler);
 			this._super();
 		},
-		appendTo: function(parent) {
+		attach: function(parent) {
 			if(parent) {
 				var height = parent.height() || ( $(document).height() - parent.offset().top - 41 ); // 41 = height in px of .uiTable-tools + uiTable-header
 				var width = parent.width();
@@ -1277,7 +1286,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 
-	es.ui.QueryFilter = acx.ui.Widget.extend({
+	es.ui.QueryFilter = app.ui.AbstractWidget.extend({
 		defaults: {
 			metadata: null,   // (required) instanceof es.MetaData
 			query: null       // (required) instanceof es.Query that the filters will act apon
@@ -1553,7 +1562,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}	
 	});
 
-	es.ui.Page = acx.ui.Widget.extend({
+	es.ui.Page = app.ui.AbstractWidget.extend({
 		show: function() {
 			this.el.show();
 		},
@@ -1638,7 +1647,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 			this.outEl = this.el.find("DIV.anyRequest-out");
 			this.errEl = this.el.find("DIV.anyRequest-jsonErr");
 			this.typeEl.val("GET");
-			this.appendTo(parent);
+			this.attach(parent);
 			this.setHistoryItem(this.history[this.history.length - 1]);
 		},
 		setHistoryItem: function(item) {
@@ -1844,7 +1853,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 	
-	es.ui.SimpleGetQuery = acx.ui.Widget.extend({
+	es.ui.SimpleGetQuery = app.ui.AbstractWidget.extend({
 		defaults: {
 //		cluster: null,	// (required) instance of app.services.Cluster
 //		path: "",					// (required) path to request
@@ -2293,7 +2302,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 
-	es.ui.DateHistogram = acx.ui.Widget.extend({
+	es.ui.DateHistogram = app.ui.AbstractWidget.extend({
 		defaults: {
 			printEl: null, // (optional) if supplied, clicking on elements in the histogram changes the query
 			cluster: null, // (required)
@@ -2413,14 +2422,14 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		"binary" : { }
 	};
 
-	es.JsonPretty = acx.ui.Widget.extend({
+	es.JsonPretty = app.ui.AbstractWidget.extend({
 		defaults: {
 			obj: null
 		},
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
-			this.appendTo(parent);
+			this.attach(parent);
 			this.el.click(this._click_handler);
 		},
 		
@@ -2480,7 +2489,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 
-	es.BoolQuery = acx.ux.Observable.extend({
+	es.BoolQuery = app.ux.Observable.extend({
 		defaults: {
 			size: 50		// size of pages to return
 		},
@@ -2540,7 +2549,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		}
 	});
 
-	es.AbstractQuery = acx.ui.Widget.extend({
+	es.AbstractQuery = app.ui.AbstractWidget.extend({
 		defaults: {
 			base_uri: "http://localhost:9200/"   // the default ElasticSearch host
 		},
@@ -2569,7 +2578,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
-			this.appendTo(parent);
+			this.attach( parent );
 			this.nameEl = this.el.find(".es-header-clusterName");
 			this.statEl = this.el.find(".es-header-clusterStatus");
 			this.statEl.text("cluster health: not connected").css("background", "red");
@@ -2630,7 +2639,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 			});
 			this.el = $(this._main_template());
 			this.out = this.el.find("DIV.es-out");
-			this.appendTo(parent);
+			this.attach( parent );
 		},
 		
 		_indexChanged_handler: function(index) {
@@ -2701,7 +2710,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 			this._super();
 			this.el = $(this._main_template());
 			this.filtersEl = this.el.find(".es-filterBrowser-filters");
-			this.appendTo(parent);
+			this.attach( parent );
 			new es.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
 				this.metadata = metadata;
 				this._createFilters_handler(eventData.originalData.metadata.indices);
@@ -2878,7 +2887,7 @@ acx.ui.PanelForm = acx.ui.Widget.extend({
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
-			this.appendTo(parent);
+			this.attach( parent );
 			this.update();
 		},
 		update: function() {
@@ -8355,7 +8364,7 @@ under the License.
 
 	var ui = app.ns("ui");
 
-	ui.Button = acx.ui.Widget.extend({
+	ui.Button = ui.AbstractWidget.extend({
 		defaults : {
 			label: "",                 // the label text
 			disabled: false,           // create a disabled button
@@ -8369,7 +8378,7 @@ under the License.
 			this.el = $(this.button_template())
 				.bind("click", this.click_handler);
 			this.config.disabled && this.disable();
-			this.appendTo(parent);
+			this.attach( parent );
 		},
 
 		click_handler: function(jEv) {
@@ -8432,7 +8441,7 @@ under the License.
 
 	var ui = app.ns("ui");
 
-	ui.SplitButton = acx.ui.Widget.extend({
+	ui.SplitButton = ui.AbstractWidget.extend({
 		defaults: {
 			items: [],
 			label: ""
@@ -8512,7 +8521,7 @@ under the License.
 
 	var ui = app.ns("ui");
 
-	ui.Header = acx.ui.Widget.extend({
+	ui.Header = ui.AbstractWidget.extend({
 		init: function() {
 			this._super();
 			this.el = $( this._main_template() );
@@ -8532,7 +8541,7 @@ under the License.
 	var es = window.es;
 	var acx = window.acx;
 
-	app.App = acx.ui.Widget.extend({
+	app.App = ui.AbstractWidget.extend({
 		defaults: {
 			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default ElasticSearch host
 		},
@@ -8553,7 +8562,7 @@ under the License.
 			}
 			this.cluster = new app.services.Cluster({ base_uri: this.base_uri });
 			this.el = $(this._main_template());
-			this.appendTo(parent);
+			this.attach( parent );
 			this.instances = {};
 			this.quicks = {};
 		},

@@ -2,7 +2,7 @@
 
 	var ui = app.ns("ui");
 
-	ui.Button = acx.ui.Widget.extend({
+	ui.Button = ui.AbstractWidget.extend({
 		defaults : {
 			label: "",                 // the label text
 			disabled: false,           // create a disabled button
@@ -16,7 +16,7 @@
 			this.el = $(this.button_template())
 				.bind("click", this.click_handler);
 			this.config.disabled && this.disable();
-			this.appendTo(parent);
+			this.attach( parent );
 		},
 
 		click_handler: function(jEv) {

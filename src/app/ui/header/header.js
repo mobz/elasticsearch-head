@@ -2,7 +2,7 @@
 
 	var ui = app.ns("ui");
 
-	ui.Header = acx.ui.Widget.extend({
+	ui.Header = ui.AbstractWidget.extend({
 		init: function() {
 			this._super();
 			this.el = $( this._main_template() );

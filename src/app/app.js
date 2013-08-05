@@ -4,7 +4,7 @@
 	var es = window.es;
 	var acx = window.acx;
 
-	app.App = acx.ui.Widget.extend({
+	app.App = ui.AbstractWidget.extend({
 		defaults: {
 			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default ElasticSearch host
 		},
@@ -25,7 +25,7 @@
 			}
 			this.cluster = new app.services.Cluster({ base_uri: this.base_uri });
 			this.el = $(this._main_template());
-			this.appendTo(parent);
+			this.attach( parent );
 			this.instances = {};
 			this.quicks = {};
 		},
