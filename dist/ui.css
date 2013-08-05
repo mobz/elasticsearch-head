@@ -78,7 +78,7 @@ BUTTON::-moz-focus-inner {
 	min-width: 0;
 }
 .uiMenuButton .uiButton-label {
-	background-image: url('images/menu-button.gif');
+	background-image: url('data:image/gif;base64,R0lGODlhDwAPAIABAP///////yH5BAEAAAEALAAAAAAPAA8AAAITjI+py+0P4wG0gmavq1HLD4ZiAQA7');
 	background-position: right 50%;
 	background-repeat: no-repeat;
 	padding: 0px 17px 0px 5px;
