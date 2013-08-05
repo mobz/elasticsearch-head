@@ -22,6 +22,7 @@ module.exports = function(grunt) {
 					'src/app/ux/observable.js',
 					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',
+					'src/app/ui/textField/textField.js',
 					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
 

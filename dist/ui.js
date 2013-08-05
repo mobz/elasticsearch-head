@@ -136,6 +136,20 @@
 
 })( this.jQuery, this.app );
 
+(function( app ) {
+
+	var ui = app.ns("ui");
+
+	ui.TextField = ui.AbstractField.extend({
+		_main_template: function() {
+			return { tag: "DIV", id: this.id(), cls: "uiField uiTextField", children: [
+				{ tag: "INPUT", type: "text", name: this.config.name }
+			]};
+		}
+	});
+
+})( this.app );
+
 var acx = window.acx || {};
 
 /**
@@ -577,14 +591,6 @@ acx.ui.Table = app.ui.AbstractWidget.extend({
 	}
 
 });
-acx.ui.TextField = app.ui.AbstractField.extend({
-	_main_template: function() {
-		return { tag: "DIV", id: this.id(), cls: "uiField uiTextField", children: [
-			{ tag: "INPUT", type: "text", name: this.config.name }
-		]};
-	}
-});
-
 acx.ux.FieldCollection = app.ux.Observable.extend({
 	defaults: {
 		fields: []	// the collection of fields
@@ -2057,14 +2063,14 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 		_newIndex_handler: function() {
 			var fields = new acx.ux.FieldCollection({
 				fields: [
-					new acx.ui.TextField({ label: acx.text("ClusterOverView.IndexName"), name: "_name", require: true }),
-					new acx.ui.TextField({
+					new app.ui.TextField({ label: acx.text("ClusterOverView.IndexName"), name: "_name", require: true }),
+					new app.ui.TextField({
 						label: acx.text("ClusterOverview.NumShards"),
 						name: "number_of_shards",
 						value: "5",
 						require: function( val ) { return parseInt( val, 10 ) >= 1; }
 					}),
-					new acx.ui.TextField({
+					new app.ui.TextField({
 						label: acx.text("ClusterOverview.NumReplicas"),
 						name: "number_of_replicas",
 						value: "1",
@@ -2092,7 +2098,7 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 		_newAliasAction_handler: function(index) {
 			var fields = new acx.ux.FieldCollection({
 				fields: [
-					new acx.ui.TextField({ label: acx.text("AliasForm.AliasName"), name: "alias", require: true })
+					new app.ui.TextField({ label: acx.text("AliasForm.AliasName"), name: "alias", require: true })
 				]
 			});
 			var dialog = new acx.ui.DialogPanel({
