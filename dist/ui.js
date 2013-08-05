@@ -86,6 +86,56 @@
 	});
 
 })( this.jQuery, this.app );
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.AbstractField = ui.AbstractWidget.extend({
+
+		defaults: {
+			name : "",			// (required) - name of the field
+			require: false,	// validation requirements (false, true, regexp, function)
+			value: "",			// default value
+			label: ""				// human readable label of this field
+		},
+
+		init: function(parent) {
+			this._super();
+			this.el = $(this._main_template());
+			this.field = this.el.find("[name="+this.config.name+"]");
+			this.label = this.config.label;
+			this.require = this.config.require;
+			this.name = this.config.name;
+			this.val( this.config.value );
+			this.attach( parent );
+		},
+
+		val: function( val ) {
+			if(val === undefined) {
+				return this.field.val();
+			} else {
+				this.field.val( val );
+				return this;
+			}
+		},
+
+		validate: function() {
+			var val = this.val(), req = this.require;
+			if( req === false ) {
+				return true;
+			} else if( req === true ) {
+				return val.length > 0;
+			} else if( req.test && $.isFunction(req.test) ) {
+				return req.test( val );
+			} else if( $.isFunction(req) ) {
+				return req( val, this );
+			}
+		}
+
+	});
+
+})( this.jQuery, this.app );
+
 var acx = window.acx || {};
 
 /**
@@ -527,60 +577,7 @@ acx.ui.Table = app.ui.AbstractWidget.extend({
 	}
 
 });
-(function() {
-	function isInt(v) { return isFinite(parseInt(v)) && parseInt(v) === +v; }
-
-	acx.val = {
-		// returns a function which checks that a (string)val is an integer and is greater or equal to min and
-		// less or equal to max. min and max can be undefined to avoid checking
-		isInt: function(min, max) {
-			return function(val) {
-				return isInt(val) && (!isInt(min) || +val >= min) && (!isInt(max) || +val <= max);
-			}
-		}
-	};
-
-})();
-
-acx.ui.AbstractField = app.ui.AbstractWidget.extend({
-	defaults: {
-		name : "", 			// (required) - name of the field
-		require: false,	// validation requirements (false, true, regexp, function)
-		value: "",			// default value
-		label: ""				// human readable label of this field
-	},
-	init: function(parent) {
-		this.el = $(this._main_template());
-		this.field = this.el.find("[name="+this.config.name+"]");
-		this.label = this.config.label;
-		this.require = this.config.require;
-		this.name = this.config.name;
-		this.val(this.config.value);
-		this.attach( parent );
-	},
-	val: function(val) {
-		if(val === undefined) {
-			return this.field.val();
-		} else {
-			this.field.val(val);
-			return this;
-		}
-	},
-	validate: function() {
-		var val = this.val(), req = this.require;
-		if(req === false) {
-			return true;
-		} else if(req === true) {
-			return val.length > 0
-		} else if(req.test && acx.isFunction(req.test)) {
-			return req.test(val);
-		} else if(acx.isFunction(req)) {
-			return req(val, this);
-		}
-	}
-});
-
-acx.ui.TextField = acx.ui.AbstractField.extend({
+acx.ui.TextField = app.ui.AbstractField.extend({
 	_main_template: function() {
 		return { tag: "DIV", id: this.id(), cls: "uiField uiTextField", children: [
 			{ tag: "INPUT", type: "text", name: this.config.name }
@@ -1592,12 +1589,12 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 					this.metadata = metadata;
 					this.store = new es.QueryDataSourceInterface( { metadata: metadata, query: this.query } );
 					this.queryFilter = new es.ui.QueryFilter({ metadata: metadata, query: this.query });
-					this.queryFilter.appendTo(this.el.find("> .browser-filter") );
+					this.queryFilter.attach(this.el.find("> .browser-filter") );
 					this.resultTable = new es.ui.Table( {
 						onHeaderClick: this._changeSort_handler,
 						store: this.store
 					} );
-					this.resultTable.appendTo( this.el.find("> .browser-table") );
+					this.resultTable.attach( this.el.find("> .browser-table") );
 					this.updateResults();
 				}.bind(this)
 			});
@@ -2061,8 +2058,18 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 			var fields = new acx.ux.FieldCollection({
 				fields: [
 					new acx.ui.TextField({ label: acx.text("ClusterOverView.IndexName"), name: "_name", require: true }),
-					new acx.ui.TextField({ label: acx.text("ClusterOverview.NumShards"), name: "number_of_shards", value: "5", require: acx.val.isInt(1) }),
-					new acx.ui.TextField({ label: acx.text("ClusterOverview.NumReplicas"), name: "number_of_replicas", value: "1", require: acx.val.isInt(0) })
+					new acx.ui.TextField({
+						label: acx.text("ClusterOverview.NumShards"),
+						name: "number_of_shards",
+						value: "5",
+						require: function( val ) { return parseInt( val, 10 ) >= 1; }
+					}),
+					new acx.ui.TextField({
+						label: acx.text("ClusterOverview.NumReplicas"),
+						name: "number_of_replicas",
+						value: "1",
+						require: function( val ) { return parseInt( val, 10 ) >= 0; }
+					})
 				]
 			});
 			var dialog = new acx.ui.DialogPanel({
