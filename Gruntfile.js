@@ -20,6 +20,7 @@ module.exports = function(grunt) {
 			uijs: {
 				src: [
 					'src/app/ux/observable.js',
+					'src/app/ux/dragdrop.js',
 					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',
 					'src/app/ui/textField/textField.js',
