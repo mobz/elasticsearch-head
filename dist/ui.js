@@ -625,39 +625,6 @@ acx.ux = {};
 acx.ui = {};
 
 
-acx.ui.MenuPanel = app.ui.AbstractPanel.extend({
-	defaults: {
-		items: [],		// (required) an array of menu items
-		modal: false
-	},
-	baseClass: "uiMenuPanel",
-	init: function() {
-		this._super();
-		this.el = $(this._main_template());
-	},
-	open: function(jEv) {
-		this._super(jEv);
-		var cx = this; setTimeout(function() { $(document).bind("click", cx._close_handler); }, 50);
-	},
-	_close_handler: function(jEv) {
-		this._super(jEv);
-		$(document).unbind("click", this._close_handler);
-	},
-	_main_template: function() {
-		return { tag: "DIV", cls: this.baseClass, children: this.config.items.map(this._menuItem_template, this) };
-	},
-	_menuItem_template: function(item) {
-		var dx = item.disabled ? { onclick: function() {} } : {};
-		return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: acx.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
-	},
-	_getPosition: function(jEv) {
-		var parent = $(jEv.target).closest("BUTTON");
-		return parent.vOffset()
-			.addY(parent.vSize().y)
-			.asOffset();
-	}
-});
-
 /**
  * widget for showing tabular data
  * @constructor
