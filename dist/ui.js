@@ -569,6 +569,16 @@
 	});
 
 })( this.jQuery, this.app );
+(function( app ) {
+
+	var ui = app.ns("ui");
+
+	ui.InfoPanel = ui.DraggablePanel.extend({
+		theme: "dark"
+	});
+
+})( this.app );
+
 var acx = window.acx || {};
 
 /**
@@ -591,10 +601,6 @@ acx.ux = {};
  */
 acx.ui = {};
 
-
-acx.ui.InfoPanel = app.ui.DraggablePanel.extend({
-	theme: "dark"
-});
 
 acx.ui.DialogPanel = app.ui.DraggablePanel.extend({
 	_commit_handler: function(jEv) {
@@ -1328,7 +1334,7 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 
 	es.ui = {};
 
-	es.ui.HelpPanel = acx.ui.InfoPanel.extend({
+	es.ui.HelpPanel = app.ui.InfoPanel.extend({
 		defaults: {
 			ref: "",
 			open: true,
@@ -1344,7 +1350,7 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 		}
 	});
 
-	es.ui.JsonPanel = acx.ui.InfoPanel.extend({
+	es.ui.JsonPanel = app.ui.InfoPanel.extend({
 		defaults: {
 			json: null, // (required)
 			modal: false,
