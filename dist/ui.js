@@ -579,6 +579,29 @@
 
 })( this.app );
 
+(function( app ) {
+
+	var ui = app.ns("ui");
+
+	ui.DialogPanel = ui.DraggablePanel.extend({
+		_commit_handler: function(jEv) {
+			this.fire("commit", this, { jEv: jEv });
+		},
+		_main_template: function() {
+			var t = this._super();
+			t.children.push(this._actionsBar_template());
+			return t;
+		},
+		_actionsBar_template: function() {
+			return { tag: "DIV", cls: "ui-right", children: [
+				new app.ui.Button({ label: "Cancel", onclick: this._close_handler }),
+				new app.ui.Button({ label: "OK", onclick: this._commit_handler })
+			]};
+		}
+	});
+
+})( this.app );
+
 var acx = window.acx || {};
 
 /**
@@ -601,23 +624,6 @@ acx.ux = {};
  */
 acx.ui = {};
 
-
-acx.ui.DialogPanel = app.ui.DraggablePanel.extend({
-	_commit_handler: function(jEv) {
-		this.fire("commit", this, { jEv: jEv });
-	},
-	_main_template: function() {
-		var t = this._super();
-		t.children.push(this._actionsBar_template());
-		return t;
-	},
-	_actionsBar_template: function() {
-		return { tag: "DIV", cls: "ui-right", children: [
-			new app.ui.Button({ label: "Cancel", onclick: this._close_handler }),
-			new app.ui.Button({ label: "OK", onclick: this._commit_handler })
-		]};
-	}
-});
 
 acx.ui.MenuPanel = app.ui.AbstractPanel.extend({
 	defaults: {
@@ -2240,7 +2246,7 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 					})
 				]
 			});
-			var dialog = new acx.ui.DialogPanel({
+			var dialog = new app.ui.DialogPanel({
 				title: acx.text("ClusterOverview.NewIndex"),
 				body: new acx.ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {
@@ -2263,7 +2269,7 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 					new app.ui.TextField({ label: acx.text("AliasForm.AliasName"), name: "alias", require: true })
 				]
 			});
-			var dialog = new acx.ui.DialogPanel({
+			var dialog = new app.ui.DialogPanel({
 				title: acx.text("AliasForm.NewAliasForIndexName", index.name),
 				body: new acx.ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {

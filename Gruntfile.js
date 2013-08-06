@@ -32,6 +32,7 @@ module.exports = function(grunt) {
 					'src/app/ui/abstractPanel/abstractPanel.js',
 					'src/app/ui/draggablePanel/draggablePanel.js',
 					'src/app/ui/infoPanel/infoPanel.js',
+					'src/app/ui/dialogPanel/dialogPanel.js',
 
 					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
