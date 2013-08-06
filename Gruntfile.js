@@ -22,8 +22,15 @@ module.exports = function(grunt) {
 					'src/app/ux/observable.js',
 					'src/app/ux/dragdrop.js',
 					'src/app/ui/abstractWidget/abstractWidget.js',
+
 					'src/app/ui/abstractField/abstractField.js',
 					'src/app/ui/textField/textField.js',
+					'src/app/ui/button/button.js',
+					'src/app/ui/menuButton/menuButton.js',
+					'src/app/ui/splitButton/splitButton.js',
+					'src/app/ui/toolbar/toolbar.js',
+					'src/app/ui/abstractPanel/abstractPanel.js',
+
 					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
 
@@ -35,11 +42,6 @@ module.exports = function(grunt) {
 					'lib/dateRangeParser/date-range-parser.js',
 
 					'src/app/services/cluster.js',
-
-					'src/app/ui/button/button.js',
-					'src/app/ui/menuButton/menuButton.js',
-					'src/app/ui/splitButton/splitButton.js',
-					'src/app/ui/toolbar/toolbar.js',
 
 					'src/app/ui/connect/connect.js',
 					'src/app/ui/header/header.js',
@@ -54,6 +56,7 @@ module.exports = function(grunt) {
 					'src/app/ui/menuButton/menuButton.css',
 					'src/app/ui/splitButton/splitButton.css',
 					'src/app/ui/toolbar/toolbar.css',
+					'src/app/ui/abstractPanel/abstractPanel.css',
 					'src/app/ui/header/header.css'
 				],
 				dest: 'dist/ui.css'
