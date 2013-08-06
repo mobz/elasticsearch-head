@@ -295,27 +295,6 @@ acx.ux = {};
  */
 acx.ui = {};
 
-
-acx.ui.Toolbar = app.ui.AbstractWidget.extend({
-	defaults: {
-		label: "",
-		left: [],
-		right: []
-	},
-	init: function(parent) {
-		this._super();
-		this.el = $(this._main_template());
-	},
-	_main_template: function() {
-		return { tag: "DIV", cls: "uiToolbar", children: [
-			{ tag: "DIV", cls: "ui-left", children: [
-				{ tag: "H2", text: this.config.label }
-			].concat(this.config.left) },
-			{ tag: "DIV", cls: "ui-right", children: this.config.right }
-		]};
-	}
-});
-
 /**
  * base abstract class for all modal panels,
  * provides open, close, modal and panel stacking
@@ -1621,7 +1600,7 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: "browser", children: [
-				new acx.ui.Toolbar({
+				new app.ui.Toolbar({
 					label: acx.text("Browser.Title"),
 					left: [ ],
 					right: [ this._refreshButton ]
@@ -2303,7 +2282,7 @@ acx.ui.PanelForm = app.ui.AbstractWidget.extend({
 		},
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "clusterOverview", children: [
-				new acx.ui.Toolbar({
+				new app.ui.Toolbar({
 					label: acx.text("Overview.PageTitle"),
 					left: [
 						new app.ui.Button({
@@ -8515,6 +8494,32 @@ under the License.
 			return { tag: "DIV", cls: this.baseClass, children: [
 				this.button, this.menuButton
 			] };
+		}
+	});
+
+})( this.jQuery, this.app );
+
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.Toolbar = ui.AbstractWidget.extend({
+		defaults: {
+			label: "",
+			left: [],
+			right: []
+		},
+		init: function(parent) {
+			this._super();
+			this.el = $(this._main_template());
+		},
+		_main_template: function() {
+			return { tag: "DIV", cls: "uiToolbar", children: [
+				{ tag: "DIV", cls: "ui-left", children: [
+					{ tag: "H2", text: this.config.label }
+				].concat(this.config.left) },
+				{ tag: "DIV", cls: "ui-right", children: this.config.right }
+			]};
 		}
 	});
 

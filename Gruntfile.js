@@ -39,6 +39,7 @@ module.exports = function(grunt) {
 					'src/app/ui/button/button.js',
 					'src/app/ui/menuButton/menuButton.js',
 					'src/app/ui/splitButton/splitButton.js',
+					'src/app/ui/toolbar/toolbar.js',
 
 					'src/app/ui/connect/connect.js',
 					'src/app/ui/header/header.js',
@@ -52,7 +53,7 @@ module.exports = function(grunt) {
 					'src/app/ui/button/button.css',
 					'src/app/ui/menuButton/menuButton.css',
 					'src/app/ui/splitButton/splitButton.css',
-
+					'src/app/ui/toolbar/toolbar.css',
 					'src/app/ui/header/header.css'
 				],
 				dest: 'dist/ui.css'
