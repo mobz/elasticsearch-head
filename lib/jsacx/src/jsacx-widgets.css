@@ -2,40 +2,6 @@
 .ui-right { float: right; }
 .require { color: #a00; }
 
-/* acx.ui.Table */
-
-.uiTable TABLE {
-	border-collapse: collapse;
-}
-
-.uiTable-body {
-	overflow-y: scroll;
-	overflow-x: auto;
-}
-
-.uiTable-headers {
-	overflow-x: hidden;
-}
-
-.uiTable-body TD {
-	white-space: nowrap;
-}
-
-.uiTable-body .uiTable-header-row TH,
-.uiTable-body .uiTable-header-row TH DIV {
-	padding-top: 0;
-	padding-bottom: 0;
-}
-
-.uiTable-body .uiTable-header-cell > DIV {
-	height: 0;
-	overflow: hidden;
-}
-
-.uiTable-headercell-menu {
-	float: right;
-}
-
 .uiPanelForm-field {
 	display: block;
 	padding: 2px 0;

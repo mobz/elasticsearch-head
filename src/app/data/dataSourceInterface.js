@@ -4,7 +4,7 @@
 	var ux = app.ns("ux");
 
 	/**
-	 * An abstract interface for delivering async data to a data consumer (eg acx.ui.Table)
+	 * An abstract interface for delivering async data to a data consumer (eg app.ui.Table)
 	 */
 	data.DataSourceInterface = ux.Observable.extend({
 		/*

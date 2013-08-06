@@ -237,6 +237,70 @@ BUTTON::-moz-focus-inner {
 	border: 1px solid #222;
 }
 
+.uiMenuPanel {
+	border: 1px solid #668dc6;
+	position: absolute;
+	background: #96c6eb;
+	color: white;
+}
+
+.uiMenuPanel LI {
+	list-style: none;
+	border-bottom: 1px solid #668dc6;
+}
+
+.uiMenuPanel LI:hover {
+	background: #2575b7;
+}
+
+.uiMenuPanel LI:last-child {
+	border-bottom: 0;
+} 
+
+.uiMenuPanel-label {
+	white-space: nowrap;
+	padding: 2px 10px 2px 10px;
+	cursor: pointer;
+}
+
+.disabled .uiMenuPanel-label {
+	cursor: auto;
+	color: #888;
+}
+
+
+.uiTable TABLE {
+	border-collapse: collapse;
+}
+
+.uiTable-body {
+	overflow-y: scroll;
+	overflow-x: auto;
+}
+
+.uiTable-headers {
+	overflow-x: hidden;
+}
+
+.uiTable-body TD {
+	white-space: nowrap;
+}
+
+.uiTable-body .uiTable-header-row TH,
+.uiTable-body .uiTable-header-row TH DIV {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.uiTable-body .uiTable-header-cell > DIV {
+	height: 0;
+	overflow: hidden;
+}
+
+.uiTable-headercell-menu {
+	float: right;
+}
+
 .uiHeader * {
 	box-sizing: border-box;
 	font-family: Avenir, Helvetica Neue, Helvetica, sans-serif;

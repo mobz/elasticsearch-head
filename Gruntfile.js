@@ -21,8 +21,9 @@ module.exports = function(grunt) {
 				src: [
 					'src/app/ux/observable.js',
 					'src/app/ux/dragdrop.js',
-					'src/app/ui/abstractWidget/abstractWidget.js',
+					'src/app/ux/fieldCollection.js',
 
+					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',
 					'src/app/ui/textField/textField.js',
 					'src/app/ui/button/button.js',
@@ -33,8 +34,9 @@ module.exports = function(grunt) {
 					'src/app/ui/draggablePanel/draggablePanel.js',
 					'src/app/ui/infoPanel/infoPanel.js',
 					'src/app/ui/dialogPanel/dialogPanel.js',
+					'src/app/ui/menuPanel/menuPanel.js',
+					'src/app/ui/table/table.js',
 
-					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
 
 					'src/app/data/dataSourceInterface.js',
@@ -60,6 +62,8 @@ module.exports = function(grunt) {
 					'src/app/ui/splitButton/splitButton.css',
 					'src/app/ui/toolbar/toolbar.css',
 					'src/app/ui/abstractPanel/abstractPanel.css',
+					'src/app/ui/menuPanel/menuPanel.css',
+					'src/app/ui/table/table.css',
 					'src/app/ui/header/header.css'
 				],
 				dest: 'dist/ui.css'

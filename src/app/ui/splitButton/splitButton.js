@@ -32,7 +32,7 @@
 			});
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
-				menu: new (acx.ui.MenuPanel.extend({
+				menu: new (app.ui.MenuPanel.extend({
 					baseClass: "uiSplitMenuPanel uiMenuPanel",
 					_getPosition: function( jEv ) {
 						var parent = $(jEv.target).closest("BUTTON");
