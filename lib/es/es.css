@@ -296,7 +296,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	margin-left: 365px;
 }
 
-/* acx.ui.DraggablePanel + es.JsonPretty overrides */
+/* app.ui.DraggablePanel + es.JsonPretty overrides */
 
 .dark span.jsonPretty-string { color: #6F6; }
 .dark span.jsonPretty-number { color: #66F; }

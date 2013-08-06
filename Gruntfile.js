@@ -30,6 +30,7 @@ module.exports = function(grunt) {
 					'src/app/ui/splitButton/splitButton.js',
 					'src/app/ui/toolbar/toolbar.js',
 					'src/app/ui/abstractPanel/abstractPanel.js',
+					'src/app/ui/draggablePanel/draggablePanel.js',
 
 					'lib/jsacx/src/jsacx-widgets.js',
 					'lib/jsacx/src/jsacx-fields.js',
