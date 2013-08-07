@@ -26,9 +26,11 @@ module.exports = function(grunt) {
 					'src/app/ux/fieldCollection.js',
 
 					'src/app/data/dataSourceInterface.js',
+					'src/app/data/resultDataSourceInterface.js',
 					'src/app/data/metaData.js',
 					'src/app/data/metaDataFactory.js',
 					'src/app/data/query.js',
+					'src/app/data/queryDataSourceInterface.js',
 
 					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',
@@ -44,8 +46,9 @@ module.exports = function(grunt) {
 					'src/app/ui/menuPanel/menuPanel.js',
 					'src/app/ui/table/table.js',
 					'src/app/ui/panelForm/panelForm.js',
+					'src/app/ui/helpPanel/helpPanel.js',
+					'src/app/ui/jsonPanel/jsonPanel.js',
 
-					'lib/es/core.js',
 					'lib/es/widgets.js',
 
 					'src/app/services/storage.js',

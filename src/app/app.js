@@ -33,7 +33,7 @@
 		quick: function(title, path) {
 			this.quicks[path] && this.quicks[path].remove();
 			this.cluster.get(path, function(data) {
-				this.quicks[path] = new es.ui.JsonPanel({ title: title, json: data });
+				this.quicks[path] = new ui.JsonPanel({ title: title, json: data });
 			}.bind(this));
 		},
 		

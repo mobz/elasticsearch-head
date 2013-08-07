@@ -1,84 +1,8 @@
-(function( acx ) {
-	var es = window.es = {};
+(function( app ) {
 
-	/*
-	notes on elasticsearch terminology used in this project
+	var data = app.ns("data");
 
- indices[index] contains one or more
- types[type] contains one or more
- documents contain one or more
- paths[path]
- each path contains one element of data
- each path maps to one field
-
- eg PUT, "/twitter/tweet/1"
-		{
-			user: "mobz",
-			date: "2011-01-01",
-			message: "You know, for browsing elasticsearch",
-			name: {
-				first: "Ben",
-				last: "Birch"
-			}
-		}
-
-   creates
-   	1 index: twitter
-   	            this is the collection of index data
-   	1 type: tweet
-   	            this is the type of document (kind of like a table in sql)
-   	1 document: /twitter/tweet/1
-   	            this is an actual document in the index ( kind of like a row in sql)
-   	5 paths: [ ["user"], ["date"], ["message"], ["name","first"], ["name","last"] ]
-   	            since documents can be heirarchical this maps a path from a document root to a piece of data
-   	5 fields: [ "user", "date", "message", "first", "last" ]
-   	            this is an indexed 'column' of data. fields are not heirarchical
-
-   	the relationship between a path and a field is called a mapping. mappings also contain a wealth of information about how es indexes the field
-
-   notes
-    1) a path is stored as an array, the dpath is  <index> . <type> . path.join("."), which can be considered the canonical reference for a mapping
-    2) confusingly, es uses the term index for both the collection of indexed data, and the individually indexed fields
-         so the term index_name is the same as field_name in this sense.
-
-	 */
-
-	es.ResultDataSourceInterface = app.data.DataSourceInterface.extend({
-		results: function(res) {
-			this._getSummary(res);
-			this._getMeta(res);
-			this._getData(res);
-			this.sort = {};
-			this.fire("data", this);
-		},
-		_getData: function(res) {
-			var columns = this.columns = [];
-			this.data = res.hits.hits.map(function(hit) {
-				var row = (function(path, spec, row) {
-					for(var prop in spec) {
-						if(acx.isObject(spec[prop])) {
-							arguments.callee(path.concat(prop), spec[prop], row);
-						} else if(acx.isArray(spec[prop])) {
-							if(spec[prop].length) {
-								arguments.callee(path.concat(prop), spec[prop][0], row)
-							}
-						} else {
-							var dpath = path.concat(prop).join(".");
-							if(! columns.contains(dpath)) {
-								columns.push(dpath);
-							}
-							row[dpath] = (spec[prop] || "null").toString();
-						}
-					}
-					return row;
-				})([ hit._type ], hit, {});
-				row._source = hit;
-				return row;
-			}, this);
-		}
-	});
-
-	es.QueryDataSourceInterface = app.data.DataSourceInterface.extend({
+	data.QueryDataSourceInterface = data.DataSourceInterface.extend({
 		defaults: {
 			metadata: null, // (required) instanceof app.data.MetaData, the cluster metadata
 			query: null     // (required) instanceof app.data.Query the data source
@@ -160,18 +84,4 @@
 		}
 	});
 
-})( window.acx );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+})( this.app );

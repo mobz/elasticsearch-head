@@ -1,5 +1,48 @@
 (function( app ) {
 
+	/*
+	notes on elasticsearch terminology used in this project
+
+	indices[index] contains one or more
+	types[type] contains one or more
+	documents contain one or more
+	paths[path]
+	each path contains one element of data
+	each path maps to one field
+
+	eg PUT, "/twitter/tweet/1"
+	{
+		user: "mobz",
+		date: "2011-01-01",
+		message: "You know, for browsing elasticsearch",
+		name: {
+			first: "Ben",
+			last: "Birch"
+		}
+	}
+
+	creates
+		1 index: twitter
+				this is the collection of index data
+		1 type: tweet
+				this is the type of document (kind of like a table in sql)
+		1 document: /twitter/tweet/1
+				this is an actual document in the index ( kind of like a row in sql)
+		5 paths: [ ["user"], ["date"], ["message"], ["name","first"], ["name","last"] ]
+				since documents can be heirarchical this maps a path from a document root to a piece of data
+		5 fields: [ "user", "date", "message", "first", "last" ]
+				this is an indexed 'column' of data. fields are not heirarchical
+
+		the relationship between a path and a field is called a mapping. mappings also contain a wealth of information about how es indexes the field
+
+	notes
+	1) a path is stored as an array, the dpath is  <index> . <type> . path.join("."),
+			which can be considered the canonical reference for a mapping
+	2) confusingly, es uses the term index for both the collection of indexed data, and the individually indexed fields
+			so the term index_name is the same as field_name in this sense.
+
+	*/
+
 	var data = app.ns("data");
 	var ux = app.ns("ux");
 
