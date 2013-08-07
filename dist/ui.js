@@ -2856,7 +2856,7 @@
 				store: qdi,
 				height: 400,
 				width: this.out.innerWidth()
-			} ).appendTo(this.out.empty());
+			} ).attach(this.out.empty());
 			qdi._results_handler(qdi.config.query, results);
 		},
 		
