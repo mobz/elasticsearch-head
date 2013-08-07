@@ -26,6 +26,9 @@ module.exports = function(grunt) {
 					'src/app/ux/fieldCollection.js',
 
 					'src/app/data/dataSourceInterface.js',
+					'src/app/data/metaData.js',
+					'src/app/data/metaDataFactory.js',
+					'src/app/data/query.js',
 
 					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',

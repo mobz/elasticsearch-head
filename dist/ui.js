@@ -198,9 +198,6 @@
 	var data = app.ns("data");
 	var ux = app.ns("ux");
 
-	/**
-	 * An abstract interface for delivering async data to a data consumer (eg app.ui.Table)
-	 */
 	data.DataSourceInterface = ux.Observable.extend({
 		/*
 		properties
@@ -211,9 +208,360 @@
 		events
 			data: function( DataSourceInterface )
 		 */
+		_getSummary: function(res) {
+			this.summary = acx.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
+		},
+		_getMeta: function(res) {
+			this.meta = { total: res.hits.total, shards: res._shards, tool: res.took };
+		}
 	});
 
 })( this.app );
+(function( app ) {
+
+	var data = app.ns("data");
+	var ux = app.ns("ux");
+
+	var coretype_map = {
+		"string" : "string",
+		"long" : "number",
+		"integer" : "number",
+		"float" : "number",
+		"double" : "number",
+		"ip" : "number",
+		"date" : "date",
+		"boolean" : "boolean",
+		"binary" : "binary",
+		"multi_field" : "multi_field"
+	};
+
+	var default_property_map = {
+		"string" : { "store" : "no", "index" : "analysed" },
+		"number" : { "store" : "no", "precision_steps" : 4 },
+		"date" : { "store" : "no", "format" : "dateOptionalTime", "index": "yes", "precision_steps": 4 },
+		"boolean" : { "store" : "no", "index": "yes" },
+		"binary" : { },
+		"multi_field" : { }
+	};
+
+	// parses metatdata from a cluster, into a bunch of useful data structures
+	data.MetaData = ux.Observable.extend({
+		defaults: {
+			state: null // (required) response from a /_cluster/state request
+		},
+		init: function() {
+			this._super();
+			this.refresh(this.config.state);
+		},
+		getIndices: function(alias) {
+			return alias ? this.aliases[alias] : this.indicesList;
+		},
+		// returns an array of strings containing all types that are in all of the indices passed in, or all types
+		getTypes: function(indices) {
+			var indices = indices || [], types = [];
+			this.typesList.forEach(function(type) {
+				for(var i = 0; i < indices.length; i++) {
+					if(! this.indices[indices[i]].types.contains(type))
+						return;
+				}
+				types.push(type);
+			}, this);
+			return types;
+		},
+		refresh: function(state) {
+			// currently metadata expects all like named fields to have the same type, even when from different types and indices
+			var aliases = this.aliases = {};
+			var indices = this.indices = {};
+			var types = this.types = {};
+			var fields = this.fields = {};
+			var paths = this.paths = {};
+
+			function createField( mapping, index, type, path, name ) {
+				var dpath = [ index, type ].concat( path ).join( "." );
+				var field_name = mapping.index_name || name;
+				var field = paths[ dpath ] = fields[ field_name ] || acx.extend({
+					field_name : field_name,
+					core_type : coretype_map[ mapping.type ],
+					dpaths : []
+				}, default_property_map[ coretype_map[ mapping.type ] ], mapping );
+
+				if (field.type === "multi_field" && typeof field.fields !== "undefined") {
+					for (var subField in field.fields) {
+						field.fields[ subField ] = createField( field.fields[ subField ], index, type, path.concat( subField ), name + "." + subField );
+					}
+				}
+				if (fields.dpaths) {
+					field.dpaths.push(dpath);
+				}
+				return field;
+			}
+			function getFields(properties, type, index, listeners) {
+				(function procPath(prop, path) {
+					for (var n in prop) {
+						if ("properties" in prop[n]) {
+							procPath( prop[ n ].properties, path.concat( n ) );
+						} else {
+							var field = createField(prop[n], index, type, path.concat(n), n);							
+							listeners.forEach( function( listener ) {
+								listener[ field.field_name ] = field;
+							} );
+						}
+					}
+				})(properties, []);
+			}
+			for (var index in state.metadata.indices) {
+				indices[index] = {
+					types : [], fields : {}, paths : {}, parents : {}
+				};
+				indices[index].aliases = state.metadata.indices[index].aliases;
+				indices[index].aliases.forEach(function(alias) {
+					(aliases[alias] || (aliases[alias] = [])).push(index);
+				});
+				var mapping = state.metadata.indices[index].mappings;
+				for (var type in mapping) {
+					indices[index].types.push(type);
+					if ( type in types) {
+						types[type].indices.push(index);
+					} else {
+						types[type] = {
+							indices : [index], fields : {}
+						};
+					}
+					getFields(mapping[type].properties, type, index, [fields, types[type].fields, indices[index].fields]);
+					if ( typeof mapping[type]._parent !== "undefined") {
+						indices[index].parents[type] = mapping[type]._parent.type;
+					}
+				}
+			}
+
+			this.aliasesList = Object.keys(aliases);
+			this.indicesList = Object.keys(indices);
+			this.typesList = Object.keys(types);
+			this.fieldsList = Object.keys(fields);
+		}
+	});
+
+})( this.app );	
+
+(function( app ) {
+
+	var data = app.ns("data");
+	var ux = app.ns("ux");
+
+	data.MetaDataFactory = ux.Observable.extend({
+		defaults: {
+			cluster: null // (required) an app.services.Cluster
+		},
+		init: function() {
+			this._super();
+			this.config.cluster.get("_cluster/state", function(data) {
+				this.metaData = new app.data.MetaData({state: data});
+				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy es.FilterBrowser
+			}.bind(this));
+		}
+	});
+
+})( this.app );
+
+(function( app ) {
+
+	var data = app.ns("data");
+	var ux = app.ns("ux");
+
+	data.Query = ux.Observable.extend({
+		defaults: {
+			cluster: null,  // (required) instanceof app.services.Cluster
+			size: 50        // size of pages to return
+		},
+		init: function() {
+			this._super();
+			this.cluster = this.config.cluster;
+			this.refuid = 0;
+			this.refmap = {};
+			this.indices = [];
+			this.types = [];
+			this.search = {
+				fields : [ "_parent", "_source" ],
+				query: { bool: { must: [], must_not: [], should: [] } },
+				from: 0,
+				size: this.config.size,
+				sort: [],
+				facets: {},
+				version: true
+			};
+			this.defaultClause = this.addClause();
+			this.history = [ this.getState() ];
+		},
+		clone: function() {
+			var q = new data.Query({ cluster: this.cluster });
+			q.restoreState(this.getState());
+			for(var uqid in q.refmap) {
+				q.removeClause(uqid);
+			}
+			return q;
+		},
+		getState: function() {
+			return acx.extend(true, {}, { search: this.search, indices: this.indices, types: this.types });
+		},
+		restoreState: function(state) {
+			state = acx.extend(true, {}, state || this.history[this.history.length - 1]);
+			this.indices = state.indices;
+			this.types = state.types;
+			this.search = state.search;
+		},
+		getData: function() {
+			return JSON.stringify(this.search);
+		},
+		query: function() {
+			var state = this.getState();
+			this.cluster.post(
+					(this.indices.join(",") || "_all") + "/" + ( this.types.length ? this.types.join(",") + "/" : "") + "_search",
+					this.getData(),
+					function(results) {
+						if(results === null) {
+							alert(acx.text("Query.FailAndUndo"));
+							this.restoreState();
+							return;
+						}
+						this.history.push(state);
+
+						this.fire("results", this, results);
+					}.bind(this));
+		},
+		loadParents: function(res,metadata){
+			//create data for mget
+			var data = { docs :[] };
+			var indexToTypeToParentIds = {};
+			res.hits.hits.forEach(function(hit) {
+			if (typeof hit.fields != "undefined"){
+				if (typeof hit.fields._parent != "undefined"){
+					var parentType = metadata.indices[hit._index].parents[hit._type];
+					if (typeof indexToTypeToParentIds[hit._index] == "undefined"){
+						indexToTypeToParentIds[hit._index] = new Object();
+					}
+					if (typeof indexToTypeToParentIds[hit._index][hit._type] == "undefined"){
+						indexToTypeToParentIds[hit._index][hit._type] = new Object();
+					}
+					if (typeof indexToTypeToParentIds[hit._index][hit._type][hit.fields._parent] == "undefined"){
+						indexToTypeToParentIds[hit._index][hit._type][hit.fields._parent] = null;
+						data.docs.push({ _index:hit._index, _type:parentType, _id:hit.fields._parent});
+					}
+				}
+			}
+		});
+
+		//load parents
+		var state = this.getState();
+			this.cluster.post("_mget",JSON.stringify(data),
+				function(results) {
+					if(results === null) {
+						alert(acx.text("Query.FailAndUndo"));
+						this.restoreState();
+						return;
+					}
+					this.history.push(state);
+					var indexToTypeToParentIdToHit = new Object();
+					results.docs.forEach(function(doc) {
+						if (typeof indexToTypeToParentIdToHit[doc._index] == "undefined"){
+						indexToTypeToParentIdToHit[doc._index] = new Object();
+					}
+					
+					if (typeof indexToTypeToParentIdToHit[doc._index][doc._type] == "undefined"){
+						indexToTypeToParentIdToHit[doc._index][doc._type] = new Object();
+					}
+					
+					indexToTypeToParentIdToHit[doc._index][doc._type][doc._id] = doc;
+					});
+					
+					res.hits.hits.forEach(function(hit) {
+						if (typeof hit.fields != "undefined"){
+							if (typeof hit.fields._parent != "undefined"){
+								var parentType = metadata.indices[hit._index].parents[hit._type];
+								hit._parent = indexToTypeToParentIdToHit[hit._index][parentType][hit.fields._parent];
+							}
+						}
+					});
+
+					this.fire("resultsWithParents", this, res);
+				}.bind(this));
+		},
+		setPage: function(page) {
+			this.search.from = this.config.size * (page - 1);
+		},
+		setSort: function(index, desc) {
+			var sortd = {}; sortd[index] = { reverse: !!desc };
+			this.search.sort.unshift( sortd );
+			for(var i = 1; i < this.search.sort.length; i++) {
+				if(Object.keys(this.search.sort[i])[0] === index) {
+					this.search.sort.splice(i, 1);
+					break;
+				}
+			}
+		},
+		setIndex: function(index, add) {
+			if(add) {
+				if(! this.indices.contains(index)) this.indices.push(index);
+			} else {
+				this.indices.remove(index);
+			}
+			this.fire("setIndex", this, { index: index, add: !!add });
+		},
+		setType: function(type, add) {
+			if(add) {
+				if(! this.types.contains(type)) this.types.push(type);
+			} else {
+				this.types.remove(type);
+			}
+			this.fire("setType", this, { type: type, add: !!add });
+		},
+		addClause: function(value, field, op, bool) {
+			bool = bool || "should";
+			op = op || "match_all";
+			field = field || "_all";
+			var clause = this._setClause(value, field, op, bool);
+			var uqid = "q-" + this.refuid++;
+			this.refmap[uqid] = { clause: clause, value: value, field: field, op: op, bool: bool };
+			if(this.search.query.bool.must.length + this.search.query.bool.should.length > 1) {
+				this.removeClause(this.defaultClause);
+			}
+			this.fire("queryChanged", this, { uqid: uqid, search: this.search} );
+			return uqid; // returns reference to inner query object to allow fast updating
+		},
+		removeClause: function(uqid) {
+			var ref = this.refmap[uqid],
+				bool = this.search.query.bool[ref.bool];
+			bool.remove(ref.clause);
+			if(this.search.query.bool.must.length + this.search.query.bool.should.length === 0) {
+				this.defaultClause = this.addClause();
+			}
+		},
+		addFacet: function(facet) {
+			var facetId = "f-" + this.refuid++;
+			this.search.facets[facetId] = facet;
+			this.refmap[facetId] = { facetId: facetId, facet: facet };
+			return facetId;
+		},
+		removeFacet: function(facetId) {
+			delete this.search.facets[facetId];
+			delete this.refmap[facetId];
+		},
+		_setClause: function(value, field, op, bool) {
+			var clause = {}, query = {};
+			if(op === "match_all") {
+			} else if(op === "query_string") {
+				query["default_field"] = field;
+				query["query"] = value;
+			} else {
+				query[field] = value;
+			}
+			clause[op] = query;
+			this.search.query.bool[bool].push(clause);
+			return clause;
+		}
+	});
+
+})( this.app );
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -863,338 +1211,7 @@
 
 	 */
 
-	var coretype_map = {
-		"string" : "string",
-		"long" : "number",
-		"integer" : "number",
-		"float" : "number",
-		"double" : "number",
-		"ip" : "number",
-		"date" : "date",
-		"boolean" : "boolean",
-		"binary" : "binary",
-		"multi_field" : "multi_field"
-	};
-	var default_property_map = {
-		"string" : { "store" : "no", "index" : "analysed" },
-		"number" : { "store" : "no", "precision_steps" : 4 },
-		"date" : { "store" : "no", "format" : "dateOptionalTime", "index": "yes", "precision_steps": 4 },
-		"boolean" : { "store" : "no", "index": "yes" },
-		"binary" : { },
-		"multi_field" : { }
-	};
-
-	// parses metatdata from a cluster, into a bunch of useful data structures
-	es.MetaData = app.ux.Observable.extend({
-		defaults: {
-			state: null // (required) response from a /_cluster/state request
-		},
-		init: function() {
-			this._super();
-			this.refresh(this.config.state);
-		},
-		getIndices: function(alias) {
-			return alias ? this.aliases[alias] : this.indicesList;
-		},
-		// returns an array of strings containing all types that are in all of the indices passed in, or all types
-		getTypes: function(indices) {
-			var indices = indices || [], types = [];
-			this.typesList.forEach(function(type) {
-				for(var i = 0; i < indices.length; i++) {
-					if(! this.indices[indices[i]].types.contains(type))
-						return;
-				}
-				types.push(type);
-			}, this);
-			return types;
-		},
-		refresh: function(state) {
-			// currently metadata expects all like named fields to have the same type, even when from different types and indices
-			var aliases = this.aliases = {};
-			var indices = this.indices = {};
-			var types = this.types = {};
-			var fields = this.fields = {};
-			var paths = this.paths = {};
-
-			function createField( mapping, index, type, path, name ) {
-				var dpath = [index, type].concat(path).join(".");
-				var field_name = mapping.index_name || name;
-				var field = paths[dpath] = fields[field_name] || acx.extend({
-					field_name : field_name,
-					core_type : coretype_map[mapping.type],
-					dpaths : []
-				}, default_property_map[coretype_map[mapping.type]], mapping);
-				if (field.type === "multi_field" && typeof field.fields !== "undefined") {
-					for (var subField in field.fields) {
-						field.fields[subField] = createField(field.fields[subField], index, type, path.concat(subField), name + "." + subField );
-					}
-				}
-				if (fields.dpaths) {
-					field.dpaths.push(dpath);
-				}
-				return field;
-			}
-			function getFields(properties, type, index, listeners) {
-				(function(prop, path) {
-					for (var n in prop) {
-						if ("properties" in prop[n]) {
-							arguments.callee(prop[n].properties, path.concat(n));
-						} else {
-							var field = createField(prop[n], index, type, path.concat(n), n);
-							listeners.forEach(function(obj) {
-								obj[field.field_name] = field;
-							});
-						}
-					}
-				})(properties, []);
-			}
-			for (var index in state.metadata.indices) {
-				indices[index] = {
-					types : [], fields : {}, paths : {}, parents : {}
-				};
-				indices[index].aliases = state.metadata.indices[index].aliases;
-				indices[index].aliases.forEach(function(alias) {
-					(aliases[alias] || (aliases[alias] = [])).push(index);
-				});
-				var mapping = state.metadata.indices[index].mappings;
-				for (var type in mapping) {
-					indices[index].types.push(type);
-					if ( type in types) {
-						types[type].indices.push(index);
-					} else {
-						types[type] = {
-							indices : [index], fields : {}
-						};
-					}
-					getFields(mapping[type].properties, type, index, [fields, types[type].fields, indices[index].fields]);
-					if ( typeof mapping[type]._parent != "undefined") {
-						indices[index].parents[type] = mapping[type]._parent.type;
-					}
-				}
-			}
-
-			this.aliasesList = Object.keys(aliases);
-			this.indicesList = Object.keys(indices);
-			this.typesList = Object.keys(types);
-			this.fieldsList = Object.keys(fields);
-		}
-	});
-
-	es.MetaDataFactory = app.ux.Observable.extend({
-		defaults: {
-			cluster: null // (required) an app.services.Cluster
-		},
-		init: function() {
-			this._super();
-			this.config.cluster.get("_cluster/state", function(data) {
-				this.metaData = new es.MetaData({state: data});
-				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy es.FilterBrowser
-			}.bind(this));
-		}
-	});
-
-	es.Query = app.ux.Observable.extend({
-		defaults: {
-			cluster: null,  // (required) instanceof app.services.Cluster
-			size: 50		    // size of pages to return
-		},
-		init: function() {
-			this._super();
-			this.cluster = this.config.cluster;
-			this.refuid = 0;
-			this.refmap = {};
-			this.indices = [];
-			this.types = [];
-			this.search = {
-				fields : [ "_parent", "_source" ],
-				query: { bool: { must: [], must_not: [], should: [] } },
-				from: 0,
-				size: this.config.size,
-				sort: [],
-				facets: {},
-				version: true
-			};
-			this.defaultClause = this.addClause();
-			this.history = [ this.getState() ];
-		},
-		clone: function() {
-			var q = new es.Query( { cluster: this.cluster } );
-			q.restoreState(this.getState());
-			for(var uqid in q.refmap) {
-				q.removeClause(uqid);
-			}
-			return q;
-		},
-		getState: function() {
-			return acx.extend(true, {}, { search: this.search, indices: this.indices, types: this.types });
-		},
-		restoreState: function(state) {
-			state = acx.extend(true, {}, state || this.history[this.history.length - 1]);
-			this.indices = state.indices;
-			this.types = state.types;
-			this.search = state.search;
-		},
-		getData: function() {
-			return JSON.stringify(this.search);
-		},
-		query: function() {
-			var state = this.getState();
-			this.cluster.post(
-					(this.indices.join(",") || "_all") + "/" + ( this.types.length ? this.types.join(",") + "/" : "") + "_search",
-					this.getData(),
-					function(results) {
-						if(results === null) {
-							alert(acx.text("Query.FailAndUndo"));
-							this.restoreState();
-							return;
-						}
-						this.history.push(state);
-
-						this.fire("results", this, results);
-					}.bind(this));
-		},
-		loadParents: function(res,metadata){
-			//create data for mget
-			var data = { docs :[] };
-			var indexToTypeToParentIds = new Object();
-			res.hits.hits.forEach(function(hit) {
-			if (typeof hit.fields != "undefined"){
-				if (typeof hit.fields._parent != "undefined"){
-					var parentType = metadata.indices[hit._index].parents[hit._type];
-					if (typeof indexToTypeToParentIds[hit._index] == "undefined"){
-						indexToTypeToParentIds[hit._index] = new Object();
-					}
-					if (typeof indexToTypeToParentIds[hit._index][hit._type] == "undefined"){
-						indexToTypeToParentIds[hit._index][hit._type] = new Object();
-					}
-					if (typeof indexToTypeToParentIds[hit._index][hit._type][hit.fields._parent] == "undefined"){
-						indexToTypeToParentIds[hit._index][hit._type][hit.fields._parent] = null;
-						data.docs.push({ _index:hit._index, _type:parentType, _id:hit.fields._parent});
-					}
-				}
-			}
-		});
-
-		//load parents
-		var state = this.getState();
-			this.cluster.post("_mget",JSON.stringify(data),
-				function(results) {
-					if(results === null) {
-						alert(acx.text("Query.FailAndUndo"));
-						this.restoreState();
-						return;
-					}
-					this.history.push(state);
-					var indexToTypeToParentIdToHit = new Object();
-					results.docs.forEach(function(doc) {
-						if (typeof indexToTypeToParentIdToHit[doc._index] == "undefined"){
-						indexToTypeToParentIdToHit[doc._index] = new Object();
-					}
-					
-					if (typeof indexToTypeToParentIdToHit[doc._index][doc._type] == "undefined"){
-						indexToTypeToParentIdToHit[doc._index][doc._type] = new Object();
-					}
-					
-					indexToTypeToParentIdToHit[doc._index][doc._type][doc._id] = doc;
-					});
-					
-					res.hits.hits.forEach(function(hit) {
-						if (typeof hit.fields != "undefined"){
-							if (typeof hit.fields._parent != "undefined"){
-								var parentType = metadata.indices[hit._index].parents[hit._type];
-								hit._parent = indexToTypeToParentIdToHit[hit._index][parentType][hit.fields._parent];
-							}
-						}
-					});
-
-					this.fire("resultsWithParents", this, res);
-				}.bind(this));
-		},
-		setPage: function(page) {
-			this.search.from = this.config.size * (page - 1);
-		},
-		setSort: function(index, desc) {
-			var sortd = {}; sortd[index] = { reverse: !!desc };
-			this.search.sort.unshift( sortd );
-			for(var i = 1; i < this.search.sort.length; i++) {
-				if(Object.keys(this.search.sort[i])[0] === index) {
-					this.search.sort.splice(i, 1);
-					break;
-				}
-			}
-		},
-		setIndex: function(index, add) {
-			if(add) {
-				if(! this.indices.contains(index)) this.indices.push(index);
-			} else {
-				this.indices.remove(index);
-			}
-			this.fire("setIndex", this, { index: index, add: !!add });
-		},
-		setType: function(type, add) {
-			if(add) {
-				if(! this.types.contains(type)) this.types.push(type);
-			} else {
-				this.types.remove(type);
-			}
-			this.fire("setType", this, { type: type, add: !!add });
-		},
-		addClause: function(value, field, op, bool) {
-			bool = bool || "should";
-			op = op || "match_all";
-			field = field || "_all";
-			var clause = this._setClause(value, field, op, bool);
-			var uqid = "q-" + this.refuid++;
-			this.refmap[uqid] = { clause: clause, value: value, field: field, op: op, bool: bool };
-			if(this.search.query.bool.must.length + this.search.query.bool.should.length > 1) {
-				this.removeClause(this.defaultClause);
-			}
-			this.fire("queryChanged", this, { uqid: uqid, search: this.search} );
-			return uqid; // returns reference to inner query object to allow fast updating
-		},
-		removeClause: function(uqid) {
-			var ref = this.refmap[uqid],
-				bool = this.search.query.bool[ref.bool];
-			bool.remove(ref.clause);
-			if(this.search.query.bool.must.length + this.search.query.bool.should.length === 0) {
-				this.defaultClause = this.addClause();
-			}
-		},
-		addFacet: function(facet) {
-			var facetId = "f-" + this.refuid++;
-			this.search.facets[facetId] = facet;
-			this.refmap[facetId] = { facetId: facetId, facet: facet };
-			return facetId;
-		},
-		removeFacet: function(facetId) {
-			delete this.search.facets[facetId];
-			delete this.refmap[facetId];
-		},
-		_setClause: function(value, field, op, bool) {
-			var clause = {}, query = {};
-			if(op === "match_all") {
-			} else if(op === "query_string") {
-				query["default_field"] = field;
-				query["query"] = value;
-			} else {
-				query[field] = value;
-			}
-			clause[op] = query;
-			this.search.query.bool[bool].push(clause);
-			return clause;
-		}
-	});
-
-	es.AbstractDataSourceInterface = app.data.DataSourceInterface.extend({
-		_getSummary: function(res) {
-			this.summary = acx.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
-		},
-		_getMeta: function(res) {
-			this.meta = { total: res.hits.total, shards: res._shards, tool: res.took };
-		}
-	});
-
-	es.ResultDataSourceInterface = es.AbstractDataSourceInterface.extend({
+	es.ResultDataSourceInterface = app.data.DataSourceInterface.extend({
 		results: function(res) {
 			this._getSummary(res);
 			this._getMeta(res);
@@ -1229,10 +1246,10 @@
 		}
 	});
 
-	es.QueryDataSourceInterface = es.AbstractDataSourceInterface.extend({
+	es.QueryDataSourceInterface = app.data.DataSourceInterface.extend({
 		defaults: {
-			metadata: null, // (required) instanceof es.MetaData, the cluster metadata
-			query: null     // (required) instanceof es.Query the data source
+			metadata: null, // (required) instanceof app.data.MetaData, the cluster metadata
+			query: null     // (required) instanceof app.data.Query the data source
 		},
 		init: function() {
 			this._super();
@@ -1450,8 +1467,8 @@
 
 	es.ui.QueryFilter = app.ui.AbstractWidget.extend({
 		defaults: {
-			metadata: null,   // (required) instanceof es.MetaData
-			query: null       // (required) instanceof es.Query that the filters will act apon
+			metadata: null,   // (required) instanceof app.data.MetaData
+			query: null       // (required) instanceof app.data.Query that the filters will act apon
 		},
 		init: function() {
 			this._super();
@@ -1740,7 +1757,7 @@
 		init: function() {
 			this._super();
 			this.cluster = this.config.cluster;
-			this.query = new es.Query( { cluster: this.cluster } );
+			this.query = new app.data.Query( { cluster: this.cluster } );
 			this._refreshButton = new app.ui.Button({
 				label: acx.text("General.RefreshResults"),
 				onclick: function( btn ) {
@@ -1748,7 +1765,7 @@
 				}.bind(this)
 			});
 			this.el = $(this._main_template());
-			new es.MetaDataFactory({
+			new app.data.MetaDataFactory({
 				cluster: this.cluster,
 				onReady: function(metadata) {
 					this.metadata = metadata;
@@ -2834,7 +2851,7 @@
 		
 		_tableResults_handler: function(results, metadata) {
 			// hack up a QueryDataSourceInterface so that StructuredQuery keeps working without using an es.Query object
-			var qdi = new es.QueryDataSourceInterface({ metadata: metadata, query: new es.Query() });
+			var qdi = new es.QueryDataSourceInterface({ metadata: metadata, query: new app.data.Query() });
 			var tab = new app.ui.Table( {
 				store: qdi,
 				height: 400,
@@ -2883,7 +2900,7 @@
 			this.el = $(this._main_template());
 			this.filtersEl = this.el.find(".es-filterBrowser-filters");
 			this.attach( parent );
-			new es.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
+			new app.data.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
 				this.metadata = metadata;
 				this._createFilters_handler(eventData.originalData.metadata.indices);
 			}.bind(this) });

@@ -3,9 +3,6 @@
 	var data = app.ns("data");
 	var ux = app.ns("ux");
 
-	/**
-	 * An abstract interface for delivering async data to a data consumer (eg app.ui.Table)
-	 */
 	data.DataSourceInterface = ux.Observable.extend({
 		/*
 		properties
@@ -16,6 +13,12 @@
 		events
 			data: function( DataSourceInterface )
 		 */
+		_getSummary: function(res) {
+			this.summary = acx.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
+		},
+		_getMeta: function(res) {
+			this.meta = { total: res.hits.total, shards: res._shards, tool: res.took };
+		}
 	});
 
 })( this.app );
