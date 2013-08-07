@@ -1,3 +1,7 @@
+.ui-left { float: left; }
+.ui-right { float: right; }
+.require { color: #a00; }
+
 BODY {
 	font-family: Verdana, sans-serif;
 	font-size: 73%;

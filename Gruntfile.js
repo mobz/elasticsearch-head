@@ -13,7 +13,9 @@ module.exports = function(grunt) {
 					'src/app/boot.js',
 
 					'lib/jsacx/src/jsacx.js',
-					'lib/nohtml/jquery.acx-nohtml.js'
+					'lib/nohtml/jquery.acx-nohtml.js',
+					'lib/graphael/g.raphael.standalone.js',
+					'lib/dateRangeParser/date-range-parser.js'
 				],
 				dest: 'dist/core.js'
 			},
@@ -22,6 +24,8 @@ module.exports = function(grunt) {
 					'src/app/ux/observable.js',
 					'src/app/ux/dragdrop.js',
 					'src/app/ux/fieldCollection.js',
+
+					'src/app/data/dataSourceInterface.js',
 
 					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',
@@ -36,15 +40,10 @@ module.exports = function(grunt) {
 					'src/app/ui/dialogPanel/dialogPanel.js',
 					'src/app/ui/menuPanel/menuPanel.js',
 					'src/app/ui/table/table.js',
-
-					'lib/jsacx/src/jsacx-fields.js',
-
-					'src/app/data/dataSourceInterface.js',
+					'src/app/ui/panelForm/panelForm.js',
 
 					'lib/es/core.js',
 					'lib/es/widgets.js',
-					'lib/graphael/g.raphael.standalone.js',
-					'lib/dateRangeParser/date-range-parser.js',
 
 					'src/app/services/cluster.js',
 
@@ -64,6 +63,7 @@ module.exports = function(grunt) {
 					'src/app/ui/abstractPanel/abstractPanel.css',
 					'src/app/ui/menuPanel/menuPanel.css',
 					'src/app/ui/table/table.css',
+					'src/app/ui/panelForm/panelForm.css',
 					'src/app/ui/header/header.css'
 				],
 				dest: 'dist/ui.css'
