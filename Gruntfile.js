@@ -45,6 +45,7 @@ module.exports = function(grunt) {
 					'lib/es/core.js',
 					'lib/es/widgets.js',
 
+					'src/app/services/storage.js',
 					'src/app/services/cluster.js',
 
 					'src/app/ui/connect/connect.js',

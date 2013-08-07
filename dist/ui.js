@@ -863,14 +863,6 @@
 
 	 */
 
-	es.storage = (function() {
-		var storage = {};
-		return {
-			get: function(k) { try { return JSON.parse(localStorage[k] || storage[k]); } catch(e) { return null } },
-			set: function(k, v) { v = JSON.stringify(v); localStorage[k] = v; storage[k] = v; }
-		};
-	})();
-
 	var coretype_map = {
 		"string" : "string",
 		"long" : "number",
@@ -1802,7 +1794,7 @@
 		},
 		init: function(parent) {
 			this._super();
-			this.history = es.storage.get("anyRequestHistory") || [ { type: "POST", path: this.config.path, query : JSON.stringify(this.config.query), transform: this.config.transform } ];
+			this.history = app.services.storage.get("anyRequestHistory") || [ { type: "POST", path: this.config.path, query : JSON.stringify(this.config.query), transform: this.config.transform } ];
 			this.el = $(this._main_template());
 			this.base_uriEl = this.el.find("INPUT[name=base_uri]");
 			this.pathEl = this.el.find("INPUT[name=path]");
@@ -1860,7 +1852,7 @@
 					transform: transform
 				});
 				this.history.slice(250); // make sure history does not get too large
-				es.storage.set("anyRequestHistory", this.history);
+				app.services.storage.set("anyRequestHistory", this.history);
 				this.el.find("UL.anyRequest-history")
 					.empty()
 					.append($( { tag: "UL", children: this.history.map(this._historyItem_template, this) }).children())
@@ -2782,7 +2774,7 @@
 		
 		_reconnect_handler: function() {
 			var base_uri = this.el.find(".es-header-uri").val();
-			$("body").empty().append(new acx.head.App("body", { id: "es", base_uri: base_uri }));
+			$("body").empty().append(new app.App("body", { id: "es", base_uri: base_uri }));
 		},
 		
 		_main_template: function() {
@@ -3103,6 +3095,22 @@
 	});
 	
 })( window.es, window.acx, window.Raphael );
+
+
+(function( app ) {
+
+	var services = app.ns("services");
+
+	services.storage = (function() {
+		var storage = {};
+		return {
+			get: function(k) { try { return JSON.parse(localStorage[k] || storage[k]); } catch(e) { return null; } },
+			set: function(k, v) { v = JSON.stringify(v); localStorage[k] = v; storage[k] = v; }
+		};
+	})();
+
+})( this.app );
+
 
 
 (function( $, app ) {
