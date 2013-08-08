@@ -48,6 +48,8 @@ module.exports = function(grunt) {
 					'src/app/ui/panelForm/panelForm.js',
 					'src/app/ui/helpPanel/helpPanel.js',
 					'src/app/ui/jsonPanel/jsonPanel.js',
+					'src/app/ui/sidebarSection/sidebarSection.js',
+					'src/app/ui/resultTable/resultTable.js',
 
 					'lib/es/widgets.js',
 
@@ -71,6 +73,8 @@ module.exports = function(grunt) {
 					'src/app/ui/menuPanel/menuPanel.css',
 					'src/app/ui/table/table.css',
 					'src/app/ui/panelForm/panelForm.css',
+					'src/app/ui/sidebarSection/sidebarSection.css',
+					'src/app/ui/resultTable/resultTable.css',
 					'src/app/ui/header/header.css'
 				],
 				dest: 'dist/ui.css'

@@ -148,67 +148,6 @@ TEXTAREA, CODE {
 	background-color: #dda3a3;
 }
 
-.uiTable-tools {
-	padding: 3px 4px;
-	height: 14px;
-}
-
-.uiTable-header-row {
-	background: #ddd;
-	background: -moz-linear-gradient(top, #eee, #ccc);
-	background: -webkit-linear-gradient(top, #eee, #ccc);
-}
-
-.uiTable-headercell-text {
-	margin-right: 20px;
-}
-
-.uiTable-headercell-menu {
-	display: none;
-}
-
-.uiTable-header-row TH {
-	border-right: 1px solid #bbb;
-	padding: 0;
-	text-align: left;
-}
-
-.uiTable-header-row TH > DIV {
-	padding: 3px 4px;
-	border-right: 1px solid #eee;
-}
-
-.uiTable-headerEndCap > DIV {
-	width: 19px;
-}
-
-.uiTable-header-row .uiTable-sort {
-	background: #ccc;
-	background: -moz-linear-gradient(top, #bebebe, #ccc);
-	background: -webkit-linear-gradient(top, #bebebe, #ccc);
-}
-.uiTable-header-row TH.uiTable-sort > DIV {
-	border-right: 1px solid #ccc;
-}
-
-.uiTable-sort .uiTable-headercell-menu {
-	display: block;
-}
-
-.uiTable TABLE TD {
-	border-right: 1px solid transparent;
-	padding: 3px 4px;
-}
-
-.uiTable-body TABLE TR:nth-child(even) {
-	background: #f3f3f3;
-}
-
-.uiTable-body TABLE TR.selected {
-	color: white;
-	background: #6060f1;
-}
-
 DIV.jsonPretty { font-size: 1.26em; font-family: monospace; }
 UL.jsonPretty-object, UL.jsonPretty-array { margin: 0; padding: 0 0 0 2em; list-style: none; }
 UL.jsonPretty-object LI, UL.jsonPretty-array LI { padding: 0; margin: 0; }
@@ -348,39 +287,8 @@ SPAN.jsonPretty-boolean { color: purple; }
 	overflow-y: auto;
 }
 
-.sidebarSection {
-}
-
-.sidebarSection-head {
-	background-color: #b9cfff;
-	background-image: url(images/expando.png);
-	background-repeat: no-repeat;
-	background-position: 2px 5px;
-	margin-bottom: 1px;
-	padding: 3px 3px 3px 17px;
-	cursor: pointer;
-}
-
-/*
- * Using the child selector so only the most immediate child
- * is selected for this. Sub-childs should remain un-shown,
- * as they occur in the case of multi_field properties.
- */
-.shown > .sidebarSection-head {
-	background-position: 2px -13px;
-}
-
 .subMultiFields {
 	padding-left: 10px;
-}
-
-.sidebarSection-body {
-	margin-bottom: 3px;
-	display: none;
-}
-
-.sidebarSection-help {
-	text-shadow: #228 1px 1px 2px;
 }
 
 /* es.ui.NodeVisualiser */

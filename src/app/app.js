@@ -103,7 +103,7 @@
 
 		_main_template: function() {
 			return { tag: "DIV", cls: "es", children: [
-				new ui.Header({}),
+//				new ui.Header({}),
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
 					{ tag: "DIV", cls: "es-header-top", children: [
 						new es.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),

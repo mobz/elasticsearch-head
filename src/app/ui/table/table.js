@@ -8,6 +8,7 @@
 			height: 0,
 			width: 0
 		},
+		baseCls: "uiTable",
 		init: function(parent) {
 			this._super();
 			this.initElements(parent);
@@ -56,7 +57,7 @@
 			}
 		},
 		_main_template: function() {
-			return { tag: "DIV", id: this.id(), css: { width: this.config.width + "px" }, cls: "uiTable", children: [
+			return { tag: "DIV", id: this.id(), css: { width: this.config.width + "px" }, cls: this.baseCls, children: [
 				{ tag: "DIV", cls: "uiTable-tools" },
 				{ tag: "DIV", cls: "uiTable-headers",
 					onClick: this._headerClick_handler

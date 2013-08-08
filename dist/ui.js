@@ -1218,6 +1218,7 @@
 			height: 0,
 			width: 0
 		},
+		baseCls: "uiTable",
 		init: function(parent) {
 			this._super();
 			this.initElements(parent);
@@ -1266,7 +1267,7 @@
 			}
 		},
 		_main_template: function() {
-			return { tag: "DIV", id: this.id(), css: { width: this.config.width + "px" }, cls: "uiTable", children: [
+			return { tag: "DIV", id: this.id(), css: { width: this.config.width + "px" }, cls: this.baseCls, children: [
 				{ tag: "DIV", cls: "uiTable-tools" },
 				{ tag: "DIV", cls: "uiTable-headers",
 					onClick: this._headerClick_handler
@@ -1382,13 +1383,11 @@
 
 })( this.app );
 
-(function( acx, raphael ) {
+(function( $, app ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
 
-	es.ui.SidebarSection = app.ui.AbstractWidget.extend({
+	ui.SidebarSection = ui.AbstractWidget.extend({
 		defaults: {
 			title: "",
 			help: null,
@@ -1424,11 +1423,19 @@
 		); }
 	});
 
-	es.ui.Table = app.ui.Table.extend({
+})( this.jQuery, this.app );
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.ResultTable = ui.Table.extend({
 		defaults: {
 			width: 500,
 			height: 400
 		},
+
+		baseCls: "uiTable uiResultTable",
+
 		init: function() {
 			this._super();
 			this.on("rowClick", this._showPreview_handler);
@@ -1472,6 +1479,14 @@
 			this.showPreview(this.selectedRow = data.row);
 		}
 	});
+
+})( this.jQuery, this.app );
+
+(function( acx, raphael ) {
+
+	window.es = {
+		ui: {}
+	};
 
 	es.ui.QueryFilter = app.ui.AbstractWidget.extend({
 		defaults: {
@@ -1706,7 +1721,7 @@
 			return { tag: "DIV", cls: "section queryFilter-filters", children: [
 				{ tag: "HEADER", text: acx.text("QueryFilter-Header-Fields") },
 				{ tag: "DIV", children: acx.eachMap(this.metadata.fields, function(name, data) {
-					return new es.ui.SidebarSection({
+					return new app.ui.SidebarSection({
 						title: name,
 						help: this.helpTypeMap[data.type],
 						onShow: this._openFilter_handler
@@ -1741,7 +1756,7 @@
 						section.config.title = spec.field_name + "." + name;
 						return this._openFilter_handler(section);
 					}
-					return new es.ui.SidebarSection({
+					return new app.ui.SidebarSection({
 						title : data.field_name, help : this.helpTypeMap[data.type], onShow : this._openFilter_handler
 					});
 				}, this)
@@ -1780,7 +1795,7 @@
 					this.store = new app.data.QueryDataSourceInterface( { metadata: metadata, query: this.query } );
 					this.queryFilter = new es.ui.QueryFilter({ metadata: metadata, query: this.query });
 					this.queryFilter.attach(this.el.find("> .browser-filter") );
-					this.resultTable = new es.ui.Table( {
+					this.resultTable = new app.ui.ResultTable( {
 						onHeaderClick: this._changeSort_handler,
 						store: this.store
 					} );
@@ -1918,7 +1933,7 @@
 			if(this.asTableEl.attr("checked")) {
 				try {
 					var store = new app.data.ResultDataSourceInterface();
-					this.outEl.append(new es.ui.Table({
+					this.outEl.append(new app.ui.ResultTable({
 						width: this.outEl.width() - 23,
 						store: store
 					} ) );
@@ -1967,12 +1982,12 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "anyRequest", children: [
 				{ tag: "DIV", cls: "anyRequest-request", children: [
-					new es.ui.SidebarSection({
+					new app.ui.SidebarSection({
 						open: false,
 						title: acx.text("AnyRequest.History"),
 						body: { tag: "UL", onclick: this._historyClick_handler, cls: "anyRequest-history", children: this.history.map(this._historyItem_template, this)	}
 					}),
-					new es.ui.SidebarSection({
+					new app.ui.SidebarSection({
 						open: true,
 						title: acx.text("AnyRequest.Query"),
 						body: { tag: "DIV", children: [
@@ -1987,7 +2002,7 @@
 							{ tag: "DIV", cls: "anyRequest-jsonErr" }
 						]}
 					}),
-					new es.ui.SidebarSection({
+					new app.ui.SidebarSection({
 						title: acx.text("AnyRequest.Transformer"),
 						help: "AnyRequest.TransformerHelp",
 						body: { tag: "DIV", children: [
@@ -1998,7 +2013,7 @@
 							{ tag: "CODE", text: "}" }
 						] }
 					}),
-					new es.ui.SidebarSection({
+					new app.ui.SidebarSection({
 						title: acx.text("AnyRequest.RepeatRequest"),
 						body: { tag: "DIV", children: [
 							acx.text("AnyRequest.RepeatRequestSelect"), " ",
@@ -2014,7 +2029,7 @@
 							].map(function(op) { return acx.extend({ tag: "OPTION"}, op); }) }
 						] }
 					}),
-					new es.ui.SidebarSection({
+					new app.ui.SidebarSection({
 						title: acx.text("AnyRequest.DisplayOptions"),
 						help: "AnyRequest.DisplayOptionsHelp",
 						body: { tag: "DIV", children: [
@@ -3303,7 +3318,7 @@
 
 		_main_template: function() {
 			return { tag: "DIV", cls: "es", children: [
-				new ui.Header({}),
+//				new ui.Header({}),
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
 					{ tag: "DIV", cls: "es-header-top", children: [
 						new es.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
