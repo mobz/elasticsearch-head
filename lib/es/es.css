@@ -172,73 +172,6 @@ SPAN.jsonPretty-boolean { color: purple; }
 .jsonPretty-minimised UL, .jsonPretty-minimised LI { display: inline; padding: 0; }
 
 
-/* es-ui-QueryFilter */
-
-.queryFilter {
-	width: 350px;
-	padding: 5px;
-	background: #d8e7ff;
-	background: -moz-linear-gradient(left, #d8e7ff, #e8f1ff);
-	background: -webkit-linear-gradient(left, #d8e7ff, #e8f1ff);
-}
-
-.queryFilter DIV.section {
-	margin-bottom: 5px;
-}
-
-.queryFilter HEADER {
-	display: block;
-	font-variant: small-caps;
-	font-weight: bold;
-	margin: 5px 0;
-}
-
-.queryFilter-aliases SELECT {
-	width: 100%;
-}
-
-.booble {
-	cursor: pointer;
-	background: #e8f1ff;
-	border: 1px solid #e8f1ff;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	padding: 1px 4px;
-	margin-bottom: 1px;
-	overflow: hidden;
-	white-space: nowrap;
-}
-
-.booble.selected {
-	background: #dae3f0;
-	border-top: 1px solid #c8d4e6;
-	border-left: 1px solid #c8d4e6;
-	border-bottom: 1px solid #ffffff;
-	border-right: 1px solid #ffffff;
-}
-
-.queryFilter-filterName {
-	background-color: #cbdfff;
-	margin-bottom: 4px;
-	padding: 3px;
-	cursor: pointer;
-}
-
-.queryFilter-filters INPUT  {
-	width: 300px;
-}
-
-/* es.ui.Browser */
-
-.browser-filter {
-	float: left;
-}
-
-.browser-table {
-	margin-left: 365px;
-}
-
 /* app.ui.DraggablePanel + es.JsonPretty overrides */
 
 .dark span.jsonPretty-string { color: #6F6; }
@@ -285,10 +218,6 @@ SPAN.jsonPretty-boolean { color: purple; }
 	max-height: 100px;
 	overflow-x: hidden;
 	overflow-y: auto;
-}
-
-.subMultiFields {
-	padding-left: 10px;
 }
 
 /* es.ui.NodeVisualiser */

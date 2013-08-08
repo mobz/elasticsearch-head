@@ -1482,13 +1482,11 @@
 
 })( this.jQuery, this.app );
 
-(function( acx, raphael ) {
+(function( $, app ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
 
-	es.ui.QueryFilter = app.ui.AbstractWidget.extend({
+	ui.QueryFilter = ui.AbstractWidget.extend({
 		defaults: {
 			metadata: null,   // (required) instanceof app.data.MetaData
 			query: null       // (required) instanceof app.data.Query that the filters will act apon
@@ -1764,7 +1762,12 @@
 		}	
 	});
 
-	es.ui.Page = app.ui.AbstractWidget.extend({
+})( this.jQuery, this.app );
+(function( app ) {
+
+	var ui = app.ns("ui");
+
+	ui.Page = ui.AbstractWidget.extend({
 		show: function() {
 			this.el.show();
 		},
@@ -1773,7 +1776,13 @@
 		}
 	});
 
-	es.ui.Browser = es.ui.Page.extend({
+})( this.app );
+(function( $, app ){
+
+	var ui = app.ns("ui");
+	var data = app.ns("data");
+
+	ui.Browser = ui.Page.extend({
 		defaults: {
 			cluster: null  // (required) instanceof app.services.Cluster
 		},
@@ -1781,25 +1790,25 @@
 			this._super();
 			this.cluster = this.config.cluster;
 			this.query = new app.data.Query( { cluster: this.cluster } );
-			this._refreshButton = new app.ui.Button({
+			this._refreshButton = new ui.Button({
 				label: acx.text("General.RefreshResults"),
 				onclick: function( btn ) {
 					this.query.query();
 				}.bind(this)
 			});
 			this.el = $(this._main_template());
-			new app.data.MetaDataFactory({
+			new data.MetaDataFactory({
 				cluster: this.cluster,
 				onReady: function(metadata) {
 					this.metadata = metadata;
-					this.store = new app.data.QueryDataSourceInterface( { metadata: metadata, query: this.query } );
-					this.queryFilter = new es.ui.QueryFilter({ metadata: metadata, query: this.query });
-					this.queryFilter.attach(this.el.find("> .browser-filter") );
-					this.resultTable = new app.ui.ResultTable( {
+					this.store = new data.QueryDataSourceInterface( { metadata: metadata, query: this.query } );
+					this.queryFilter = new ui.QueryFilter({ metadata: metadata, query: this.query });
+					this.queryFilter.attach(this.el.find("> .uiBrowser-filter") );
+					this.resultTable = new ui.ResultTable( {
 						onHeaderClick: this._changeSort_handler,
 						store: this.store
 					} );
-					this.resultTable.attach( this.el.find("> .browser-table") );
+					this.resultTable.attach( this.el.find("> .uiBrowser-table") );
 					this.updateResults();
 				}.bind(this)
 			});
@@ -1813,19 +1822,27 @@
 			this.query.query();
 		},
 		_main_template: function() {
-			return { tag: "DIV", cls: "browser", children: [
-				new app.ui.Toolbar({
+			return { tag: "DIV", cls: "uiBrowser", children: [
+				new ui.Toolbar({
 					label: acx.text("Browser.Title"),
 					left: [ ],
 					right: [ this._refreshButton ]
 				}),
-				{ tag: "DIV", cls: "browser-filter" },
-				{ tag: "DIV", cls: "browser-table" }
+				{ tag: "DIV", cls: "uiBrowser-filter" },
+				{ tag: "DIV", cls: "uiBrowser-table" }
 			] };
 		}
 	});
 
-	es.ui.AnyRequest = es.ui.Page.extend({
+})( this.jQuery, this.app );
+(function( acx, raphael ) {
+
+	window.es = {
+		ui: {}
+	};
+
+
+	es.ui.AnyRequest = app.ui.Page.extend({
 		defaults: {
 			cluster: null,       // (required) instanceof app.services.Cluster
 			path: "_search",     // default uri to send a request to
@@ -2078,7 +2095,7 @@
 		}
 	});
 
-	es.ui.ClusterOverview = es.ui.Page.extend({
+	es.ui.ClusterOverview = app.ui.Page.extend({
 		defaults: {
 			cluster: null // (reqired) an instanceof app.services.Cluster
 		},
@@ -2832,7 +2849,7 @@
 		}
 	});
 
-	es.ui.StructuredQuery = es.ui.Page.extend({
+	es.ui.StructuredQuery = app.ui.Page.extend({
 		init: function() {
 			this.q = new es.StructuredQuery( this.config );
 			this.el = this.q.el;
@@ -3254,7 +3271,7 @@
 		
 		show: function(type, config, jEv) {
 			if(! this.instances[type]) {
-				var page = this.instances[type] = new es.ui[type](config);
+				var page = this.instances[type] = new ( ui[type] || es.ui[type] )(config);
 				this.el.find("#"+this.id("body")).append( page );
 			}
 			$(jEv.target).closest("DIV.es-header-menu-item").addClass("active").siblings().removeClass("active");

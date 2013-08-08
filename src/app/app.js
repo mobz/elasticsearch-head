@@ -39,7 +39,7 @@
 		
 		show: function(type, config, jEv) {
 			if(! this.instances[type]) {
-				var page = this.instances[type] = new es.ui[type](config);
+				var page = this.instances[type] = new ( ui[type] || es.ui[type] )(config);
 				this.el.find("#"+this.id("body")).append( page );
 			}
 			$(jEv.target).closest("DIV.es-header-menu-item").addClass("active").siblings().removeClass("active");

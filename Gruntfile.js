@@ -50,6 +50,9 @@ module.exports = function(grunt) {
 					'src/app/ui/jsonPanel/jsonPanel.js',
 					'src/app/ui/sidebarSection/sidebarSection.js',
 					'src/app/ui/resultTable/resultTable.js',
+					'src/app/ui/queryFilter/queryFilter.js',
+					'src/app/ui/page/page.js',
+					'src/app/ui/browser/browser.js',
 
 					'lib/es/widgets.js',
 
@@ -75,6 +78,8 @@ module.exports = function(grunt) {
 					'src/app/ui/panelForm/panelForm.css',
 					'src/app/ui/sidebarSection/sidebarSection.css',
 					'src/app/ui/resultTable/resultTable.css',
+					'src/app/ui/queryFilter/queryFilter.css',
+					'src/app/ui/browser/browser.css',
 					'src/app/ui/header/header.css'
 				],
 				dest: 'dist/ui.css'
