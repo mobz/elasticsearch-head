@@ -1,0 +1,38 @@
+.anyRequest-request {
+	float: left;
+	width: 350px;
+	padding: 5px;
+	background: #d8e7ff;
+	background: -moz-linear-gradient(left, #d8e7ff, #e8f1ff);
+	background: -webkit-linear-gradient(left, #d8e7ff, #e8f1ff);
+}
+
+.anyRequest-request INPUT[type=text],
+.anyRequest-request TEXTAREA {
+	width: 340px;
+}
+
+.anyRequest INPUT[name=path] {
+	width: 259px;
+}
+
+.anyRequest-out {
+	margin-left: 365px;
+}
+
+.anyRequest-out P {
+	margin-top: 0;
+}
+
+.anyRequest-jsonErr {
+	color: red;
+}
+
+.anyRequest-history {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-height: 100px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}

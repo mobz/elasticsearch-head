@@ -1835,14 +1835,11 @@
 	});
 
 })( this.jQuery, this.app );
-(function( acx, raphael ) {
+(function( $, app, raphael ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
 
-
-	es.ui.AnyRequest = app.ui.Page.extend({
+	ui.AnyRequest = ui.Page.extend({
 		defaults: {
 			cluster: null,       // (required) instanceof app.services.Cluster
 			path: "_search",     // default uri to send a request to
@@ -2072,28 +2069,12 @@
 		}
 	});
 	
-	es.ui.SimpleGetQuery = app.ui.AbstractWidget.extend({
-		defaults: {
-//		cluster: null,	// (required) instance of app.services.Cluster
-//		path: "",					// (required) path to request
-		},
-		
-		init: function(parent) {
-			this._super();
-			this.el = $(this._main_template());
-			this.config.cluster.get(this.config.path, this._update_handler);
-		},
-		
-		_update_handler: function(data) {
-			this.el.find("> .simpleGetQuery-out").empty().append(new es.JsonPretty({ obj: data }));
-		},
+})( this.jQuery, this.app, this.Raphael );
+(function( acx, raphael ) {
 
-		_main_template: function() {
-			return { tag: "DIV", id: this.id(), cls: "simpleGetQuery", children: [
-				{ tag: "DIV", cls: "simpleGetQuery-out" }
-			] };
-		}
-	});
+	window.es = {
+		ui: {}
+	};
 
 	es.ui.ClusterOverview = app.ui.Page.extend({
 		defaults: {
