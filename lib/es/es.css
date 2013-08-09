@@ -189,7 +189,3 @@ SPAN.jsonPretty-boolean { color: purple; }
 .nodeVisualiser-name { background: #aa1; padding: 10px; }
 .nodeVisualiser-nodes { background: #a1a; }
 .nodeVisualiser-nodes TD { background: #1aa; }
-
-/* es.ui.DateHistogram */
-.dateHistogram {
-}

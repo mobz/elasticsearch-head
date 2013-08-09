@@ -55,6 +55,7 @@ module.exports = function(grunt) {
 					'src/app/ui/browser/browser.js',
 					'src/app/ui/anyRequest/anyRequest.js',
 					'src/app/ui/clusterOverview/clusterOverview.js',
+					'src/app/ui/dateHistogram/dateHistogram.js',
 
 					'lib/es/widgets.js',
 

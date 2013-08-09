@@ -1574,7 +1574,7 @@
 					section.body.append(this._textFilter_template(spec));
 				} else if(spec.core_type === "date") {
 					section.body.append(this._dateFilter_template(spec));
-					section.body.append(new es.ui.DateHistogram({ printEl: section.body.find("INPUT"), cluster: this.cluster, query: this.query, spec: spec }));
+					section.body.append(new ui.DateHistogram({ printEl: section.body.find("INPUT"), cluster: this.cluster, query: this.query, spec: spec }));
 				} else if(spec.core_type === "number") {
 					section.body.append(this._numericFilter_template(spec));
 				} else if(spec.core_type === 'boolean') {
@@ -2511,13 +2511,11 @@
 	});
 
 })( this.jQuery, this.app );
-(function( acx, raphael ) {
+(function( app, raphael ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
 
-	es.ui.DateHistogram = app.ui.AbstractWidget.extend({
+	ui.DateHistogram = ui.AbstractWidget.extend({
 		defaults: {
 			printEl: null, // (optional) if supplied, clicking on elements in the histogram changes the query
 			cluster: null, // (required)
@@ -2571,11 +2569,11 @@
 				range = range / factor;
 			} while(range > 70);
 			this.dateFacet = this.query.addFacet({
-					date_histogram : {
-						field: this.config.spec.field_name,
-						interval: this.intervalName,
-						global: true
-					}
+				date_histogram : {
+					field: this.config.spec.field_name,
+					interval: this.intervalName,
+					global: true
+				}
 			});
 			this.query.query();
 			this.query.removeFacet(this.dateFacet);
@@ -2617,6 +2615,14 @@
 			] }
 		); }
 	});
+
+})( this.app, this.Raphael );
+(function( acx, raphael ) {
+
+	window.es = {
+		ui: {}
+	};
+
 
 	var coretype_map = {
 		"string" : "string",

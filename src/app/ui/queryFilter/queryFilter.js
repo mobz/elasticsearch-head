@@ -90,7 +90,7 @@
 					section.body.append(this._textFilter_template(spec));
 				} else if(spec.core_type === "date") {
 					section.body.append(this._dateFilter_template(spec));
-					section.body.append(new es.ui.DateHistogram({ printEl: section.body.find("INPUT"), cluster: this.cluster, query: this.query, spec: spec }));
+					section.body.append(new ui.DateHistogram({ printEl: section.body.find("INPUT"), cluster: this.cluster, query: this.query, spec: spec }));
 				} else if(spec.core_type === "number") {
 					section.body.append(this._numericFilter_template(spec));
 				} else if(spec.core_type === 'boolean') {
