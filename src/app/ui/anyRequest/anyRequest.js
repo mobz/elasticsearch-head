@@ -120,7 +120,7 @@
 				}
 			}
 			if(this.asJsonEl.attr("checked")) {
-				this.outEl.append(new es.JsonPretty({ obj: data }));
+				this.outEl.append(new ui.JsonPretty({ obj: data }));
 			}
 			if(this.cronEl.val() > 0) {
 				this.timer = window.setTimeout(function(){

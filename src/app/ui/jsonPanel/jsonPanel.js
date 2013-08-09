@@ -13,7 +13,7 @@
 		},
 		_body_template: function() {
 			var body = this._super();
-			body.child = new es.JsonPretty({ obj: this.config.json });
+			body.child = new ui.JsonPretty({ obj: this.config.json });
 			return body;
 		}
 	});

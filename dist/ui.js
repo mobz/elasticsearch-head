@@ -1317,6 +1317,78 @@
 
 	var ui = app.ns("ui");
 
+	ui.JsonPretty = ui.AbstractWidget.extend({
+		defaults: {
+			obj: null
+		},
+		init: function(parent) {
+			this._super();
+			this.el = $(this._main_template());
+			this.attach(parent);
+			this.el.click(this._click_handler);
+		},
+		
+		_click_handler: function(jEv) {
+			var t = $(jEv.target).closest(".jsonPretty-name").closest("LI");
+			if(t.length === 0 || t.parents(".jsonPretty-minimised").length > 0) { return; }
+			t.toggleClass("jsonPretty-minimised");
+			jEv.stopPropagation();
+		},
+		
+		_main_template: function() {
+			try {
+					return { tag: "DIV", cls: "jsonPretty", children: this.pretty.parse(this.config.obj) };
+			}	catch (error) {
+					throw "JsonPretty error: " + error.message;
+			}
+		},
+		
+		pretty: { // from https://github.com/RyanAmos/Pretty-JSON/blob/master/pretty_json.js
+			"expando" : function(value) {
+				return (value && (/array|object/i).test(value.constructor.name)) ? "expando" : "";
+			},
+			"parse": function (member) {
+				return this[(member == null) ? 'null' : member.constructor.name.toLowerCase()](member);
+			},
+			"null": function (value) {
+				return this['value']('null', 'null');
+			},
+			"array": function (value) {
+				var results = value.map(function(v) {
+					return { tag: "LI", cls: this.expando(v), child: this['parse'](v) };
+				}, this);
+				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-array", children: results } : null), "]" ];
+			},
+			"object": function (value) {
+				var results = [];
+				for (var member in value) {
+					results.push({ tag: "LI", cls: this.expando(value[member]), children:  [ this['value']('name', member), ': ', this['parse'](value[member]) ] });
+				}
+				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-object", children: results } : null ),  "}" ];
+			},
+			"number": function (value) {
+				return this['value']('number', value.toString());
+			},
+			"string": function (value) {
+				return this['value']('string', value.toString());
+			},
+			"boolean": function (value) {
+				return this['value']('boolean', value.toString());
+			},
+			"value": function (type, value) {
+				if (/^(http|https|file):\/\/[^\s]+$/.test(value)) {
+					return this['value'](type, { tag: "A", href: value, target: "_blank", text: value } );
+				}
+				return { tag: "SPAN", cls: "jsonPretty-" + type, text: value };
+			}
+		}
+	});
+
+})( this.jQuery, this.app );
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
 	ui.PanelForm = ui.AbstractWidget.extend({
 		defaults: {
 			fields: null	// (required) instanceof app.ux.FieldCollection
@@ -1376,7 +1448,7 @@
 		},
 		_body_template: function() {
 			var body = this._super();
-			body.child = new es.JsonPretty({ obj: this.config.json });
+			body.child = new ui.JsonPretty({ obj: this.config.json });
 			return body;
 		}
 	});
@@ -1957,7 +2029,7 @@
 				}
 			}
 			if(this.asJsonEl.attr("checked")) {
-				this.outEl.append(new es.JsonPretty({ obj: data }));
+				this.outEl.append(new ui.JsonPretty({ obj: data }));
 			}
 			if(this.cronEl.val() > 0) {
 				this.timer = window.setTimeout(function(){
@@ -2624,73 +2696,6 @@
 	};
 
 
-	es.JsonPretty = app.ui.AbstractWidget.extend({
-		defaults: {
-			obj: null
-		},
-		init: function(parent) {
-			this._super();
-			this.el = $(this._main_template());
-			this.attach(parent);
-			this.el.click(this._click_handler);
-		},
-		
-		_click_handler: function(jEv) {
-			var t = $(jEv.target).closest(".jsonPretty-name").closest("LI");
-			if(t.length === 0 || t.parents(".jsonPretty-minimised").length > 0) { return; }
-			t.toggleClass("jsonPretty-minimised");
-			jEv.stopPropagation();
-		},
-		
-		_main_template: function() {
-			try {
-					return { tag: "DIV", cls: "jsonPretty", children: this.pretty.parse(this.config.obj) };
-			}	catch (error) {
-					throw "JsonPretty error: " + error.message;
-			}
-		},
-		
-		pretty: { // from https://github.com/RyanAmos/Pretty-JSON/blob/master/pretty_json.js
-			"expando" : function(value) {
-				return (value && (/array|object/i).test(value.constructor.name)) ? "expando" : "";
-			},
-			"parse": function (member) {
-				return this[(member == null) ? 'null' : member.constructor.name.toLowerCase()](member);
-			},
-			"null": function (value) {
-				return this['value']('null', 'null');
-			},
-			"array": function (value) {
-				var results = value.map(function(v) {
-					return { tag: "LI", cls: this.expando(v), child: this['parse'](v) };
-				}, this);
-				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-array", children: results } : null), "]" ];
-			},
-			"object": function (value) {
-				var results = [];
-				for (var member in value) {
-					results.push({ tag: "LI", cls: this.expando(value[member]), children:  [ this['value']('name', member), ': ', this['parse'](value[member]) ] });
-				}
-				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-object", children: results } : null ),  "}" ];
-			},
-			"number": function (value) {
-				return this['value']('number', value.toString());
-			},
-			"string": function (value) {
-				return this['value']('string', value.toString());
-			},
-			"boolean": function (value) {
-				return this['value']('boolean', value.toString());
-			},
-			"value": function (type, value) {
-				if (/^(http|https|file):\/\/[^\s]+$/.test(value)) {
-					return this['value'](type, { tag: "A", href: value, target: "_blank", text: value } );
-				}
-				return { tag: "SPAN", cls: "jsonPretty-" + type, text: value };
-			}
-		}
-	});
-
 	es.BoolQuery = app.ux.Observable.extend({
 		defaults: {
 			size: 50		// size of pages to return
@@ -2859,7 +2864,7 @@
 		},
 		
 		_jsonResults_handler: function(results) {
-			this.el.find("DIV.es-out").empty().append(new es.JsonPretty({ obj: results }));
+			this.el.find("DIV.es-out").empty().append( new app.ui.JsonPretty({ obj: results }));
 		},
 		
 		_tableResults_handler: function(results, metadata) {
@@ -2884,7 +2889,7 @@
 		
 		_searchSource_handler: function(src) {
 			var searchSourceDiv = this.el.find("DIV.es-searchSource");
-			searchSourceDiv.empty().append(new es.JsonPretty({ obj: src }));
+			searchSourceDiv.empty().append(new app.ui.JsonPretty({ obj: src }));
 			if(typeof JSON !== "undefined") {
 				var showRawJSON = $({ tag: "BUTTON", type: "button", text: acx.text("StructuredQuery.ShowRawJson"), id: "showRawJSON", value: JSON.stringify(src), onclick: this._showRawJSON });
 				searchSourceDiv.append(showRawJSON);
