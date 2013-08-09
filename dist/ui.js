@@ -2070,13 +2070,11 @@
 	});
 	
 })( this.jQuery, this.app, this.Raphael );
-(function( acx, raphael ) {
+(function( $, app ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
 
-	es.ui.ClusterOverview = app.ui.Page.extend({
+	ui.ClusterOverview = ui.Page.extend({
 		defaults: {
 			cluster: null // (reqired) an instanceof app.services.Cluster
 		},
@@ -2084,7 +2082,7 @@
 			this._super();
 			this._resetTimer = null;
 			this._redrawValue = -1;
-			this._refreshButton = new app.ui.SplitButton({
+			this._refreshButton = new ui.SplitButton({
 				label: acx.text("General.RefreshResults"),
 				items: [
 					{ label: acx.text("General.ManualRefresh"), value: -1, selected: true },
@@ -2260,14 +2258,14 @@
 		_newIndex_handler: function() {
 			var fields = new app.ux.FieldCollection({
 				fields: [
-					new app.ui.TextField({ label: acx.text("ClusterOverView.IndexName"), name: "_name", require: true }),
-					new app.ui.TextField({
+					new ui.TextField({ label: acx.text("ClusterOverView.IndexName"), name: "_name", require: true }),
+					new ui.TextField({
 						label: acx.text("ClusterOverview.NumShards"),
 						name: "number_of_shards",
 						value: "5",
 						require: function( val ) { return parseInt( val, 10 ) >= 1; }
 					}),
-					new app.ui.TextField({
+					new ui.TextField({
 						label: acx.text("ClusterOverview.NumReplicas"),
 						name: "number_of_replicas",
 						value: "1",
@@ -2275,9 +2273,9 @@
 					})
 				]
 			});
-			var dialog = new app.ui.DialogPanel({
+			var dialog = new ui.DialogPanel({
 				title: acx.text("ClusterOverview.NewIndex"),
-				body: new app.ui.PanelForm({ fields: fields }),
+				body: new ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {
 					if(fields.validate()) {
 						var data = fields.getData();
@@ -2295,12 +2293,12 @@
 		_newAliasAction_handler: function(index) {
 			var fields = new app.ux.FieldCollection({
 				fields: [
-					new app.ui.TextField({ label: acx.text("AliasForm.AliasName"), name: "alias", require: true })
+					new ui.TextField({ label: acx.text("AliasForm.AliasName"), name: "alias", require: true })
 				]
 			});
-			var dialog = new app.ui.DialogPanel({
+			var dialog = new ui.DialogPanel({
 				title: acx.text("AliasForm.NewAliasForIndexName", index.name),
-				body: new app.ui.PanelForm({ fields: fields }),
+				body: new ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {
 					if(fields.validate()) {
 						var data = fields.getData();
@@ -2350,7 +2348,7 @@
 			return { tag: "DIV",
 				cls: "clusterOverview-replica" + (r.primary ? " primary" : "") + ( " state-" + r.state ),
 				text: r.shard.toString(),
-				onclick: function() { new app.ui.JsonPanel({
+				onclick: function() { new ui.JsonPanel({
 					json: replica.status || replica.replica,
 					title: r.index + "/" + r.node + " [" + r.shard + "]" });
 				}
@@ -2382,18 +2380,18 @@
 					]},
 					{ tag: "DIV", text: node.cluster.http_address },
 					{ tag: "DIV", cls: "clusterOverview-controls", children: [
-						new app.ui.MenuButton({
+						new ui.MenuButton({
 							label: acx.text("NodeInfoMenu.Title"),
-							menu: new app.ui.MenuPanel({
+							menu: new ui.MenuPanel({
 								items: [
-									{ text: acx.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new app.ui.JsonPanel({ json: node.cluster, title: node.name });} },
-									{ text: acx.text("NodeInfoMenu.NodeStats"), onclick: function() { new app.ui.JsonPanel({ json: node.stats, title: node.name });} }
+									{ text: acx.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new ui.JsonPanel({ json: node.cluster, title: node.name });} },
+									{ text: acx.text("NodeInfoMenu.NodeStats"), onclick: function() { new ui.JsonPanel({ json: node.stats, title: node.name });} }
 								]
 							})
 						}),
-						new app.ui.MenuButton({
+						new ui.MenuButton({
 							label: acx.text("NodeActionsMenu.Title"),
-							menu: new app.ui.MenuPanel({
+							menu: new ui.MenuPanel({
 								items: [
 									{ text: acx.text("NodeActionsMenu.Shutdown"), onclick: function() { this._showdownNode_handler(node); }.bind(this) }
 								]
@@ -2412,18 +2410,18 @@
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
 				{ tag: "DIV", cls: "clusterOverview-controls", children: [
-					new app.ui.MenuButton({
+					new ui.MenuButton({
 						label: acx.text("IndexInfoMenu.Title"),
-						menu: new app.ui.MenuPanel({
+						menu: new ui.MenuPanel({
 							items: [
-								{ text: acx.text("IndexInfoMenu.Status"), onclick: function() { new app.ui.JsonPanel({ json: index.status, title: index.name }); } },
-								{ text: acx.text("IndexInfoMenu.Metadata"), onclick: function() { new app.ui.JsonPanel({ json: index.metadata, title: index.name }); } }
+								{ text: acx.text("IndexInfoMenu.Status"), onclick: function() { new ui.JsonPanel({ json: index.status, title: index.name }); } },
+								{ text: acx.text("IndexInfoMenu.Metadata"), onclick: function() { new ui.JsonPanel({ json: index.metadata, title: index.name }); } }
 							]
 						})
 					}),
-					new app.ui.MenuButton({
+					new ui.MenuButton({
 						label: acx.text("IndexActionsMenu.Title"),
-						menu: new app.ui.MenuPanel({
+						menu: new ui.MenuPanel({
 							items: [
 								{ text: acx.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
 								{ text: acx.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
@@ -2494,10 +2492,10 @@
 		},
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "clusterOverview", children: [
-				new app.ui.Toolbar({
+				new ui.Toolbar({
 					label: acx.text("Overview.PageTitle"),
 					left: [
-						new app.ui.Button({
+						new ui.Button({
 							label: acx.text("ClusterOverview.NewIndex"),
 							onclick: this._newIndex_handler
 						})
@@ -2511,6 +2509,13 @@
 			] };
 		}
 	});
+
+})( this.jQuery, this.app );
+(function( acx, raphael ) {
+
+	window.es = {
+		ui: {}
+	};
 
 	es.ui.DateHistogram = app.ui.AbstractWidget.extend({
 		defaults: {

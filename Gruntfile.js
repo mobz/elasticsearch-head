@@ -54,6 +54,7 @@ module.exports = function(grunt) {
 					'src/app/ui/page/page.js',
 					'src/app/ui/browser/browser.js',
 					'src/app/ui/anyRequest/anyRequest.js',
+					'src/app/ui/clusterOverview/clusterOverview.js',
 
 					'lib/es/widgets.js',
 
@@ -82,6 +83,8 @@ module.exports = function(grunt) {
 					'src/app/ui/queryFilter/queryFilter.css',
 					'src/app/ui/browser/browser.css',
 					'src/app/ui/anyRequest/anyRequest.css',
+					'src/app/ui/clusterOverview/clusterOverview.css',
+
 					'src/app/ui/header/header.css'
 				],
 				dest: 'dist/ui.css'
