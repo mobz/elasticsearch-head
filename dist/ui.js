@@ -2836,21 +2836,12 @@
 	});
 
 })( this.jQuery, this.app );
-(function( acx, raphael ) {
+(function( $, app ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
+	var data = app.ns("data");
 
-
-	es.ui.StructuredQuery = app.ui.Page.extend({
-		init: function() {
-			this.q = new es.StructuredQuery( this.config );
-			this.el = this.q.el;
-		}
-	});
-
-	es.StructuredQuery = ui.AbstractQuery.extend({
+	var StructuredQuery = ui.AbstractQuery.extend({
 		defaults: {
 			cluster: null  // (required) instanceof app.services.Cluster
 		},
@@ -2880,13 +2871,13 @@
 		},
 		
 		_jsonResults_handler: function(results) {
-			this.el.find("DIV.es-out").empty().append( new app.ui.JsonPretty({ obj: results }));
+			this.el.find("DIV.es-out").empty().append( new ui.JsonPretty({ obj: results }));
 		},
 		
 		_tableResults_handler: function(results, metadata) {
 			// hack up a QueryDataSourceInterface so that StructuredQuery keeps working without using an es.Query object
-			var qdi = new app.data.QueryDataSourceInterface({ metadata: metadata, query: new app.data.Query() });
-			var tab = new app.ui.Table( {
+			var qdi = new data.QueryDataSourceInterface({ metadata: metadata, query: new data.Query() });
+			var tab = new ui.Table( {
 				store: qdi,
 				height: 400,
 				width: this.out.innerWidth()
@@ -2923,7 +2914,22 @@
 		}
 	});
 
-	es.FilterBrowser = ui.AbstractQuery.extend({
+	ui.StructuredQuery = ui.Page.extend({
+		init: function() {
+			this.q = new StructuredQuery( this.config );
+			this.el = this.q.el;
+		}
+	});
+
+})( this.jQuery, this.app );
+
+(function( acx, raphael ) {
+
+	window.es = {
+		ui: {}
+	};
+
+	es.FilterBrowser = app.ui.AbstractQuery.extend({
 		defaults: {
 			cluster: null,  // (required) instanceof app.services.Cluster
 			index: "" // (required) name of the index to query
@@ -3106,7 +3112,7 @@
 		}
 	});
 	
-	es.IndexSelector = ui.AbstractQuery.extend({
+	es.IndexSelector = app.ui.AbstractQuery.extend({
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
