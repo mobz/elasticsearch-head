@@ -59,6 +59,7 @@ module.exports = function(grunt) {
 					'src/app/ui/clusterOverview/clusterOverview.js',
 					'src/app/ui/dateHistogram/dateHistogram.js',
 					'src/app/ui/abstractQuery/abstractQuery.js',
+					'src/app/ui/clusterConnect/clusterConnect.js',
 
 					'lib/es/widgets.js',
 
@@ -89,6 +90,7 @@ module.exports = function(grunt) {
 					'src/app/ui/browser/browser.css',
 					'src/app/ui/anyRequest/anyRequest.css',
 					'src/app/ui/clusterOverview/clusterOverview.css',
+					'src/app/ui/clusterConnect/clusterConnect.css',
 
 					'src/app/ui/header/header.css'
 				],

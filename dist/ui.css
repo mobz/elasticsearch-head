@@ -622,6 +622,45 @@ SPAN.jsonPretty-boolean { color: purple; }
 .clusterOverview-replica.state-STARTED { background: #99dd88; }
 .clusterOverview-replica.state-RELOCATING { background: #dc88dd; }
 
+.es-header-top {
+	padding: 3px 10px;
+}
+
+.es-header H1 {
+	margin: -2px 0 -4px 0;
+	float: left;
+	padding-right: 25px;
+}
+
+.es-header-clusterName, .es-header-clusterStatus {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 0 10px;
+}
+
+.es-header-uri {
+	width: 280px;
+}
+
+.es-header-menu {
+	border-bottom: 1px solid #bbb;
+	padding: 0px 3px;
+	height: 22px;
+}
+
+.es-header-menu .active {
+	background: white;
+	border-bottom-color: white;
+}
+
+.es-header-menu-item {
+	border: 1px solid #bbb;
+	padding: 4px 8px 1px ;
+	margin: 2px 1px 0;
+	height: 14px;
+	cursor: pointer;
+}
+
 .uiHeader * {
 	box-sizing: border-box;
 	font-family: Avenir, Helvetica Neue, Helvetica, sans-serif;

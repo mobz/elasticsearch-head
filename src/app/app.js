@@ -106,7 +106,7 @@
 //				new ui.Header({}),
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
 					{ tag: "DIV", cls: "es-header-top", children: [
-						new es.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
+						new ui.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
 						{ tag: "H1", text: acx.text("General.ElasticSearch") }
 					]},
 					{ tag: "DIV", cls: "es-header-menu", children: [

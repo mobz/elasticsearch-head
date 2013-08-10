@@ -2784,14 +2784,11 @@
 	});
 	
 })( this.jQuery, this.app );
-(function( acx, raphael ) {
+(function( $, app ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
 
-
-	es.ClusterConnect = ui.AbstractQuery.extend({
+		ui.ClusterConnect = ui.AbstractQuery.extend({
 		
 		init: function(parent) {
 			this._super();
@@ -2837,6 +2834,14 @@
 			]};
 		}
 	});
+
+})( this.jQuery, this.app );
+(function( acx, raphael ) {
+
+	window.es = {
+		ui: {}
+	};
+
 
 	es.ui.StructuredQuery = app.ui.Page.extend({
 		init: function() {
@@ -3327,7 +3332,7 @@
 //				new ui.Header({}),
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
 					{ tag: "DIV", cls: "es-header-top", children: [
-						new es.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
+						new ui.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
 						{ tag: "H1", text: acx.text("General.ElasticSearch") }
 					]},
 					{ tag: "DIV", cls: "es-header-menu", children: [
