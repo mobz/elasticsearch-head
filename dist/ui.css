@@ -661,6 +661,16 @@ SPAN.jsonPretty-boolean { color: purple; }
 	cursor: pointer;
 }
 
+.es-filterBrowser-row * {
+	margin-right: 0.4em;
+}
+
+.es-filterBrowser-row BUTTON {
+	height: 22px;
+	position: relative;
+	top: 1px;
+}
+
 .uiHeader * {
 	box-sizing: border-box;
 	font-family: Avenir, Helvetica Neue, Helvetica, sans-serif;

@@ -11,7 +11,7 @@
 			this._super();
 			this.config.cluster.get("_cluster/state", function(data) {
 				this.metaData = new app.data.MetaData({state: data});
-				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy es.FilterBrowser
+				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy ui.FilterBrowser
 			}.bind(this));
 		}
 	});

@@ -61,8 +61,8 @@ module.exports = function(grunt) {
 					'src/app/ui/abstractQuery/abstractQuery.js',
 					'src/app/ui/clusterConnect/clusterConnect.js',
 					'src/app/ui/structuredQuery/structuredQuery.js',
-
-					'lib/es/widgets.js',
+					'src/app/ui/filterBrowser/filterBrowser.js',
+					'src/app/ui/indexSelector/indexSelector.js',
 
 					'src/app/services/storage.js',
 					'src/app/services/cluster.js',
@@ -92,6 +92,7 @@ module.exports = function(grunt) {
 					'src/app/ui/anyRequest/anyRequest.css',
 					'src/app/ui/clusterOverview/clusterOverview.css',
 					'src/app/ui/clusterConnect/clusterConnect.css',
+					'src/app/ui/filterBrowser/filterBrowser.css',
 
 					'src/app/ui/header/header.css'
 				],

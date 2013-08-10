@@ -9,7 +9,7 @@
 		},
 		init: function(parent) {
 			this._super();
-			this.selector = new es.IndexSelector({
+			this.selector = new ui.IndexSelector({
 				onIndexChanged: this._indexChanged_handler,
 				base_uri: this.config.base_uri
 			});
@@ -20,7 +20,7 @@
 		
 		_indexChanged_handler: function(index) {
 			this.filter && this.filter.remove();
-			this.filter = new es.FilterBrowser({
+			this.filter = new ui.FilterBrowser({
 				cluster: this.config.cluster,
 				base_uri: this.config.base_uri,
 				index: index,

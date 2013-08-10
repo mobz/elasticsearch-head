@@ -440,7 +440,7 @@
 			this._super();
 			this.config.cluster.get("_cluster/state", function(data) {
 				this.metaData = new app.data.MetaData({state: data});
-				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy es.FilterBrowser
+				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy ui.FilterBrowser
 			}.bind(this));
 		}
 	});
@@ -2847,7 +2847,7 @@
 		},
 		init: function(parent) {
 			this._super();
-			this.selector = new es.IndexSelector({
+			this.selector = new ui.IndexSelector({
 				onIndexChanged: this._indexChanged_handler,
 				base_uri: this.config.base_uri
 			});
@@ -2858,7 +2858,7 @@
 		
 		_indexChanged_handler: function(index) {
 			this.filter && this.filter.remove();
-			this.filter = new es.FilterBrowser({
+			this.filter = new ui.FilterBrowser({
 				cluster: this.config.cluster,
 				base_uri: this.config.base_uri,
 				index: index,
@@ -2923,13 +2923,12 @@
 
 })( this.jQuery, this.app );
 
-(function( acx, raphael ) {
+(function( $, app ) {
 
-	window.es = {
-		ui: {}
-	};
+	var ui = app.ns("ui");
+	var data = app.ns("data");
 
-	es.FilterBrowser = app.ui.AbstractQuery.extend({
+	ui.FilterBrowser = ui.AbstractQuery.extend({
 		defaults: {
 			cluster: null,  // (required) instanceof app.services.Cluster
 			index: "" // (required) name of the index to query
@@ -2940,7 +2939,7 @@
 			this.el = $(this._main_template());
 			this.filtersEl = this.el.find(".es-filterBrowser-filters");
 			this.attach( parent );
-			new app.data.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
+			new data.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
 				this.metadata = metadata;
 				this._createFilters_handler(eventData.originalData.metadata.indices);
 			}.bind(this) });
@@ -2987,7 +2986,7 @@
 		},
 		
 		_search_handler: function() {
-			var search = new app.data.BoolQuery();
+			var search = new data.BoolQuery();
 			this.fire("staringSearch");
 			this.filtersEl.find(".es-filterBrowser-row").each(function(i, row) {
 				row = $(row);
@@ -3112,7 +3111,12 @@
 		}
 	});
 	
-	es.IndexSelector = app.ui.AbstractQuery.extend({
+})( this.jQuery, this.app );
+(function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	ui.IndexSelector = app.ui.AbstractQuery.extend({
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
@@ -3150,8 +3154,8 @@
 			return  { tag: "OPTION", value: name, text: acx.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
 		}
 	});
-	
-})( window.acx, window.Raphael );
+
+})( this.jQuery, this.app );
 
 
 (function( app ) {
