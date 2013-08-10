@@ -31,6 +31,7 @@ module.exports = function(grunt) {
 					'src/app/data/metaDataFactory.js',
 					'src/app/data/query.js',
 					'src/app/data/queryDataSourceInterface.js',
+					'src/app/data/boolQuery.js',
 
 					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',
@@ -57,6 +58,7 @@ module.exports = function(grunt) {
 					'src/app/ui/anyRequest/anyRequest.js',
 					'src/app/ui/clusterOverview/clusterOverview.js',
 					'src/app/ui/dateHistogram/dateHistogram.js',
+					'src/app/ui/abstractQuery/abstractQuery.js',
 
 					'lib/es/widgets.js',
 
