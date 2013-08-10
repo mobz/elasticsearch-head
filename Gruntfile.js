@@ -100,10 +100,19 @@ module.exports = function(grunt) {
 			}
 		},
 
+		copy: {
+			base: {
+				expand: true,
+				cwd: 'src/app/base/',
+				src: '**',
+				dest: 'dist/base/'
+			}
+		},
+
 		watch: {
 			scripts: {
 				files: ['lib/**/*.js','src/**/*.js', 'src/**/*.css'],
-				tasks: ['concat'],
+				tasks: ['concat', 'copy:base'],
 				options: {
 					spawn: false
 				}
@@ -125,9 +134,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	// Default task(s).
-	grunt.registerTask('default', ['concat']);
+	grunt.registerTask('default', ['concat', 'copy:base']);
 	grunt.registerTask('server', ['connect:server']);
 
 };
