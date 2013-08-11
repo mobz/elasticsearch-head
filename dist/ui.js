@@ -2852,7 +2852,7 @@
 				base_uri: this.config.base_uri
 			});
 			this.el = $(this._main_template());
-			this.out = this.el.find("DIV.es-out");
+			this.out = this.el.find("DIV.es-structuredQuery-out");
 			this.attach( parent );
 		},
 		
@@ -2862,7 +2862,7 @@
 				cluster: this.config.cluster,
 				base_uri: this.config.base_uri,
 				index: index,
-				onStaringSearch: function() { this.el.find("DIV.es-out").text( acx.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
+				onStaringSearch: function() { this.el.find("DIV.es-structuredQuery-out").text( acx.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
 				onJsonResults: this._jsonResults_handler,
 				onTableResults: this._tableResults_handler
@@ -2871,7 +2871,7 @@
 		},
 		
 		_jsonResults_handler: function(results) {
-			this.el.find("DIV.es-out").empty().append( new ui.JsonPretty({ obj: results }));
+			this.el.find("DIV.es-structuredQuery-out").empty().append( new ui.JsonPretty({ obj: results }));
 		},
 		
 		_tableResults_handler: function(results, metadata) {
@@ -2909,7 +2909,7 @@
 				this.selector,
 				{ tag: "DIV", cls: "es-structuredQuery-body" },
 				{ tag: "DIV", cls: "es-searchSource", css: { display: "none" } },
-				{ tag: "DIV", cls: "es-out" }
+				{ tag: "DIV", cls: "es-structuredQuery-out" }
 			]};
 		}
 	});
@@ -3362,7 +3362,7 @@
 						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
 					]}
 				]},
-				{ tag: "DIV", id: this.id("body") }
+				{ tag: "DIV", id: this.id("body"), cls: "es-body" }
 			]};
 		},
 

@@ -95,7 +95,9 @@ module.exports = function(grunt) {
 					'src/app/ui/clusterConnect/clusterConnect.css',
 					'src/app/ui/filterBrowser/filterBrowser.css',
 
-					'src/app/ui/header/header.css'
+					'src/app/ui/header/header.css',
+
+					'src/app/app.css'
 				],
 				dest: 'dist/ui.css'
 			}
@@ -112,7 +114,7 @@ module.exports = function(grunt) {
 
 		watch: {
 			scripts: {
-				files: ['lib/**/*.js','src/**/*.js', 'src/**/*.css'],
+				files: ['lib/**/*.js','src/**/*.js', 'src/**/*.css', 'src/app/base/*' ],
 				tasks: ['concat', 'copy:base'],
 				options: {
 					spawn: false

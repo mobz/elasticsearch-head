@@ -126,7 +126,7 @@
 						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
 					]}
 				]},
-				{ tag: "DIV", id: this.id("body") }
+				{ tag: "DIV", id: this.id("body"), cls: "es-body" }
 			]};
 		},
 

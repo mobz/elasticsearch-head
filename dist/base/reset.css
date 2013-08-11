@@ -33,3 +33,9 @@ TEXTAREA, CODE {
 .pull-right {
 	float: right;
 }
+
+.loading  {
+	background-image: url(loading.gif);
+	background-repeat: no-repeat;
+	text-indent: 20px;
+}

@@ -767,3 +767,15 @@ SPAN.jsonPretty-boolean { color: purple; }
 	border-bottom-right-radius: 15px;
 }
 
+
+.es-header {
+	background: #eee;
+	position: fixed;
+	width: 100%;
+	z-index: 9;
+}
+
+.es-body {
+	padding: 51px 0px 0px 0px;
+}
+
