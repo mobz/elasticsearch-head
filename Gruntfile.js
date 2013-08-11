@@ -76,6 +76,7 @@ module.exports = function(grunt) {
 			},
 			uicss: {
 				src: [
+					'src/app/ui/abstractField/abstractField.css',
 					'src/app/ui/button/button.css',
 					'src/app/ui/menuButton/menuButton.css',
 					'src/app/ui/splitButton/splitButton.css',

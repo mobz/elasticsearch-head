@@ -31,7 +31,7 @@
 			{ tag: "DIV", cls: "sidebarSection", children: [
 				(this.config.title && { tag: "DIV", cls: "sidebarSection-head", onclick: this._showSection_handler, children: [
 					this.config.title,
-					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help textLink es-right", onclick: this._showHelp_handler, text: acx.text("General.HelpGlyph") } )
+					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help textLink pull-right", onclick: this._showHelp_handler, text: acx.text("General.HelpGlyph") } )
 				] }),
 				{ tag: "DIV", cls: "sidebarSection-body", child: this.config.body }
 			] }

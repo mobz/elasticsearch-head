@@ -1063,10 +1063,10 @@
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiToolbar", children: [
-				{ tag: "DIV", cls: "ui-left", children: [
+				{ tag: "DIV", cls: "pull-left", children: [
 					{ tag: "H2", text: this.config.label }
 				].concat(this.config.left) },
-				{ tag: "DIV", cls: "ui-right", children: this.config.right }
+				{ tag: "DIV", cls: "pull-right", children: this.config.right }
 			]};
 		}
 	});
@@ -1226,7 +1226,7 @@
 			return t;
 		},
 		_actionsBar_template: function() {
-			return { tag: "DIV", cls: "ui-right", children: [
+			return { tag: "DIV", cls: "pull-right", children: [
 				new app.ui.Button({ label: "Cancel", onclick: this._close_handler }),
 				new app.ui.Button({ label: "OK", onclick: this._commit_handler })
 			]};
@@ -1554,7 +1554,7 @@
 			{ tag: "DIV", cls: "sidebarSection", children: [
 				(this.config.title && { tag: "DIV", cls: "sidebarSection-head", onclick: this._showSection_handler, children: [
 					this.config.title,
-					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help textLink es-right", onclick: this._showHelp_handler, text: acx.text("General.HelpGlyph") } )
+					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help textLink pull-right", onclick: this._showHelp_handler, text: acx.text("General.HelpGlyph") } )
 				] }),
 				{ tag: "DIV", cls: "sidebarSection-body", child: this.config.body }
 			] }
@@ -3346,20 +3346,20 @@
 						{ tag: "H1", text: acx.text("General.ElasticSearch") }
 					]},
 					{ tag: "DIV", cls: "es-header-menu", children: [
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.Browser"), onclick: this._openBrowser_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.Browser"), onclick: this._openBrowser_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item es-left", text: acx.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.Status"), onclick: this._openStatus_handler },
-						{ tag: "DIV", cls: "es-header-menu-item es-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Status"), onclick: this._openStatus_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
 					]}
 				]},
 				{ tag: "DIV", id: this.id("body") }
@@ -3367,7 +3367,7 @@
 		},
 
 		newTab: function(text, events) {
-			var $el = $({tag: 'DIV', cls: 'es-header-menu-item es-left', text: text, children: [
+			var $el = $({tag: 'DIV', cls: 'es-header-menu-item pull-left', text: text, children: [
 				{tag: 'A', text: ' [-]'}
 			]});
 
