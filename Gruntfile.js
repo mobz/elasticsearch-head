@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 			options: {
 //        separator: ';'
 			},
-			setup: {
+			corejs: {
 				src: [
 					'src/vendor/jquery/jquery.js',
 

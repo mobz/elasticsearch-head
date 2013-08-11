@@ -8953,7 +8953,6 @@ function ns( namespace ) {
 var acx = ns("acx");
 acx.ut = {};
 acx.ux = {};
-acx.ui = {};
 
 /**
  * generic object iterator

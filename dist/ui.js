@@ -1087,7 +1087,7 @@
 			parent: 'BODY',        // node that panel is attached to
 			autoRemove: false      // remove the panel from the dom and destroy it when the widget is closed
 		},
-		shared: {  // shared data for all instances of acx.ui.Panel and decendants
+		shared: {  // shared data for all instances of ui.Panel and decendants
 			stack: [], // array of all open panels
 			modal: $( { tag: "DIV", id: "uiModal", css: { opacity: 0.2, position: "absolute", top: "0px", left: "0px" } } )
 		},
