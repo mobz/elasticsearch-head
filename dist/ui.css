@@ -372,6 +372,12 @@ SPAN.jsonPretty-boolean { color: purple; }
 
 .sidebarSection-help {
 	text-shadow: #228 1px 1px 2px;
+	color: blue;
+	cursor: pointer;
+}
+
+.sidebarSection-help:hover {
+	text-decoration: underline;
 }
 
 .uiTable-tools {
@@ -496,6 +502,11 @@ SPAN.jsonPretty-boolean { color: purple; }
 	padding-left: 10px;
 }
 
+.queryFilter-rangeHintFrom,
+.queryFilter-rangeHintTo {
+	margin: 0;
+	opacity: 0.75;
+}
 .uiBrowser-filter {
 	float: left;
 }

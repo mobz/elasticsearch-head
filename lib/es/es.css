@@ -1,33 +1,3 @@
-INPUT, SELECT, TEXTAREA {
-    border: 1px solid #cecece;
-    padding: 1px 3px;
-    background: white;
-    *margin: -1px 0px;
-}
-SELECT {
-    padding: 0;
-    *text-indent: -1px;
-}
-.saf SELECT { margin-top: 0px; margin-bottom: 0px; }
-
-TEXTAREA, CODE {
-	font-family: monospace;
-	font-size: 13px;
-}
-
-.textLink {
-	color: blue;
-	cursor: pointer;
-}
-.textLink:hover {
-	text-decoration: underline;
-}
-
-.hint {
-	margin: 0;
-	opacity: 0.75;
-}
-
 .loading  {
 	background-image: url(images/loading.gif);
 	background-repeat: no-repeat;

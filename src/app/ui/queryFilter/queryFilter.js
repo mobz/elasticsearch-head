@@ -249,8 +249,8 @@
 		_dateFilter_template: function(spec) {
 			return { tag: "DIV", children: [
 				{ tag: "INPUT", data: { spec: spec }, onKeyup: this._dateFilterChange_handler },
-				{ tag: "PRE", cls: "hint queryFilter-rangeHintFrom", text: acx.text("QueryFilter.DateRangeHint.from", "")},
-				{ tag: "PRE", cls: "hint queryFilter-rangeHintTo", text: acx.text("QueryFilter.DateRangeHint.to", "") }
+				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: acx.text("QueryFilter.DateRangeHint.from", "")},
+				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: acx.text("QueryFilter.DateRangeHint.to", "") }
 			]};
 		},
 		_numericFilter_template: function(spec) {

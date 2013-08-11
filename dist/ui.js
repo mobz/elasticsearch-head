@@ -1554,7 +1554,7 @@
 			{ tag: "DIV", cls: "sidebarSection", children: [
 				(this.config.title && { tag: "DIV", cls: "sidebarSection-head", onclick: this._showSection_handler, children: [
 					this.config.title,
-					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help textLink pull-right", onclick: this._showHelp_handler, text: acx.text("General.HelpGlyph") } )
+					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help pull-right", onclick: this._showHelp_handler, text: acx.text("General.HelpGlyph") } )
 				] }),
 				{ tag: "DIV", cls: "sidebarSection-body", child: this.config.body }
 			] }
@@ -1871,8 +1871,8 @@
 		_dateFilter_template: function(spec) {
 			return { tag: "DIV", children: [
 				{ tag: "INPUT", data: { spec: spec }, onKeyup: this._dateFilterChange_handler },
-				{ tag: "PRE", cls: "hint queryFilter-rangeHintFrom", text: acx.text("QueryFilter.DateRangeHint.from", "")},
-				{ tag: "PRE", cls: "hint queryFilter-rangeHintTo", text: acx.text("QueryFilter.DateRangeHint.to", "") }
+				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: acx.text("QueryFilter.DateRangeHint.from", "")},
+				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: acx.text("QueryFilter.DateRangeHint.to", "") }
 			]};
 		},
 		_numericFilter_template: function(spec) {

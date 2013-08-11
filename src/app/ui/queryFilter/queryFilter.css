@@ -58,3 +58,9 @@
 .subMultiFields {
 	padding-left: 10px;
 }
+
+.queryFilter-rangeHintFrom,
+.queryFilter-rangeHintTo {
+	margin: 0;
+	opacity: 0.75;
+}

@@ -5,6 +5,27 @@ BODY {
 	margin: 0;
 }
 
+INPUT, SELECT, TEXTAREA {
+	border: 1px solid #cecece;
+	padding: 1px 3px;
+	background: white;
+}
+
+SELECT {
+	padding: 0;
+}
+
+.saf SELECT {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+TEXTAREA, CODE {
+	font-family: monospace;
+	font-size: 13px;
+}
+
+
 .pull-left {
 	float: left;
 }
