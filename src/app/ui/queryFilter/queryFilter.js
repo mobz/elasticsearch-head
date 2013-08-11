@@ -1,6 +1,7 @@
 (function( $, app ) {
 
 	var ui = app.ns("ui");
+	var ut = app.ns("ut");
 
 	ui.QueryFilter = ui.AbstractWidget.extend({
 		defaults: {
@@ -212,7 +213,7 @@
 			var aliases = acx.eachMap(this.metadata.aliases, function(alias) { return alias; } );
 			aliases.unshift( acx.text("QueryFilter.AllIndices") );
 			return { tag: "DIV", cls: "section queryFilter-aliases", child:
-				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(acx.ut.option_template) }
+				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
 		_indexSelector_template: function() {

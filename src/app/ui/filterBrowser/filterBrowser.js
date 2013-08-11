@@ -2,6 +2,7 @@
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
+	var ut = app.ns("ut");
 
 	ui.FilterBrowser = ui.AbstractQuery.extend({
 		defaults: {
@@ -130,7 +131,7 @@
 			} else if(spec.type === 'ip') {
 				ops = ["term", "range", "fuzzy", "query_string"];
 			}
-			select.after({ tag: "SELECT", cls: "es-op", onchange: this._changeQueryOp_handler, children: ops.map(acx.ut.option_template) });
+			select.after({ tag: "SELECT", cls: "es-op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
 			select.next().change();
 		},
 		
@@ -151,7 +152,7 @@
 				{ tag: "DIV", cls: "es-filterBrowser-filters" },
 				{ tag: "BUTTON", type: "button", text: acx.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					acx.i18n.formatComplex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ acx.text("Output.Table"), acx.text("Output.JSON")].map(acx.ut.option_template) } )
+					acx.i18n.formatComplex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ acx.text("Output.Table"), acx.text("Output.JSON")].map(ut.option_template) } )
 				},
 				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, acx.text("Output.ShowSource") ] }
 			]};
@@ -159,7 +160,7 @@
 		
 		_filter_template: function() {
 			return { tag: "DIV", cls: "es-filterBrowser-row", children: [
-				{ tag: "SELECT", cls: "es-bool", children: ["must", "must_not", "should"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-bool", children: ["must", "must_not", "should"].map(ut.option_template) },
 				{ tag: "SELECT", cls: "es-field", onchange: this._changeQueryField_handler, children: this.filters.map(function(f) {
 					return { tag: "OPTION", data: { spec: f }, value: f.path.join("."), text: f.path.join(".") };
 				})},
@@ -170,9 +171,9 @@
 		
 		_range_template: function() {
 			return { tag: "SPAN", cls: "es-range", children: [
-				{ tag: "SELECT", cls: "es-lowop", children: ["from", "gt", "gte"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-lowop", children: ["from", "gt", "gte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "es-lowqual" },
-				{ tag: "SELECT", cls: "es-highop", children: ["to", "lt", "lte"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-highop", children: ["to", "lt", "lte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "es-highqual" }
 			]};
 		},
@@ -180,7 +181,7 @@
 		_fuzzy_template: function() {
 			return { tag: "SPAN", cls: "es-fuzzy", children: [
 				{ tag: "INPUT", cls: "es-qual", type: "text" },
-				{ tag: "SELECT", cls: "es-fuzzyop", children: ["max_expansions", "min_similarity"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-fuzzyop", children: ["max_expansions", "min_similarity"].map(ut.option_template) },
 				{ tag: "INPUT", cls: "es-fuzzyqual", type: "text" }
 			]};
 		}

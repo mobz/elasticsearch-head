@@ -1,6 +1,7 @@
 (function( $, app ) {
 
 	var ui = app.ns("ui");
+	var ut = app.ns("ut");
 
 	ui.PanelForm = ui.AbstractWidget.extend({
 		defaults: {
@@ -16,7 +17,7 @@
 		},
 		_field_template: function(field) {
 			return { tag: "LABEL", cls: "uiPanelForm-field", children: [
-				{ tag: "DIV", cls: "uiPanelForm-label", children: [ field.label, acx.ut.require_template(field) ] },
+				{ tag: "DIV", cls: "uiPanelForm-label", children: [ field.label, ut.require_template(field) ] },
 				field
 			]}
 		}

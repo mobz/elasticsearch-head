@@ -1,5 +1,15 @@
 (function( app ) {
 
+	var ut = app.ns("ut");
+
+	ut.option_template = function(v) { return { tag: "OPTION", value: v, text: v }; };
+	ut.require_template = function(f) { return f.require ? { tag: "SPAN", cls: "require", text: "*" } : null; };
+
+
+
+})( this.app );
+(function( app ) {
+
 	var ux = app.ns("ux");
 
 	ux.Observable = acx.Class.extend((function() {
@@ -1454,6 +1464,7 @@
 (function( $, app ) {
 
 	var ui = app.ns("ui");
+	var ut = app.ns("ut");
 
 	ui.PanelForm = ui.AbstractWidget.extend({
 		defaults: {
@@ -1469,7 +1480,7 @@
 		},
 		_field_template: function(field) {
 			return { tag: "LABEL", cls: "uiPanelForm-field", children: [
-				{ tag: "DIV", cls: "uiPanelForm-label", children: [ field.label, acx.ut.require_template(field) ] },
+				{ tag: "DIV", cls: "uiPanelForm-label", children: [ field.label, ut.require_template(field) ] },
 				field
 			]}
 		}
@@ -1623,6 +1634,7 @@
 (function( $, app ) {
 
 	var ui = app.ns("ui");
+	var ut = app.ns("ut");
 
 	ui.QueryFilter = ui.AbstractWidget.extend({
 		defaults: {
@@ -1834,7 +1846,7 @@
 			var aliases = acx.eachMap(this.metadata.aliases, function(alias) { return alias; } );
 			aliases.unshift( acx.text("QueryFilter.AllIndices") );
 			return { tag: "DIV", cls: "section queryFilter-aliases", child:
-				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(acx.ut.option_template) }
+				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
 		_indexSelector_template: function() {
@@ -1976,6 +1988,7 @@
 (function( $, app, raphael ) {
 
 	var ui = app.ns("ui");
+	var ut = app.ns("ut");
 
 	ui.AnyRequest = ui.Page.extend({
 		defaults: {
@@ -2146,7 +2159,7 @@
 							{ tag: "INPUT", type: "text", name: "base_uri", value: this.config.cluster.config.base_uri },
 							{ tag: "BR" },
 							{ tag: "INPUT", type: "text", name: "path", value: this.config.path },
-							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "DELETE"].map(acx.ut.option_template) },
+							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "DELETE"].map(ut.option_template) },
 							{ tag: "TEXTAREA", name: "body", rows: 20, text: JSON.stringify(this.config.query) },
 							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: acx.text("AnyRequest.Request") }, onclick: this._request_handler },
 							{ tag: "BUTTON", type: "button", text: acx.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
@@ -2927,6 +2940,7 @@
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
+	var ut = app.ns("ut");
 
 	ui.FilterBrowser = ui.AbstractQuery.extend({
 		defaults: {
@@ -3055,7 +3069,7 @@
 			} else if(spec.type === 'ip') {
 				ops = ["term", "range", "fuzzy", "query_string"];
 			}
-			select.after({ tag: "SELECT", cls: "es-op", onchange: this._changeQueryOp_handler, children: ops.map(acx.ut.option_template) });
+			select.after({ tag: "SELECT", cls: "es-op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
 			select.next().change();
 		},
 		
@@ -3076,7 +3090,7 @@
 				{ tag: "DIV", cls: "es-filterBrowser-filters" },
 				{ tag: "BUTTON", type: "button", text: acx.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					acx.i18n.formatComplex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ acx.text("Output.Table"), acx.text("Output.JSON")].map(acx.ut.option_template) } )
+					acx.i18n.formatComplex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ acx.text("Output.Table"), acx.text("Output.JSON")].map(ut.option_template) } )
 				},
 				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, acx.text("Output.ShowSource") ] }
 			]};
@@ -3084,7 +3098,7 @@
 		
 		_filter_template: function() {
 			return { tag: "DIV", cls: "es-filterBrowser-row", children: [
-				{ tag: "SELECT", cls: "es-bool", children: ["must", "must_not", "should"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-bool", children: ["must", "must_not", "should"].map(ut.option_template) },
 				{ tag: "SELECT", cls: "es-field", onchange: this._changeQueryField_handler, children: this.filters.map(function(f) {
 					return { tag: "OPTION", data: { spec: f }, value: f.path.join("."), text: f.path.join(".") };
 				})},
@@ -3095,9 +3109,9 @@
 		
 		_range_template: function() {
 			return { tag: "SPAN", cls: "es-range", children: [
-				{ tag: "SELECT", cls: "es-lowop", children: ["from", "gt", "gte"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-lowop", children: ["from", "gt", "gte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "es-lowqual" },
-				{ tag: "SELECT", cls: "es-highop", children: ["to", "lt", "lte"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-highop", children: ["to", "lt", "lte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "es-highqual" }
 			]};
 		},
@@ -3105,7 +3119,7 @@
 		_fuzzy_template: function() {
 			return { tag: "SPAN", cls: "es-fuzzy", children: [
 				{ tag: "INPUT", cls: "es-qual", type: "text" },
-				{ tag: "SELECT", cls: "es-fuzzyop", children: ["max_expansions", "min_similarity"].map(acx.ut.option_template) },
+				{ tag: "SELECT", cls: "es-fuzzyop", children: ["max_expansions", "min_similarity"].map(ut.option_template) },
 				{ tag: "INPUT", cls: "es-fuzzyqual", type: "text" }
 			]};
 		}

@@ -8951,7 +8951,6 @@ function ns( namespace ) {
 }
 
 var acx = ns("acx");
-acx.ut = {};
 
 /**
  * generic object iterator
@@ -9397,9 +9396,6 @@ acx.text = acx.i18n.formatKey;
         return Class;
     };
 })();
-
-acx.ut.option_template = function(v) { return { tag: "OPTION", value: v, text: v }; };
-acx.ut.require_template = function(f) { return f.require ? { tag: "SPAN", cls: "require", text: "*" } : null; };
 
 })();
 

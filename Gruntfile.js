@@ -21,6 +21,7 @@ module.exports = function(grunt) {
 			},
 			uijs: {
 				src: [
+					'src/app/base/ut.js',
 					'src/app/ux/observable.js',
 					'src/app/ux/dragdrop.js',
 					'src/app/ux/fieldCollection.js',
