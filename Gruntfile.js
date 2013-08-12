@@ -13,9 +13,9 @@ module.exports = function(grunt) {
 					'src/app/boot.js',
 
 					'lib/jsacx/src/jsacx.js',
-					'lib/nohtml/jquery.acx-nohtml.js',
-					'lib/graphael/g.raphael.standalone.js',
-					'lib/dateRangeParser/date-range-parser.js'
+					'src/vendor/nohtml/jquery.acx-nohtml.js',
+					'src/vendor/graphael/g.raphael.standalone.js',
+					'src/vendor/dateRangeParser/date-range-parser.js'
 				],
 				dest: 'dist/core.js'
 			},
