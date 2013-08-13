@@ -10,11 +10,11 @@
 			modal: false,
 			width: 500,
 			height: 450,
-			title: acx.text("General.Help")
+			title: i18n.text("General.Help")
 		},
 		init: function() {
 			this._super();
-			this.body.append(acx.text(this.config.ref));
+			this.body.append(i18n.text(this.config.ref));
 		}
 	});
 

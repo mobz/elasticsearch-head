@@ -150,11 +150,11 @@
 		_main_template: function() {
 			return { tag: "DIV", children: [
 				{ tag: "DIV", cls: "es-filterBrowser-filters" },
-				{ tag: "BUTTON", type: "button", text: acx.text("General.Search"), onclick: this._search_handler },
+				{ tag: "BUTTON", type: "button", text: i18n.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					acx.i18n.formatComplex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ acx.text("Output.Table"), acx.text("Output.JSON")].map(ut.option_template) } )
+					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
 				},
-				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, acx.text("Output.ShowSource") ] }
+				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
 		},
 		

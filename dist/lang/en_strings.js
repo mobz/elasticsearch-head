@@ -1,4 +1,4 @@
-acx.i18n.setKeys({
+i18n.setKeys({
 	"General.ElasticSearch": "ElasticSearch",
 	"General.LoadingFacets": "Loading Facets...",
 	"General.Searching": "Searching...",
@@ -85,7 +85,7 @@ acx.i18n.setKeys({
 	"StructuredQuery.ShowRawJson": "Show Raw JSON"
 });
 
-acx.i18n.setKeys({
+i18n.setKeys({
 	"AnyRequest.TransformerHelp" : "\
 		<p>The Result Transformer can be used to post process the raw json results from a request into a more useful format.</p>\
 		<p>The transformer should contain the body of a javascript function. The return value from the function becomes the new value passed to the json printer</p>\
@@ -106,7 +106,7 @@ acx.i18n.setKeys({
 		"
 });
 
-acx.i18n.setKeys({
+i18n.setKeys({
 	"AnyRequest.DisplayOptionsHelp" : "\
 		<p>Raw Json: shows complete results of the query and transformation in raw JSON format </p>\
 		<p>Graph Results: To produce a graph of your results, use the result transformer to produce an array of values</p>\
@@ -114,7 +114,7 @@ acx.i18n.setKeys({
 		"
 });
 
-acx.i18n.setKeys({
+i18n.setKeys({
 	"QueryFilter.DateRangeHelp" : "\
 		<p>Date fields accept a natural language query to produce a From and To date that form a range that the results are queried over.</p>\
 		<p>The following formats are supported:</p>\

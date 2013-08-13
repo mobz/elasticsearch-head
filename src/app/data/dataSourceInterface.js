@@ -14,7 +14,7 @@
 			data: function( DataSourceInterface )
 		 */
 		_getSummary: function(res) {
-			this.summary = acx.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
+			this.summary = i18n.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
 		},
 		_getMeta: function(res) {
 			this.meta = { total: res.hits.total, shards: res._shards, tool: res.took };

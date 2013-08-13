@@ -9,9 +9,6 @@ module.exports = function(grunt) {
 			corejs: {
 				src: [
 					'src/vendor/jquery/jquery.js',
-
-					'src/app/boot.js',
-
 					'lib/jsacx/src/jsacx.js',
 					'src/vendor/nohtml/jquery.acx-nohtml.js',
 					'src/vendor/graphael/g.raphael.standalone.js',
@@ -110,13 +107,23 @@ module.exports = function(grunt) {
 				cwd: 'src/app/base/',
 				src: '**',
 				dest: 'dist/base/'
+			},
+			i18n: {
+				src: 'src/vendor/i18n/i18n.js',
+				dest: 'dist/i18n.js'
+			},
+			lang: {
+				expand: true,
+				cwd: 'src/app/lang/',
+				src: '**',
+				dest: 'dist/lang/'
 			}
 		},
 
 		watch: {
 			scripts: {
 				files: ['lib/**/*.js','src/**/*.js', 'src/**/*.css', 'src/app/base/*' ],
-				tasks: ['concat', 'copy:base'],
+				tasks: ['default'],
 				options: {
 					spawn: false
 				}
@@ -141,7 +148,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	// Default task(s).
-	grunt.registerTask('default', ['concat', 'copy:base']);
+	grunt.registerTask('default', ['concat', 'copy:base', 'copy:i18n', 'copy:lang']);
 	grunt.registerTask('server', ['connect:server']);
 
 };

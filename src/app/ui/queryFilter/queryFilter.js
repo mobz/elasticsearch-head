@@ -159,9 +159,9 @@
 			}
 			jEl.data("lastRange", range);
 			jEl.siblings(".queryFilter-rangeHintFrom")
-				.text(acx.text("QueryFilter.DateRangeHint.from", range.start && new Date(range.start).toUTCString()));
+				.text(i18n.text("QueryFilter.DateRangeHint.from", range.start && new Date(range.start).toUTCString()));
 			jEl.siblings(".queryFilter-rangeHintTo")
-				.text(acx.text("QueryFilter.DateRangeHint.to", range.end && new Date(range.end).toUTCString()));
+				.text(i18n.text("QueryFilter.DateRangeHint.to", range.end && new Date(range.end).toUTCString()));
 			jEl.data("uqid", uqid);
 			this.requestUpdate(jEv);
 		},
@@ -211,14 +211,14 @@
 		},
 		_aliasSelector_template: function() {
 			var aliases = acx.eachMap(this.metadata.aliases, function(alias) { return alias; } );
-			aliases.unshift( acx.text("QueryFilter.AllIndices") );
+			aliases.unshift( i18n.text("QueryFilter.AllIndices") );
 			return { tag: "DIV", cls: "section queryFilter-aliases", child:
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
 		_indexSelector_template: function() {
 			return { tag: "DIV", cls: "section queryFilter-indices", children: [
-				{ tag: "HEADER", text: acx.text("QueryFilter-Header-Indices") },
+				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Indices") },
 				{ tag: "DIV", onClick: this._selectIndex_handler, children: acx.eachMap(this.metadata.indices, function(name, data) {
 					return { tag: "DIV", cls: "booble queryFilter-index", text: name };
 				})}
@@ -226,7 +226,7 @@
 		},
 		_typesSelector_template: function() {
 			return { tag: "DIV", cls: "section queryFilter-types", children: [
-				{ tag: "HEADER", text: acx.text("QueryFilter-Header-Types") },
+				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Types") },
 				{ tag: "DIV", onClick: this._selectType_handler, children: acx.eachMap(this.metadata.types, function(name, data) {
 					return { tag: "DIV", cls: "booble queryFilter-type", text: name };
 				})}
@@ -234,7 +234,7 @@
 		},
 		_filters_template: function() {
 			return { tag: "DIV", cls: "section queryFilter-filters", children: [
-				{ tag: "HEADER", text: acx.text("QueryFilter-Header-Fields") },
+				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Fields") },
 				{ tag: "DIV", children: acx.eachMap(this.metadata.fields, function(name, data) {
 					return new app.ui.SidebarSection({
 						title: name,
@@ -250,8 +250,8 @@
 		_dateFilter_template: function(spec) {
 			return { tag: "DIV", children: [
 				{ tag: "INPUT", data: { spec: spec }, onKeyup: this._dateFilterChange_handler },
-				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: acx.text("QueryFilter.DateRangeHint.from", "")},
-				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: acx.text("QueryFilter.DateRangeHint.to", "") }
+				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: i18n.text("QueryFilter.DateRangeHint.from", "")},
+				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: i18n.text("QueryFilter.DateRangeHint.to", "") }
 			]};
 		},
 		_numericFilter_template: function(spec) {
@@ -259,7 +259,7 @@
 		},
 		_booleanFilter_template: function(spec) {
 			return { tag: "SELECT", data: { spec: spec }, onChange: this._booleanFilterChange_handler,
-				children: [ acx.text("QueryFilter.AnyValue"), "true", "false" ].map( function( val ) {
+				children: [ i18n.text("QueryFilter.AnyValue"), "true", "false" ].map( function( val ) {
 					return { tag: "OPTION", value: val, text: val };
 				})
 			};

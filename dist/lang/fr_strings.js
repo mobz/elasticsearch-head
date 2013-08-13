@@ -1,4 +1,4 @@
-acx.i18n.setKeys({
+i18n.setKeys({
 //	"General.ElasticSearch": "ElasticSearch",
 	"General.LoadingFacets" : "Chargement des facettes...",
 	"General.Searching": "Recherche en cours...",
@@ -81,7 +81,7 @@ acx.i18n.setKeys({
 	"StructuredQuery.ShowRawJson": "Voir le JSON brut"
 });
 
-acx.i18n.setKeys({
+i18n.setKeys({
 	"AnyRequest.TransformerHelp" : "\
 		<p>Le transformateur de résultats peut être utilisé pour modifier a posteriori les résultats JSON bruts dans un format plus utile.</p>\
 		<p>Le transformateur devrait contenir le corps d'une fonction javascript. La valeur de retour de la fonction devient la nouvelle valeur qui sera passée à l'afficheur des documents JSON.</p>\
@@ -102,7 +102,7 @@ acx.i18n.setKeys({
 		"
 });
 
-acx.i18n.setKeys({
+i18n.setKeys({
 	"AnyRequest.DisplayOptionsHelp" : "\
 		<p>En JSON brut: affiche les résultats complets de la recherche éventuellement transformée au format JSON brut.</p>\
 		<p>En graphe: pour fabriquer un graphe de vos résultats, utilsez la transformation de résultats pour générer un tableau de valeurs.</p>\
@@ -110,7 +110,7 @@ acx.i18n.setKeys({
 		"
 });
 
-acx.i18n.setKeys({
+i18n.setKeys({
 	"QueryFilter.DateRangeHelp" : "\
 		<p>Les champs Date acceptent une requête en langage naturel pour produire un écart de date (from/to) correspondant.</p>\
 		<p>Les formats suivants sont acceptés :</p>\

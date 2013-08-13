@@ -89,16 +89,16 @@
 		},
 
 		_openAnyRequest_handler: function(jEv) { this.show("AnyRequest", { cluster: this.cluster }, jEv); },
-		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, acx.text("Nav.AnyRequest")); return false; },
+		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, i18n.text("Nav.AnyRequest")); return false; },
 		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv); },
-		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, acx.text("Nav.StructuredQuery")); return false; },
+		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterHealth_handler: function(jEv) { this.quick( acx.text("Nav.ClusterHealth"), "_cluster/health" ); },
-		_openClusterState_handler: function(jEv) { this.quick( acx.text("Nav.ClusterState"), "_cluster/state" ); },
-		_openClusterNodes_handler: function(jEv) { this.quick( acx.text("Nav.ClusterNodes"), "_cluster/nodes" ); },
-		_openClusterNodesStats_handler: function(jEv) { this.quick( acx.text("Nav.NodeStats"), "_cluster/nodes/stats" ); },
-		_openStatus_handler: function(jEv) { this.quick( acx.text("Nav.Status"), "_status" ); },
-		_openInfo_handler: function(jEv) { this.quick( acx.text("Nav.Info"), "" ); },
+		_openClusterHealth_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterHealth"), "_cluster/health" ); },
+		_openClusterState_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterState"), "_cluster/state" ); },
+		_openClusterNodes_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterNodes"), "_cluster/nodes" ); },
+		_openClusterNodesStats_handler: function(jEv) { this.quick( i18n.text("Nav.NodeStats"), "_cluster/nodes/stats" ); },
+		_openStatus_handler: function(jEv) { this.quick( i18n.text("Nav.Status"), "_status" ); },
+		_openInfo_handler: function(jEv) { this.quick( i18n.text("Nav.Info"), "" ); },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
 
 		_main_template: function() {
@@ -107,23 +107,23 @@
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
 					{ tag: "DIV", cls: "es-header-top", children: [
 						new ui.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
-						{ tag: "H1", text: acx.text("General.ElasticSearch") }
+						{ tag: "H1", text: i18n.text("General.ElasticSearch") }
 					]},
 					{ tag: "DIV", cls: "es-header-menu", children: [
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.Browser"), onclick: this._openBrowser_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Status"), onclick: this._openStatus_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.Status"), onclick: this._openStatus_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.Info"), onclick: this._openInfo_handler }
 					]}
 				]},
 				{ tag: "DIV", id: this.id("body"), cls: "es-body" }

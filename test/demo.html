@@ -7,22 +7,9 @@
 		<link rel="stylesheet" href="../dist/base/reset.css">
 		<link rel="stylesheet" href="../lib/es/es.css">
 		<link rel="stylesheet" href="../dist/ui.css">
+		<script src="../dist/i18n.js" data-baseDir="../dist/lang" data-langs="en,fr"></script>
 		<script src="../dist/core.js"></script>
 		<script src="../dist/base/boot.js"></script>
-		<script src="../lib/lang/en_strings.js"></script>
-		<script>
-			(function() {
-				var script0 = document.getElementsByTagName('script')[0];
-				var userLang = window.navigator.language || window.navigator.userLanguage;
-				userLang && ['fr'].forEach( function( lang ) {
-					if( userLang.indexOf( lang ) === 0 ) {
-						var s = document.createElement("script");
-						s.src = '../lib/lang/' + lang + '_strings.js';
-						script0.parentNode.insertBefore(s, script0);
-					}
-				});
-			}());
-		</script>
 		<script src="../dist/ui.js"></script>
 		<script>
 			$( function() {
@@ -36,7 +23,7 @@
 				document.title = args['demo'].match(/([^\/]+)(\.js)$/)[1]
 			} );
 		</script>
-		<link rel="icon" href="lib/es/images/favicon.png" type="image/png">
+		<link rel="icon" href="../dist/app/favicon.png" type="image/png">
 	</head>
 	<body></body>
 </html>

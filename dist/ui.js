@@ -219,7 +219,7 @@
 			data: function( DataSourceInterface )
 		 */
 		_getSummary: function(res) {
-			this.summary = acx.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
+			this.summary = i18n.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
 		},
 		_getMeta: function(res) {
 			this.meta = { total: res.hits.total, shards: res._shards, tool: res.took };
@@ -513,7 +513,7 @@
 					this.getData(),
 					function(results) {
 						if(results === null) {
-							alert(acx.text("Query.FailAndUndo"));
+							alert(i18n.text("Query.FailAndUndo"));
 							this.restoreState();
 							return;
 						}
@@ -549,7 +549,7 @@
 			this.cluster.post("_mget",JSON.stringify(data),
 				function(results) {
 					if(results === null) {
-						alert(acx.text("Query.FailAndUndo"));
+						alert(i18n.text("Query.FailAndUndo"));
 						this.restoreState();
 						return;
 					}
@@ -1500,11 +1500,11 @@
 			modal: false,
 			width: 500,
 			height: 450,
-			title: acx.text("General.Help")
+			title: i18n.text("General.Help")
 		},
 		init: function() {
 			this._super();
-			this.body.append(acx.text(this.config.ref));
+			this.body.append(i18n.text(this.config.ref));
 		}
 	});
 
@@ -1565,7 +1565,7 @@
 			{ tag: "DIV", cls: "sidebarSection", children: [
 				(this.config.title && { tag: "DIV", cls: "sidebarSection-head", onclick: this._showSection_handler, children: [
 					this.config.title,
-					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help pull-right", onclick: this._showHelp_handler, text: acx.text("General.HelpGlyph") } )
+					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help pull-right", onclick: this._showHelp_handler, text: i18n.text("General.HelpGlyph") } )
 				] }),
 				{ tag: "DIV", cls: "sidebarSection-body", child: this.config.body }
 			] }
@@ -1607,7 +1607,7 @@
 		showPreview: function(row) {
 			row.addClass("selected");
 			this.preview = new app.ui.JsonPanel({
-				title: acx.text("Browser.ResultSourcePanelTitle"),
+				title: i18n.text("Browser.ResultSourcePanelTitle"),
 				json: row.data("row")._source,
 				onClose: function() { row.removeClass("selected"); }
 			});
@@ -1792,9 +1792,9 @@
 			}
 			jEl.data("lastRange", range);
 			jEl.siblings(".queryFilter-rangeHintFrom")
-				.text(acx.text("QueryFilter.DateRangeHint.from", range.start && new Date(range.start).toUTCString()));
+				.text(i18n.text("QueryFilter.DateRangeHint.from", range.start && new Date(range.start).toUTCString()));
 			jEl.siblings(".queryFilter-rangeHintTo")
-				.text(acx.text("QueryFilter.DateRangeHint.to", range.end && new Date(range.end).toUTCString()));
+				.text(i18n.text("QueryFilter.DateRangeHint.to", range.end && new Date(range.end).toUTCString()));
 			jEl.data("uqid", uqid);
 			this.requestUpdate(jEv);
 		},
@@ -1844,14 +1844,14 @@
 		},
 		_aliasSelector_template: function() {
 			var aliases = acx.eachMap(this.metadata.aliases, function(alias) { return alias; } );
-			aliases.unshift( acx.text("QueryFilter.AllIndices") );
+			aliases.unshift( i18n.text("QueryFilter.AllIndices") );
 			return { tag: "DIV", cls: "section queryFilter-aliases", child:
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
 		_indexSelector_template: function() {
 			return { tag: "DIV", cls: "section queryFilter-indices", children: [
-				{ tag: "HEADER", text: acx.text("QueryFilter-Header-Indices") },
+				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Indices") },
 				{ tag: "DIV", onClick: this._selectIndex_handler, children: acx.eachMap(this.metadata.indices, function(name, data) {
 					return { tag: "DIV", cls: "booble queryFilter-index", text: name };
 				})}
@@ -1859,7 +1859,7 @@
 		},
 		_typesSelector_template: function() {
 			return { tag: "DIV", cls: "section queryFilter-types", children: [
-				{ tag: "HEADER", text: acx.text("QueryFilter-Header-Types") },
+				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Types") },
 				{ tag: "DIV", onClick: this._selectType_handler, children: acx.eachMap(this.metadata.types, function(name, data) {
 					return { tag: "DIV", cls: "booble queryFilter-type", text: name };
 				})}
@@ -1867,7 +1867,7 @@
 		},
 		_filters_template: function() {
 			return { tag: "DIV", cls: "section queryFilter-filters", children: [
-				{ tag: "HEADER", text: acx.text("QueryFilter-Header-Fields") },
+				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Fields") },
 				{ tag: "DIV", children: acx.eachMap(this.metadata.fields, function(name, data) {
 					return new app.ui.SidebarSection({
 						title: name,
@@ -1883,8 +1883,8 @@
 		_dateFilter_template: function(spec) {
 			return { tag: "DIV", children: [
 				{ tag: "INPUT", data: { spec: spec }, onKeyup: this._dateFilterChange_handler },
-				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: acx.text("QueryFilter.DateRangeHint.from", "")},
-				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: acx.text("QueryFilter.DateRangeHint.to", "") }
+				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: i18n.text("QueryFilter.DateRangeHint.from", "")},
+				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: i18n.text("QueryFilter.DateRangeHint.to", "") }
 			]};
 		},
 		_numericFilter_template: function(spec) {
@@ -1892,7 +1892,7 @@
 		},
 		_booleanFilter_template: function(spec) {
 			return { tag: "SELECT", data: { spec: spec }, onChange: this._booleanFilterChange_handler,
-				children: [ acx.text("QueryFilter.AnyValue"), "true", "false" ].map( function( val ) {
+				children: [ i18n.text("QueryFilter.AnyValue"), "true", "false" ].map( function( val ) {
 					return { tag: "OPTION", value: val, text: val };
 				})
 			};
@@ -1941,7 +1941,7 @@
 			this.cluster = this.config.cluster;
 			this.query = new app.data.Query( { cluster: this.cluster } );
 			this._refreshButton = new ui.Button({
-				label: acx.text("General.RefreshResults"),
+				label: i18n.text("General.RefreshResults"),
 				onclick: function( btn ) {
 					this.query.query();
 				}.bind(this)
@@ -1974,7 +1974,7 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiBrowser", children: [
 				new ui.Toolbar({
-					label: acx.text("Browser.Title"),
+					label: i18n.text("Browser.Title"),
 					left: [ ],
 					right: [ this._refreshButton ]
 				}),
@@ -2037,7 +2037,7 @@
 					window.clearTimeout(this.timer); // stop any cron jobs
 				}
 				delete this.prevData; // remove data from previous cron runs
-				this.outEl.text(acx.text("AnyRequest.Requesting"));
+				this.outEl.text(i18n.text("AnyRequest.Requesting"));
 				if( ! /\/$/.test( base_uri )) {
 					base_uri += "/";
 					this.base_uriEl.val( base_uri );
@@ -2149,26 +2149,26 @@
 				{ tag: "DIV", cls: "anyRequest-request", children: [
 					new app.ui.SidebarSection({
 						open: false,
-						title: acx.text("AnyRequest.History"),
+						title: i18n.text("AnyRequest.History"),
 						body: { tag: "UL", onclick: this._historyClick_handler, cls: "anyRequest-history", children: this.history.map(this._historyItem_template, this)	}
 					}),
 					new app.ui.SidebarSection({
 						open: true,
-						title: acx.text("AnyRequest.Query"),
+						title: i18n.text("AnyRequest.Query"),
 						body: { tag: "DIV", children: [
 							{ tag: "INPUT", type: "text", name: "base_uri", value: this.config.cluster.config.base_uri },
 							{ tag: "BR" },
 							{ tag: "INPUT", type: "text", name: "path", value: this.config.path },
 							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "DELETE"].map(ut.option_template) },
 							{ tag: "TEXTAREA", name: "body", rows: 20, text: JSON.stringify(this.config.query) },
-							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: acx.text("AnyRequest.Request") }, onclick: this._request_handler },
-							{ tag: "BUTTON", type: "button", text: acx.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, acx.text("AnyRequest.Pretty") ] },
+							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: i18n.text("AnyRequest.Request") }, onclick: this._request_handler },
+							{ tag: "BUTTON", type: "button", text: i18n.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, i18n.text("AnyRequest.Pretty") ] },
 							{ tag: "DIV", cls: "anyRequest-jsonErr" }
 						]}
 					}),
 					new app.ui.SidebarSection({
-						title: acx.text("AnyRequest.Transformer"),
+						title: i18n.text("AnyRequest.Transformer"),
 						help: "AnyRequest.TransformerHelp",
 						body: { tag: "DIV", children: [
 							{ tag: "CODE", text: "function(root, prev) {" },
@@ -2179,9 +2179,9 @@
 						] }
 					}),
 					new app.ui.SidebarSection({
-						title: acx.text("AnyRequest.RepeatRequest"),
+						title: i18n.text("AnyRequest.RepeatRequest"),
 						body: { tag: "DIV", children: [
-							acx.text("AnyRequest.RepeatRequestSelect"), " ",
+							i18n.text("AnyRequest.RepeatRequestSelect"), " ",
 							{ tag: "SELECT", name: "cron", children: [
 								{ value: 0, text: "do not repeat" },
 								{ value: 1000, text: "second" },
@@ -2195,14 +2195,14 @@
 						] }
 					}),
 					new app.ui.SidebarSection({
-						title: acx.text("AnyRequest.DisplayOptions"),
+						title: i18n.text("AnyRequest.DisplayOptions"),
 						help: "AnyRequest.DisplayOptionsHelp",
 						body: { tag: "DIV", children: [
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", checked: true, name: "asJson" }, acx.text("AnyRequest.AsJson") ] },
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", checked: true, name: "asJson" }, i18n.text("AnyRequest.AsJson") ] },
 							{ tag: "BR" },
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asGraph" }, acx.text("AnyRequest.AsGraph") ] },
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asGraph" }, i18n.text("AnyRequest.AsGraph") ] },
 							{ tag: "BR" },
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asTable" }, acx.text("AnyRequest.AsTable") ] }
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asTable" }, i18n.text("AnyRequest.AsTable") ] }
 						] }
 					})
 				] },
@@ -2234,12 +2234,12 @@
 			this._resetTimer = null;
 			this._redrawValue = -1;
 			this._refreshButton = new ui.SplitButton({
-				label: acx.text("General.RefreshResults"),
+				label: i18n.text("General.RefreshResults"),
 				items: [
-					{ label: acx.text("General.ManualRefresh"), value: -1, selected: true },
-					{ label: acx.text("General.RefreshQuickly"), value: 100 },
-					{ label: acx.text("General.Refresh5seconds"), value: 5000 },
-					{ label: acx.text("General.Refresh1minute"), value: 60000 }
+					{ label: i18n.text("General.ManualRefresh"), value: -1, selected: true },
+					{ label: i18n.text("General.RefreshQuickly"), value: 100 },
+					{ label: i18n.text("General.Refresh5seconds"), value: 5000 },
+					{ label: i18n.text("General.Refresh1minute"), value: 60000 }
 				],
 				onselect: function( btn, event ) {
 					this._redrawValue = event.value;
@@ -2409,15 +2409,15 @@
 		_newIndex_handler: function() {
 			var fields = new app.ux.FieldCollection({
 				fields: [
-					new ui.TextField({ label: acx.text("ClusterOverView.IndexName"), name: "_name", require: true }),
+					new ui.TextField({ label: i18n.text("ClusterOverView.IndexName"), name: "_name", require: true }),
 					new ui.TextField({
-						label: acx.text("ClusterOverview.NumShards"),
+						label: i18n.text("ClusterOverview.NumShards"),
 						name: "number_of_shards",
 						value: "5",
 						require: function( val ) { return parseInt( val, 10 ) >= 1; }
 					}),
 					new ui.TextField({
-						label: acx.text("ClusterOverview.NumReplicas"),
+						label: i18n.text("ClusterOverview.NumReplicas"),
 						name: "number_of_replicas",
 						value: "1",
 						require: function( val ) { return parseInt( val, 10 ) >= 0; }
@@ -2425,7 +2425,7 @@
 				]
 			});
 			var dialog = new ui.DialogPanel({
-				title: acx.text("ClusterOverview.NewIndex"),
+				title: i18n.text("ClusterOverview.NewIndex"),
 				body: new ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {
 					if(fields.validate()) {
@@ -2444,11 +2444,11 @@
 		_newAliasAction_handler: function(index) {
 			var fields = new app.ux.FieldCollection({
 				fields: [
-					new ui.TextField({ label: acx.text("AliasForm.AliasName"), name: "alias", require: true })
+					new ui.TextField({ label: i18n.text("AliasForm.AliasName"), name: "alias", require: true })
 				]
 			});
 			var dialog = new ui.DialogPanel({
-				title: acx.text("AliasForm.NewAliasForIndexName", index.name),
+				title: i18n.text("AliasForm.NewAliasForIndexName", index.name),
 				body: new ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {
 					if(fields.validate()) {
@@ -2468,7 +2468,7 @@
 			}).open();
 		},
 		_deleteIndexAction_handler: function(index) {
-			if( prompt( acx.text("AliasForm.DeleteAliasMessage", acx.text("Command.DELETE"), index.name ) ) === acx.text("Command.DELETE") ) {
+			if( prompt( i18n.text("AliasForm.DeleteAliasMessage", i18n.text("Command.DELETE"), index.name ) ) === i18n.text("Command.DELETE") ) {
 				this.cluster["delete"](index.name, null, function(r) {
 					alert(JSON.stringify(r));
 					this.redraw("reset");
@@ -2482,12 +2482,12 @@
 			}.bind(this));
 		},
 		_testAnalyser_handler: function(index) {
-			this.cluster.get(index.name + "/_analyze?text=" + prompt( acx.text("IndexCommand.TextToAnalyze") ), function(r) {
+			this.cluster.get(index.name + "/_analyze?text=" + prompt( i18n.text("IndexCommand.TextToAnalyze") ), function(r) {
 				alert(JSON.stringify(r, true, "  "));
 			});
 		},
 		_showdownNode_handler: function(node) {
-			if(prompt( acx.text("IndexCommand.ShutdownMessage", acx.text("Command.SHUTDOWN"), node.cluster.name ) ) === acx.text("Command.SHUTDOWN") ) {
+			if(prompt( i18n.text("IndexCommand.ShutdownMessage", i18n.text("Command.SHUTDOWN"), node.cluster.name ) ) === i18n.text("Command.SHUTDOWN") ) {
 				this.cluster.post( "_cluster/nodes/" + node.name + "/_shutdown", null, function(r) {
 					alert(JSON.stringify(r));
 					this.redraw("reset");
@@ -2532,19 +2532,19 @@
 					{ tag: "DIV", text: node.cluster.http_address },
 					{ tag: "DIV", cls: "clusterOverview-controls", children: [
 						new ui.MenuButton({
-							label: acx.text("NodeInfoMenu.Title"),
+							label: i18n.text("NodeInfoMenu.Title"),
 							menu: new ui.MenuPanel({
 								items: [
-									{ text: acx.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new ui.JsonPanel({ json: node.cluster, title: node.name });} },
-									{ text: acx.text("NodeInfoMenu.NodeStats"), onclick: function() { new ui.JsonPanel({ json: node.stats, title: node.name });} }
+									{ text: i18n.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new ui.JsonPanel({ json: node.cluster, title: node.name });} },
+									{ text: i18n.text("NodeInfoMenu.NodeStats"), onclick: function() { new ui.JsonPanel({ json: node.stats, title: node.name });} }
 								]
 							})
 						}),
 						new ui.MenuButton({
-							label: acx.text("NodeActionsMenu.Title"),
+							label: i18n.text("NodeActionsMenu.Title"),
 							menu: new ui.MenuPanel({
 								items: [
-									{ text: acx.text("NodeActionsMenu.Shutdown"), onclick: function() { this._showdownNode_handler(node); }.bind(this) }
+									{ text: i18n.text("NodeActionsMenu.Shutdown"), onclick: function() { this._showdownNode_handler(node); }.bind(this) }
 								]
 							})
 						})
@@ -2562,25 +2562,25 @@
 				{ tag: "DIV", text: line2 },
 				{ tag: "DIV", cls: "clusterOverview-controls", children: [
 					new ui.MenuButton({
-						label: acx.text("IndexInfoMenu.Title"),
+						label: i18n.text("IndexInfoMenu.Title"),
 						menu: new ui.MenuPanel({
 							items: [
-								{ text: acx.text("IndexInfoMenu.Status"), onclick: function() { new ui.JsonPanel({ json: index.status, title: index.name }); } },
-								{ text: acx.text("IndexInfoMenu.Metadata"), onclick: function() { new ui.JsonPanel({ json: index.metadata, title: index.name }); } }
+								{ text: i18n.text("IndexInfoMenu.Status"), onclick: function() { new ui.JsonPanel({ json: index.status, title: index.name }); } },
+								{ text: i18n.text("IndexInfoMenu.Metadata"), onclick: function() { new ui.JsonPanel({ json: index.metadata, title: index.name }); } }
 							]
 						})
 					}),
 					new ui.MenuButton({
-						label: acx.text("IndexActionsMenu.Title"),
+						label: i18n.text("IndexActionsMenu.Title"),
 						menu: new ui.MenuPanel({
 							items: [
-								{ text: acx.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
-								{ text: closed ? acx.text("IndexActionsMenu.Open") : acx.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler(closed ? "_open" : "_close", index, true); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Delete"), onclick: function() { this._deleteIndexAction_handler(index); }.bind(this) }
+								{ text: i18n.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
+								{ text: closed ? i18n.text("IndexActionsMenu.Open") : i18n.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler(closed ? "_open" : "_close", index, true); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Delete"), onclick: function() { this._deleteIndexAction_handler(index); }.bind(this) }
 							]
 						})
 					})
@@ -2597,7 +2597,7 @@
 						text: alias.name,
 						children: [
 							{	tag: 'SPAN',
-								text: acx.text("General.CloseGlyph"),
+								text: i18n.text("General.CloseGlyph"),
 								cls: 'clusterOverview-hasAlias-remove',
 								onclick: function() {
 									var command = {
@@ -2644,10 +2644,10 @@
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "clusterOverview", children: [
 				new ui.Toolbar({
-					label: acx.text("Overview.PageTitle"),
+					label: i18n.text("Overview.PageTitle"),
 					left: [
 						new ui.Button({
-							label: acx.text("ClusterOverview.NewIndex"),
+							label: i18n.text("ClusterOverview.NewIndex"),
 							onclick: this._newIndex_handler
 						})
 					],
@@ -2762,7 +2762,7 @@
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: "dateHistogram loading", css: { height: "50px" }, children: [
-				acx.text("General.LoadingFacets")
+				i18n.text("General.LoadingFacets")
 			] }
 		); }
 	});
@@ -2823,7 +2823,7 @@
 		
 		_health_handler: function(data) {
 			if(data) {
-				this.statEl.text(acx.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) ).css("background", data.status);
+				this.statEl.text(i18n.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) ).css("background", data.status);
 				this.fire("status", data.status);
 			}
 		},
@@ -2841,7 +2841,7 @@
 						this._reconnect_handler();
 					}
 				}.bind(this), id: this.id("baseUri"), value: this.config.base_uri },
-				{ tag: "BUTTON", type: "button", text: acx.text("Header.Connect"), onclick: this._reconnect_handler },
+				{ tag: "BUTTON", type: "button", text: i18n.text("Header.Connect"), onclick: this._reconnect_handler },
 				{ tag: "SPAN", cls: "es-header-clusterName" },
 				{ tag: "SPAN", cls: "es-header-clusterStatus" }
 			]};
@@ -2875,7 +2875,7 @@
 				cluster: this.config.cluster,
 				base_uri: this.config.base_uri,
 				index: index,
-				onStaringSearch: function() { this.el.find("DIV.es-structuredQuery-out").text( acx.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
+				onStaringSearch: function() { this.el.find("DIV.es-structuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
 				onJsonResults: this._jsonResults_handler,
 				onTableResults: this._tableResults_handler
@@ -2911,7 +2911,7 @@
 			var searchSourceDiv = this.el.find("DIV.es-searchSource");
 			searchSourceDiv.empty().append(new app.ui.JsonPretty({ obj: src }));
 			if(typeof JSON !== "undefined") {
-				var showRawJSON = $({ tag: "BUTTON", type: "button", text: acx.text("StructuredQuery.ShowRawJson"), id: "showRawJSON", value: JSON.stringify(src), onclick: this._showRawJSON });
+				var showRawJSON = $({ tag: "BUTTON", type: "button", text: i18n.text("StructuredQuery.ShowRawJson"), id: "showRawJSON", value: JSON.stringify(src), onclick: this._showRawJSON });
 				searchSourceDiv.append(showRawJSON);
 			}
 			searchSourceDiv.show();
@@ -3088,11 +3088,11 @@
 		_main_template: function() {
 			return { tag: "DIV", children: [
 				{ tag: "DIV", cls: "es-filterBrowser-filters" },
-				{ tag: "BUTTON", type: "button", text: acx.text("General.Search"), onclick: this._search_handler },
+				{ tag: "BUTTON", type: "button", text: i18n.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					acx.i18n.formatComplex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ acx.text("Output.Table"), acx.text("Output.JSON")].map(ut.option_template) } )
+					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
 				},
-				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, acx.text("Output.ShowSource") ] }
+				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
 		},
 		
@@ -3153,7 +3153,7 @@
 		},
 		
 		_main_template: function() {
-			return { tag: "DIV", cls: "es-indexSelector", children: acx.i18n.formatComplex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "es-indexSelector-select" } ) };
+			return { tag: "DIV", cls: "es-indexSelector", children: i18n.complex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "es-indexSelector-select" } ) };
 		},
 
 		_indexChanged_handler: function() {
@@ -3165,7 +3165,7 @@
 		},
 		
 		_option_template: function(name, index) {
-			return  { tag: "OPTION", value: name, text: acx.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
+			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
 		}
 	});
 
@@ -3339,16 +3339,16 @@
 		},
 
 		_openAnyRequest_handler: function(jEv) { this.show("AnyRequest", { cluster: this.cluster }, jEv); },
-		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, acx.text("Nav.AnyRequest")); return false; },
+		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, i18n.text("Nav.AnyRequest")); return false; },
 		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv); },
-		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, acx.text("Nav.StructuredQuery")); return false; },
+		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterHealth_handler: function(jEv) { this.quick( acx.text("Nav.ClusterHealth"), "_cluster/health" ); },
-		_openClusterState_handler: function(jEv) { this.quick( acx.text("Nav.ClusterState"), "_cluster/state" ); },
-		_openClusterNodes_handler: function(jEv) { this.quick( acx.text("Nav.ClusterNodes"), "_cluster/nodes" ); },
-		_openClusterNodesStats_handler: function(jEv) { this.quick( acx.text("Nav.NodeStats"), "_cluster/nodes/stats" ); },
-		_openStatus_handler: function(jEv) { this.quick( acx.text("Nav.Status"), "_status" ); },
-		_openInfo_handler: function(jEv) { this.quick( acx.text("Nav.Info"), "" ); },
+		_openClusterHealth_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterHealth"), "_cluster/health" ); },
+		_openClusterState_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterState"), "_cluster/state" ); },
+		_openClusterNodes_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterNodes"), "_cluster/nodes" ); },
+		_openClusterNodesStats_handler: function(jEv) { this.quick( i18n.text("Nav.NodeStats"), "_cluster/nodes/stats" ); },
+		_openStatus_handler: function(jEv) { this.quick( i18n.text("Nav.Status"), "_status" ); },
+		_openInfo_handler: function(jEv) { this.quick( i18n.text("Nav.Info"), "" ); },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
 
 		_main_template: function() {
@@ -3357,23 +3357,23 @@
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
 					{ tag: "DIV", cls: "es-header-top", children: [
 						new ui.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
-						{ tag: "H1", text: acx.text("General.ElasticSearch") }
+						{ tag: "H1", text: i18n.text("General.ElasticSearch") }
 					]},
 					{ tag: "DIV", cls: "es-header-menu", children: [
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.Browser"), onclick: this._openBrowser_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: acx.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
+						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Status"), onclick: this._openStatus_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: acx.text("Nav.Info"), onclick: this._openInfo_handler }
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.Status"), onclick: this._openStatus_handler },
+						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.Info"), onclick: this._openInfo_handler }
 					]}
 				]},
 				{ tag: "DIV", id: this.id("body"), cls: "es-body" }

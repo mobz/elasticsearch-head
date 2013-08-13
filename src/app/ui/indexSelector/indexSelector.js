@@ -25,7 +25,7 @@
 		},
 		
 		_main_template: function() {
-			return { tag: "DIV", cls: "es-indexSelector", children: acx.i18n.formatComplex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "es-indexSelector-select" } ) };
+			return { tag: "DIV", cls: "es-indexSelector", children: i18n.complex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "es-indexSelector-select" } ) };
 		},
 
 		_indexChanged_handler: function() {
@@ -37,7 +37,7 @@
 		},
 		
 		_option_template: function(name, index) {
-			return  { tag: "OPTION", value: name, text: acx.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
+			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
 		}
 	});
 

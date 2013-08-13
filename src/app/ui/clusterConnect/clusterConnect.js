@@ -24,7 +24,7 @@
 		
 		_health_handler: function(data) {
 			if(data) {
-				this.statEl.text(acx.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) ).css("background", data.status);
+				this.statEl.text(i18n.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) ).css("background", data.status);
 				this.fire("status", data.status);
 			}
 		},
@@ -42,7 +42,7 @@
 						this._reconnect_handler();
 					}
 				}.bind(this), id: this.id("baseUri"), value: this.config.base_uri },
-				{ tag: "BUTTON", type: "button", text: acx.text("Header.Connect"), onclick: this._reconnect_handler },
+				{ tag: "BUTTON", type: "button", text: i18n.text("Header.Connect"), onclick: this._reconnect_handler },
 				{ tag: "SPAN", cls: "es-header-clusterName" },
 				{ tag: "SPAN", cls: "es-header-clusterStatus" }
 			]};

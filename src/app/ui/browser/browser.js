@@ -12,7 +12,7 @@
 			this.cluster = this.config.cluster;
 			this.query = new app.data.Query( { cluster: this.cluster } );
 			this._refreshButton = new ui.Button({
-				label: acx.text("General.RefreshResults"),
+				label: i18n.text("General.RefreshResults"),
 				onclick: function( btn ) {
 					this.query.query();
 				}.bind(this)
@@ -45,7 +45,7 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiBrowser", children: [
 				new ui.Toolbar({
-					label: acx.text("Browser.Title"),
+					label: i18n.text("Browser.Title"),
 					left: [ ],
 					right: [ this._refreshButton ]
 				}),

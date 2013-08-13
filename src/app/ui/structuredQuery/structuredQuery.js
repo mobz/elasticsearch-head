@@ -24,7 +24,7 @@
 				cluster: this.config.cluster,
 				base_uri: this.config.base_uri,
 				index: index,
-				onStaringSearch: function() { this.el.find("DIV.es-structuredQuery-out").text( acx.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
+				onStaringSearch: function() { this.el.find("DIV.es-structuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
 				onJsonResults: this._jsonResults_handler,
 				onTableResults: this._tableResults_handler
@@ -60,7 +60,7 @@
 			var searchSourceDiv = this.el.find("DIV.es-searchSource");
 			searchSourceDiv.empty().append(new app.ui.JsonPretty({ obj: src }));
 			if(typeof JSON !== "undefined") {
-				var showRawJSON = $({ tag: "BUTTON", type: "button", text: acx.text("StructuredQuery.ShowRawJson"), id: "showRawJSON", value: JSON.stringify(src), onclick: this._showRawJSON });
+				var showRawJSON = $({ tag: "BUTTON", type: "button", text: i18n.text("StructuredQuery.ShowRawJson"), id: "showRawJSON", value: JSON.stringify(src), onclick: this._showRawJSON });
 				searchSourceDiv.append(showRawJSON);
 			}
 			searchSourceDiv.show();

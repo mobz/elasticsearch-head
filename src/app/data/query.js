@@ -54,7 +54,7 @@
 					this.getData(),
 					function(results) {
 						if(results === null) {
-							alert(acx.text("Query.FailAndUndo"));
+							alert(i18n.text("Query.FailAndUndo"));
 							this.restoreState();
 							return;
 						}
@@ -90,7 +90,7 @@
 			this.cluster.post("_mget",JSON.stringify(data),
 				function(results) {
 					if(results === null) {
-						alert(acx.text("Query.FailAndUndo"));
+						alert(i18n.text("Query.FailAndUndo"));
 						this.restoreState();
 						return;
 					}

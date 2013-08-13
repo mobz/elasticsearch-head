@@ -11,12 +11,12 @@
 			this._resetTimer = null;
 			this._redrawValue = -1;
 			this._refreshButton = new ui.SplitButton({
-				label: acx.text("General.RefreshResults"),
+				label: i18n.text("General.RefreshResults"),
 				items: [
-					{ label: acx.text("General.ManualRefresh"), value: -1, selected: true },
-					{ label: acx.text("General.RefreshQuickly"), value: 100 },
-					{ label: acx.text("General.Refresh5seconds"), value: 5000 },
-					{ label: acx.text("General.Refresh1minute"), value: 60000 }
+					{ label: i18n.text("General.ManualRefresh"), value: -1, selected: true },
+					{ label: i18n.text("General.RefreshQuickly"), value: 100 },
+					{ label: i18n.text("General.Refresh5seconds"), value: 5000 },
+					{ label: i18n.text("General.Refresh1minute"), value: 60000 }
 				],
 				onselect: function( btn, event ) {
 					this._redrawValue = event.value;
@@ -186,15 +186,15 @@
 		_newIndex_handler: function() {
 			var fields = new app.ux.FieldCollection({
 				fields: [
-					new ui.TextField({ label: acx.text("ClusterOverView.IndexName"), name: "_name", require: true }),
+					new ui.TextField({ label: i18n.text("ClusterOverView.IndexName"), name: "_name", require: true }),
 					new ui.TextField({
-						label: acx.text("ClusterOverview.NumShards"),
+						label: i18n.text("ClusterOverview.NumShards"),
 						name: "number_of_shards",
 						value: "5",
 						require: function( val ) { return parseInt( val, 10 ) >= 1; }
 					}),
 					new ui.TextField({
-						label: acx.text("ClusterOverview.NumReplicas"),
+						label: i18n.text("ClusterOverview.NumReplicas"),
 						name: "number_of_replicas",
 						value: "1",
 						require: function( val ) { return parseInt( val, 10 ) >= 0; }
@@ -202,7 +202,7 @@
 				]
 			});
 			var dialog = new ui.DialogPanel({
-				title: acx.text("ClusterOverview.NewIndex"),
+				title: i18n.text("ClusterOverview.NewIndex"),
 				body: new ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {
 					if(fields.validate()) {
@@ -221,11 +221,11 @@
 		_newAliasAction_handler: function(index) {
 			var fields = new app.ux.FieldCollection({
 				fields: [
-					new ui.TextField({ label: acx.text("AliasForm.AliasName"), name: "alias", require: true })
+					new ui.TextField({ label: i18n.text("AliasForm.AliasName"), name: "alias", require: true })
 				]
 			});
 			var dialog = new ui.DialogPanel({
-				title: acx.text("AliasForm.NewAliasForIndexName", index.name),
+				title: i18n.text("AliasForm.NewAliasForIndexName", index.name),
 				body: new ui.PanelForm({ fields: fields }),
 				onCommit: function(panel, args) {
 					if(fields.validate()) {
@@ -245,7 +245,7 @@
 			}).open();
 		},
 		_deleteIndexAction_handler: function(index) {
-			if( prompt( acx.text("AliasForm.DeleteAliasMessage", acx.text("Command.DELETE"), index.name ) ) === acx.text("Command.DELETE") ) {
+			if( prompt( i18n.text("AliasForm.DeleteAliasMessage", i18n.text("Command.DELETE"), index.name ) ) === i18n.text("Command.DELETE") ) {
 				this.cluster["delete"](index.name, null, function(r) {
 					alert(JSON.stringify(r));
 					this.redraw("reset");
@@ -259,12 +259,12 @@
 			}.bind(this));
 		},
 		_testAnalyser_handler: function(index) {
-			this.cluster.get(index.name + "/_analyze?text=" + prompt( acx.text("IndexCommand.TextToAnalyze") ), function(r) {
+			this.cluster.get(index.name + "/_analyze?text=" + prompt( i18n.text("IndexCommand.TextToAnalyze") ), function(r) {
 				alert(JSON.stringify(r, true, "  "));
 			});
 		},
 		_showdownNode_handler: function(node) {
-			if(prompt( acx.text("IndexCommand.ShutdownMessage", acx.text("Command.SHUTDOWN"), node.cluster.name ) ) === acx.text("Command.SHUTDOWN") ) {
+			if(prompt( i18n.text("IndexCommand.ShutdownMessage", i18n.text("Command.SHUTDOWN"), node.cluster.name ) ) === i18n.text("Command.SHUTDOWN") ) {
 				this.cluster.post( "_cluster/nodes/" + node.name + "/_shutdown", null, function(r) {
 					alert(JSON.stringify(r));
 					this.redraw("reset");
@@ -309,19 +309,19 @@
 					{ tag: "DIV", text: node.cluster.http_address },
 					{ tag: "DIV", cls: "clusterOverview-controls", children: [
 						new ui.MenuButton({
-							label: acx.text("NodeInfoMenu.Title"),
+							label: i18n.text("NodeInfoMenu.Title"),
 							menu: new ui.MenuPanel({
 								items: [
-									{ text: acx.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new ui.JsonPanel({ json: node.cluster, title: node.name });} },
-									{ text: acx.text("NodeInfoMenu.NodeStats"), onclick: function() { new ui.JsonPanel({ json: node.stats, title: node.name });} }
+									{ text: i18n.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new ui.JsonPanel({ json: node.cluster, title: node.name });} },
+									{ text: i18n.text("NodeInfoMenu.NodeStats"), onclick: function() { new ui.JsonPanel({ json: node.stats, title: node.name });} }
 								]
 							})
 						}),
 						new ui.MenuButton({
-							label: acx.text("NodeActionsMenu.Title"),
+							label: i18n.text("NodeActionsMenu.Title"),
 							menu: new ui.MenuPanel({
 								items: [
-									{ text: acx.text("NodeActionsMenu.Shutdown"), onclick: function() { this._showdownNode_handler(node); }.bind(this) }
+									{ text: i18n.text("NodeActionsMenu.Shutdown"), onclick: function() { this._showdownNode_handler(node); }.bind(this) }
 								]
 							})
 						})
@@ -339,25 +339,25 @@
 				{ tag: "DIV", text: line2 },
 				{ tag: "DIV", cls: "clusterOverview-controls", children: [
 					new ui.MenuButton({
-						label: acx.text("IndexInfoMenu.Title"),
+						label: i18n.text("IndexInfoMenu.Title"),
 						menu: new ui.MenuPanel({
 							items: [
-								{ text: acx.text("IndexInfoMenu.Status"), onclick: function() { new ui.JsonPanel({ json: index.status, title: index.name }); } },
-								{ text: acx.text("IndexInfoMenu.Metadata"), onclick: function() { new ui.JsonPanel({ json: index.metadata, title: index.name }); } }
+								{ text: i18n.text("IndexInfoMenu.Status"), onclick: function() { new ui.JsonPanel({ json: index.status, title: index.name }); } },
+								{ text: i18n.text("IndexInfoMenu.Metadata"), onclick: function() { new ui.JsonPanel({ json: index.metadata, title: index.name }); } }
 							]
 						})
 					}),
 					new ui.MenuButton({
-						label: acx.text("IndexActionsMenu.Title"),
+						label: i18n.text("IndexActionsMenu.Title"),
 						menu: new ui.MenuPanel({
 							items: [
-								{ text: acx.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
-								{ text: closed ? acx.text("IndexActionsMenu.Open") : acx.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler(closed ? "_open" : "_close", index, true); }.bind(this) },
-								{ text: acx.text("IndexActionsMenu.Delete"), onclick: function() { this._deleteIndexAction_handler(index); }.bind(this) }
+								{ text: i18n.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
+								{ text: closed ? i18n.text("IndexActionsMenu.Open") : i18n.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler(closed ? "_open" : "_close", index, true); }.bind(this) },
+								{ text: i18n.text("IndexActionsMenu.Delete"), onclick: function() { this._deleteIndexAction_handler(index); }.bind(this) }
 							]
 						})
 					})
@@ -374,7 +374,7 @@
 						text: alias.name,
 						children: [
 							{	tag: 'SPAN',
-								text: acx.text("General.CloseGlyph"),
+								text: i18n.text("General.CloseGlyph"),
 								cls: 'clusterOverview-hasAlias-remove',
 								onclick: function() {
 									var command = {
@@ -421,10 +421,10 @@
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "clusterOverview", children: [
 				new ui.Toolbar({
-					label: acx.text("Overview.PageTitle"),
+					label: i18n.text("Overview.PageTitle"),
 					left: [
 						new ui.Button({
-							label: acx.text("ClusterOverview.NewIndex"),
+							label: i18n.text("ClusterOverview.NewIndex"),
 							onclick: this._newIndex_handler
 						})
 					],

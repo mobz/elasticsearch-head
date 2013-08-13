@@ -32,7 +32,7 @@
 		showPreview: function(row) {
 			row.addClass("selected");
 			this.preview = new app.ui.JsonPanel({
-				title: acx.text("Browser.ResultSourcePanelTitle"),
+				title: i18n.text("Browser.ResultSourcePanelTitle"),
 				json: row.data("row")._source,
 				onClose: function() { row.removeClass("selected"); }
 			});

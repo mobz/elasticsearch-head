@@ -50,7 +50,7 @@
 					window.clearTimeout(this.timer); // stop any cron jobs
 				}
 				delete this.prevData; // remove data from previous cron runs
-				this.outEl.text(acx.text("AnyRequest.Requesting"));
+				this.outEl.text(i18n.text("AnyRequest.Requesting"));
 				if( ! /\/$/.test( base_uri )) {
 					base_uri += "/";
 					this.base_uriEl.val( base_uri );
@@ -162,26 +162,26 @@
 				{ tag: "DIV", cls: "anyRequest-request", children: [
 					new app.ui.SidebarSection({
 						open: false,
-						title: acx.text("AnyRequest.History"),
+						title: i18n.text("AnyRequest.History"),
 						body: { tag: "UL", onclick: this._historyClick_handler, cls: "anyRequest-history", children: this.history.map(this._historyItem_template, this)	}
 					}),
 					new app.ui.SidebarSection({
 						open: true,
-						title: acx.text("AnyRequest.Query"),
+						title: i18n.text("AnyRequest.Query"),
 						body: { tag: "DIV", children: [
 							{ tag: "INPUT", type: "text", name: "base_uri", value: this.config.cluster.config.base_uri },
 							{ tag: "BR" },
 							{ tag: "INPUT", type: "text", name: "path", value: this.config.path },
 							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "DELETE"].map(ut.option_template) },
 							{ tag: "TEXTAREA", name: "body", rows: 20, text: JSON.stringify(this.config.query) },
-							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: acx.text("AnyRequest.Request") }, onclick: this._request_handler },
-							{ tag: "BUTTON", type: "button", text: acx.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, acx.text("AnyRequest.Pretty") ] },
+							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: i18n.text("AnyRequest.Request") }, onclick: this._request_handler },
+							{ tag: "BUTTON", type: "button", text: i18n.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, i18n.text("AnyRequest.Pretty") ] },
 							{ tag: "DIV", cls: "anyRequest-jsonErr" }
 						]}
 					}),
 					new app.ui.SidebarSection({
-						title: acx.text("AnyRequest.Transformer"),
+						title: i18n.text("AnyRequest.Transformer"),
 						help: "AnyRequest.TransformerHelp",
 						body: { tag: "DIV", children: [
 							{ tag: "CODE", text: "function(root, prev) {" },
@@ -192,9 +192,9 @@
 						] }
 					}),
 					new app.ui.SidebarSection({
-						title: acx.text("AnyRequest.RepeatRequest"),
+						title: i18n.text("AnyRequest.RepeatRequest"),
 						body: { tag: "DIV", children: [
-							acx.text("AnyRequest.RepeatRequestSelect"), " ",
+							i18n.text("AnyRequest.RepeatRequestSelect"), " ",
 							{ tag: "SELECT", name: "cron", children: [
 								{ value: 0, text: "do not repeat" },
 								{ value: 1000, text: "second" },
@@ -208,14 +208,14 @@
 						] }
 					}),
 					new app.ui.SidebarSection({
-						title: acx.text("AnyRequest.DisplayOptions"),
+						title: i18n.text("AnyRequest.DisplayOptions"),
 						help: "AnyRequest.DisplayOptionsHelp",
 						body: { tag: "DIV", children: [
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", checked: true, name: "asJson" }, acx.text("AnyRequest.AsJson") ] },
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", checked: true, name: "asJson" }, i18n.text("AnyRequest.AsJson") ] },
 							{ tag: "BR" },
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asGraph" }, acx.text("AnyRequest.AsGraph") ] },
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asGraph" }, i18n.text("AnyRequest.AsGraph") ] },
 							{ tag: "BR" },
-							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asTable" }, acx.text("AnyRequest.AsTable") ] }
+							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "asTable" }, i18n.text("AnyRequest.AsTable") ] }
 						] }
 					})
 				] },

@@ -98,7 +98,7 @@
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: "dateHistogram loading", css: { height: "50px" }, children: [
-				acx.text("General.LoadingFacets")
+				i18n.text("General.LoadingFacets")
 			] }
 		); }
 	});
