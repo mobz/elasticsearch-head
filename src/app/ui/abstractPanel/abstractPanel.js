@@ -53,17 +53,12 @@
 		},
 		// starting at the top of the stack, find the first panel that wants a modal and put it just underneath, otherwise remove the modal
 		_setModal: function() {
-			function docSize() {
-				var de = document.documentElement;
-				return acx.browser.msie ? // jquery incorrectly uses offsetHeight/Width for the doc size in IE
-					acx.vector(Math.max(de.clientWidth, de.scrollWidth), Math.max(de.clientHeight, de.scrollHeight)) : $(document).vSize();
-			}
 			for(var stackPtr = this.shared.stack.length - 1; stackPtr >= 0; stackPtr--) {
 				if(this.shared.stack[stackPtr].config.modal) {
 					this.shared.modal
 						.appendTo( document.body )
 						.css( { zIndex: this.shared.stack[stackPtr].el.css("zIndex") - 5 } )
-						.css( docSize().asSize() );
+						.css( $(document).vSize().asSize() );
 					return;
 				}
 			}

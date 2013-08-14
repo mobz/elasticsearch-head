@@ -1,3 +1,291 @@
+(function() {
+
+	var window = this,
+		$ = jQuery;
+
+	function ns( namespace ) {
+		return (namespace || "").split(".").reduce( function( space, name ) {
+			return space[ name ] || ( space[ name ] = { ns: ns } );
+		}, this );
+	}
+
+	var app = ns("app");
+
+	var acx = ns("acx");
+
+	/**
+	 * object iterator, returns an array with one element for each property of the object
+	 * @function
+	 */
+	acx.eachMap = function(obj, fn, thisp) {
+		var ret = [];
+		for(var n in obj) {
+			ret.push(fn.call(thisp, n, obj[n], obj));
+		}
+		return ret;
+	};
+
+	/**
+	 * extends the first argument with the properties of the second and subsequent arguments
+	 * @function
+	 */
+	acx.extend = $.extend;
+
+	/**
+	 * augments the first argument with the properties of the second and subsequent arguments
+	 * like {@link acx.extend} except that existing properties are not overwritten
+	 */
+	acx.augment = function() {
+		var args = Array.prototype.slice.call(arguments),
+			src = (args.length === 1) ? this : args.shift(),
+			augf = function(n, v) {
+				if(! (n in src)) {
+					src[n] = v;
+				}
+			};
+		for(var i = 0; i < args.length; i++) {
+			$.each(args[i], augf);
+		}
+		return src;
+	};
+
+	/**
+	 * tests whether the argument is an array
+	 * @function
+	 */
+	acx.isArray = $.isArray;
+
+	/**
+	 * tests whether the argument is an object
+	 * @function
+	 */
+	acx.isObject = function (value) {
+		return Object.prototype.toString.call(value) == "[object Object]";
+	};
+
+	/**
+	 * tests whether the argument is a function
+	 * @function
+	 */
+	acx.isFunction = $.isFunction;
+
+	/**
+	 * tests whether the argument is a date
+	 * @function
+	 */
+	acx.isDate = function (value) {
+		return Object.prototype.toString.call(value) == "[object Date]";
+	};
+
+	/**
+	 * tests whether the argument is a regexp
+	 * @function
+	 */
+	acx.isRegExp = function (value) {
+		return Object.prototype.toString.call(value) == "[object RegExp]";
+	};
+
+	/**
+	 * tests whether the value is blank or empty
+	 * @function
+	 */
+	acx.isEmpty = function (value, allowBlank) {
+		return value === null || value === undefined || ((acx.isArray(value) && !value.length)) || (!allowBlank ? value === '' : false);
+	};
+
+	/**
+	 * data type for performing chainable geometry calculations<br>
+	 * can be initialised x,y | {x, y} | {left, top}
+	 */
+	acx.vector = function(x, y) {
+		return new acx.vector.prototype.Init(x, y);
+	};
+
+	acx.vector.prototype = {
+		Init : function(x, y) {
+			x = x || 0;
+			this.y = isFinite(x.y) ? x.y : (isFinite(x.top) ? x.top : (isFinite(y) ? y : 0));
+			this.x = isFinite(x.x) ? x.x : (isFinite(x.left) ? x.left : (isFinite(x) ? x : 0));
+		},
+		
+		add : function(i, j) {
+			var d = acx.vector(i, j);
+			return new this.Init(this.x + d.x, this.y + d.y);
+		},
+		
+		sub : function(i, j) {
+			var d = acx.vector(i, j);
+			return new this.Init(this.x - d.x, this.y - d.y);
+		},
+		
+		addX : function(i) {
+			return new this.Init(this.x + i, this.y);
+		},
+		
+		addY : function(j) {
+			return new this.Init(this.x, this.y + j);
+		},
+
+		mod : function(fn) { // runs a function against the x and y values
+			return new this.Init({x: fn.call(this, this.x, "x"), y: fn.call(this, this.y, "y")});
+		},
+		
+		/** returns true if this is within a rectangle formed by the points p and q */
+		within : function(p, q) {
+			return ( this.x >= ((p.x < q.x) ? p.x : q.x) && this.x <= ((p.x > q.x) ? p.x : q.x) &&
+					this.y >= ((p.y < q.y) ? p.y : q.y) && this.y <= ((p.y > q.y) ? p.y : q.y) );
+		},
+		
+		asOffset : function() {
+			return { top: this.y, left: this.x };
+		},
+		
+		asSize : function() {
+			return { height: this.y, width: this.x };
+		}
+	};
+
+	acx.vector.prototype.Init.prototype = acx.vector.prototype;
+
+	/**
+	 * short cut functions for working with vectors and jquery.
+	 * Each function returns the equivalent jquery value in a two dimentional vector
+	 */
+	$.fn.vSize = function() { return acx.vector(this.width(), this.height()); };
+	$.fn.vOuterSize = function(margin) { return acx.vector(this.outerWidth(margin), this.outerHeight(margin)); };
+	$.fn.vScroll = function() { return acx.vector(this.scrollLeft(), this.scrollTop()); };
+	$.fn.vOffset = function() { return acx.vector(this.offset()); };
+	$.fn.vPosition = function() { return acx.vector(this.position()); };
+	$.Event.prototype.vMouse = function() { return acx.vector(this.pageX, this.pageY); };
+
+	/**
+	 * object extensions (ecma5 compatible)
+	 */
+	acx.augment(Object, {
+		keys: function(obj) {
+			var ret = [];
+			for(var n in obj) if(Object.prototype.hasOwnProperty.call(obj, n)) ret.push(n);
+			return ret;
+		}
+	});
+
+	/**
+	 * Array prototype extensions
+	 */
+	acx.augment(Array.prototype, {
+		'contains' : function(needle) {
+			return this.indexOf(needle) !== -1;
+		},
+
+		// returns a new array consisting of all the members that are in both arrays
+		'intersection' : function(b) {
+			var ret = [];
+			for(var i = 0; i < this.length; i++) {
+				if(b.contains(this[i])) {
+					ret.push(this[i]);
+				}
+			}
+			return ret;
+		},
+		
+		'remove' : function(value) {
+			var i = this.indexOf(value);
+			if(i !== -1) {
+				this.splice(i, 1);
+			}
+		}
+	});
+
+	/**
+	 * String prototype extensions
+	 */
+	acx.augment(String.prototype, {
+		'contains' : function(needle) {
+			return this.indexOf(needle) !== -1;
+		},
+
+		'equalsIgnoreCase' : function(match) {
+			return this.toLowerCase() === match.toLowerCase();
+		},
+
+		'escapeHtml' : function() {
+			return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		},
+
+		'escapeJS' : function() {
+			var meta = {'"':'\\"', '\\':'\\\\', '/':'\\/', '\b':'\\b', '\f':'\\f', '\n':'\\n', '\r':'\\r', '\t':'\\t'},
+				xfrm = function(c) { return meta[c] || "\\u" + c.charCodeAt(0).toString(16).zeroPad(4); };
+			return this.replace(new RegExp('(["\\\\\x00-\x1f\x7f-\uffff])', 'g'), xfrm);
+		},
+
+		'escapeRegExp' : function() {
+			var ret = "", esc = "\\^$*+?.()=|{,}[]-";
+			for ( var i = 0; i < this.length; i++) {
+				ret += (esc.contains(this.charAt(i)) ? "\\" : "") + this.charAt(i);
+			}
+			return ret;
+		},
+		
+		'zeroPad' : function(len) {
+			return ("0000000000" + this).substring(this.length - len + 10);
+		}
+	});
+
+	$.fn.forEach = Array.prototype.forEach;
+
+
+})();
+/**
+ * base class for creating inheritable classes
+ * based on resigs 'Simple Javascript Inheritance Class' (based on base2 and prototypejs)
+ * modified with static super and auto config
+ * @name Class
+ * @constructor
+ */
+(function( $, app ){
+
+	var ux = app.ns("ux");
+
+	var initializing = false, fnTest = /\b_super\b/;
+
+	ux.Class = function(){};
+
+	ux.Class.extend = function(prop) {
+		function Class() {
+			if(!initializing) {
+				var args = Array.prototype.slice.call(arguments);
+				this.config = $.extend( function(t) { // automatically construct a config object based on defaults and last item passed into the constructor
+					return $.extend(t._proto && t._proto() && arguments.callee(t._proto()) || {}, t.defaults);
+				} (this) , args.pop() );
+				this.init && this.init.apply(this, args); // automatically run the init function when class created
+			}
+		}
+
+		initializing = true;
+		var prototype = new this();
+		initializing = false;
+		
+		var _super = this.prototype;
+		prototype._proto = function() {
+			return _super;
+		};
+
+		for(var name in prop) {
+			prototype[name] = typeof prop[name] === "function" && typeof _super[name] === "function" && fnTest.test(prop[name]) ?
+				(function(name, fn){
+					return function() { this._super = _super[name]; return fn.apply(this, arguments); };
+				})(name, prop[name]) : prop[name];
+		}
+
+		Class.prototype = prototype;
+		Class.constructor = Class;
+
+		Class.extend = arguments.callee; // make class extendable
+
+		return Class;
+	};
+})( this.jQuery, this.app );
+
 (function( app ) {
 
 	var ut = app.ns("ut");
@@ -5,14 +293,12 @@
 	ut.option_template = function(v) { return { tag: "OPTION", value: v, text: v }; };
 	ut.require_template = function(f) { return f.require ? { tag: "SPAN", cls: "require", text: "*" } : null; };
 
-
-
 })( this.app );
 (function( app ) {
 
 	var ux = app.ns("ux");
 
-	ux.Observable = acx.Class.extend((function() {
+	ux.Observable = ux.Class.extend((function() {
 		return {
 			init: function() {
 				this.observers = {};
@@ -1138,17 +1424,12 @@
 		},
 		// starting at the top of the stack, find the first panel that wants a modal and put it just underneath, otherwise remove the modal
 		_setModal: function() {
-			function docSize() {
-				var de = document.documentElement;
-				return acx.browser.msie ? // jquery incorrectly uses offsetHeight/Width for the doc size in IE
-					acx.vector(Math.max(de.clientWidth, de.scrollWidth), Math.max(de.clientHeight, de.scrollHeight)) : $(document).vSize();
-			}
 			for(var stackPtr = this.shared.stack.length - 1; stackPtr >= 0; stackPtr--) {
 				if(this.shared.stack[stackPtr].config.modal) {
 					this.shared.modal
 						.appendTo( document.body )
 						.css( { zIndex: this.shared.stack[stackPtr].el.css("zIndex") - 5 } )
-						.css( docSize().asSize() );
+						.css( $(document).vSize().asSize() );
 					return;
 				}
 			}
@@ -2311,17 +2592,17 @@
 					indices[index] = i;
 					return index;
 				}
-				acx.each(clusterNodes.nodes, function(name, node) {
+				$.each(clusterNodes.nodes, function(name, node) {
 					getIndexForNode(name);
 				});
 
 				var indexNames = [];
-				acx.each(clusterState.routing_table.indices, function(name, index){
+				$.each(clusterState.routing_table.indices, function(name, index){
 					indexNames.push(name);
 				});
 				indexNames.sort().forEach(function(name) {
 					var index = clusterState.routing_table.indices[name];
-					acx.each(index.shards, function(name, shard) {
+					$.each(index.shards, function(name, shard) {
 						shard.forEach(function(replica){
 							var node = replica.node;
 							if(node === null) { node = "Unassigned"; }
@@ -2351,7 +2632,7 @@
 						status: status.indices[index]
 					};
 				}, this);
-				acx.each(clusterState.metadata.indices, function(name, index) {
+				$.each(clusterState.metadata.indices, function(name, index) {
 					if(index.state === "close") {
 						indices.push({
 							name: name,
@@ -2373,7 +2654,7 @@
 				var aliasesIndex = {};
 				var aliases = [];
 				var indexClone = indices.map(function() { return false; });
-				acx.each(clusterState.metadata.indices, function(name, index) {
+				$.each(clusterState.metadata.indices, function(name, index) {
 					index.aliases.forEach(function(alias) {
 						var aliasIndex = aliasesIndex[alias] = (alias in aliasesIndex) ? aliasesIndex[alias] : aliases.push( { name: alias, max: -1, min: 999, indices: [].concat(indexClone) }) - 1;
 						var indexIndex = indexIndices[name];
@@ -3191,8 +3472,9 @@
 (function( $, app ) {
 
 	var services = app.ns("services");
+	var ux = app.ns("ux");
 
-	services.Cluster = acx.Class.extend({
+	services.Cluster = ux.Class.extend({
 		defaults: {
 			base_uri: "http://localhost:9200/"
 		},

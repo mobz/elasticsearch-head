@@ -1,17 +1,4 @@
 (function($, document) {
-	// ie 6, 7 and 8 have trouble with the type and names of dynamically created inputs
-	$.support.useHTMLForInputType = false;
-	$(function() {
-		try {
-			var field = document.createElement( "INPUT" );
-			document.body.appendChild( field );
-			field.setAttribute( "type", "checkbox" );
-		} catch(e) {
-			$.support.useHTMLForInputType = true;
-		} finally {
-			field.parentNode && document.body.removeChild( field );
-		}
-	});
 
 	var create = $.create = (function() {
 
@@ -61,26 +48,20 @@
 			}
 			var el;
 			if(typeof(obj) === 'string') {
-			  el = context.createTextNode(obj);
+				el = context.createTextNode( obj );
 			} else if(!obj) {
 				return undefined;
 			} else if(obj.nodeType === 1) {
 				el = obj;
-			} else if(obj instanceof app.ui.AbstractWidget) {
+			} else if( obj instanceof app.ui.AbstractWidget ) {
 				el = obj.el[0];
 			} else {
-				if($.support.useHTMLForInputType && obj.tag && obj.tag.match(/input|button/i)) {
-					el = context.createElement("<"+obj.tag + ( obj.type ? " type='"+obj.type+"'" : "" ) + ( obj.name ? " name='"+obj.name+"'" : "" ) + ( obj.checked ? " checked" : "" ) + ">");
-					delete obj.type;
-					delete obj.name;
-				} else {
-					el = context.createElement(obj.tag||'DIV');
-				}
+				el = context.createElement( obj.tag || 'DIV' );
 				addAttrs(el, obj, context);
 			}
 			if(parent){ parent.appendChild(el); }
 			return el;
-		};
+		}
 
 		return function(elementDef, parentNode) {
 			return createNode(elementDef, parentNode, (parentNode && parentNode.ownerDocument) || document);
@@ -95,8 +76,9 @@
 
 	$.clean = function( elems, context, fragment, scripts ) {
 		for(var i = 0; i < elems.length; i++) {
-			if( elems[i].tag || elems[i] instanceof app.ui.AbstractWidget )
+			if( elems[i].tag || elems[i] instanceof app.ui.AbstractWidget ) {
 				elems[i] = create( elems[i], null, context );
+			}
 		}
 		return clean( elems, context, fragment, scripts );
 	};

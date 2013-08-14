@@ -1,8 +1,9 @@
 (function( $, app ) {
 
 	var services = app.ns("services");
+	var ux = app.ns("ux");
 
-	services.Cluster = acx.Class.extend({
+	services.Cluster = ux.Class.extend({
 		defaults: {
 			base_uri: "http://localhost:9200/"
 		},

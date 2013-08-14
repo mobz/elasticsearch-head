@@ -88,17 +88,17 @@
 					indices[index] = i;
 					return index;
 				}
-				acx.each(clusterNodes.nodes, function(name, node) {
+				$.each(clusterNodes.nodes, function(name, node) {
 					getIndexForNode(name);
 				});
 
 				var indexNames = [];
-				acx.each(clusterState.routing_table.indices, function(name, index){
+				$.each(clusterState.routing_table.indices, function(name, index){
 					indexNames.push(name);
 				});
 				indexNames.sort().forEach(function(name) {
 					var index = clusterState.routing_table.indices[name];
-					acx.each(index.shards, function(name, shard) {
+					$.each(index.shards, function(name, shard) {
 						shard.forEach(function(replica){
 							var node = replica.node;
 							if(node === null) { node = "Unassigned"; }
@@ -128,7 +128,7 @@
 						status: status.indices[index]
 					};
 				}, this);
-				acx.each(clusterState.metadata.indices, function(name, index) {
+				$.each(clusterState.metadata.indices, function(name, index) {
 					if(index.state === "close") {
 						indices.push({
 							name: name,
@@ -150,7 +150,7 @@
 				var aliasesIndex = {};
 				var aliases = [];
 				var indexClone = indices.map(function() { return false; });
-				acx.each(clusterState.metadata.indices, function(name, index) {
+				$.each(clusterState.metadata.indices, function(name, index) {
 					index.aliases.forEach(function(alias) {
 						var aliasIndex = aliasesIndex[alias] = (alias in aliasesIndex) ? aliasesIndex[alias] : aliases.push( { name: alias, max: -1, min: 999, indices: [].concat(indexClone) }) - 1;
 						var indexIndex = indexIndices[name];

@@ -2,7 +2,7 @@
 
 	var ux = app.ns("ux");
 
-	ux.Observable = acx.Class.extend((function() {
+	ux.Observable = ux.Class.extend((function() {
 		return {
 			init: function() {
 				this.observers = {};

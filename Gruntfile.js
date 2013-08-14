@@ -2,23 +2,26 @@ module.exports = function(grunt) {
 
 	// Project configuration.
 	grunt.initConfig({
+		clean: {
+			dist: {
+				src: ['dist']
+			}
+		},
 		concat: {
-			options: {
-//        separator: ';'
-			},
-			corejs: {
+			vendorjs: {
 				src: [
 					'src/vendor/jquery/jquery.js',
-					'lib/jsacx/src/jsacx.js',
-					'src/vendor/nohtml/jquery.acx-nohtml.js',
+					'src/vendor/nohtml/jquery-nohtml.js',
 					'src/vendor/graphael/g.raphael.standalone.js',
 					'src/vendor/dateRangeParser/date-range-parser.js'
 				],
-				dest: 'dist/core.js'
+				dest: 'dist/vendor.js'
 			},
-			uijs: {
+			appjs: {
 				src: [
-					'src/app/base/ut.js',
+					'src/app/core/boot.js',
+					'src/app/ux/class.js',
+					'src/app/ux/templates.js',
 					'src/app/ux/observable.js',
 					'src/app/ux/dragdrop.js',
 					'src/app/ux/fieldCollection.js',
@@ -70,9 +73,9 @@ module.exports = function(grunt) {
 
 					'src/app/app.js'
 				],
-				dest: 'dist/ui.js'
+				dest: 'dist/app.js'
 			},
-			uicss: {
+			appcss: {
 				src: [
 					'src/app/ui/abstractField/abstractField.css',
 					'src/app/ui/button/button.css',
@@ -97,7 +100,7 @@ module.exports = function(grunt) {
 
 					'src/app/app.css'
 				],
-				dest: 'dist/ui.css'
+				dest: 'dist/app.css'
 			}
 		},
 
@@ -122,7 +125,7 @@ module.exports = function(grunt) {
 
 		watch: {
 			scripts: {
-				files: ['lib/**/*.js','src/**/*.js', 'src/**/*.css', 'src/app/base/*' ],
+				files: ['src/**/*' ],
 				tasks: ['default'],
 				options: {
 					spawn: false
@@ -142,13 +145,14 @@ module.exports = function(grunt) {
 
 	});
 
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	// Default task(s).
-	grunt.registerTask('default', ['concat', 'copy:base', 'copy:i18n', 'copy:lang']);
+	grunt.registerTask('default', ['clean', 'concat', 'copy']);
 	grunt.registerTask('server', ['connect:server']);
 
 };
