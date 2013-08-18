@@ -514,7 +514,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	margin-left: 365px;
 }
 
-.anyRequest-request {
+.uiAnyRequest-request {
 	float: left;
 	width: 350px;
 	padding: 5px;
@@ -523,8 +523,8 @@ SPAN.jsonPretty-boolean { color: purple; }
 	background: -webkit-linear-gradient(left, #d8e7ff, #e8f1ff);
 }
 
-.anyRequest-request INPUT[type=text],
-.anyRequest-request TEXTAREA {
+.uiAnyRequest-request INPUT[type=text],
+.uiAnyRequest-request TEXTAREA {
 	width: 340px;
 }
 
@@ -532,19 +532,19 @@ SPAN.jsonPretty-boolean { color: purple; }
 	width: 259px;
 }
 
-.anyRequest-out {
+.uiAnyRequest-out {
 	margin-left: 365px;
 }
 
-.anyRequest-out P {
+.uiAnyRequest-out P {
 	margin-top: 0;
 }
 
-.anyRequest-jsonErr {
+.uiAnyRequest-jsonErr {
 	color: red;
 }
 
-.anyRequest-history {
+.uiAnyRequest-history {
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -553,39 +553,39 @@ SPAN.jsonPretty-boolean { color: purple; }
 	overflow-y: auto;
 }
 
-.clusterOverview-cluster {
+.uiClusterOverview-cluster {
 	border-collapse: collapse;
 }
-.clusterOverview-cluster TH,
-.clusterOverview-cluster TD {
+.uiClusterOverview-cluster TH,
+.uiClusterOverview-cluster TD {
 	vertical-align: top;
 	padding: 2px 20px;
 }
 
-.clusterOverview TH {
+.uiClusterOverview TH {
 	font-weight: normal;
 	text-align: left;
 }
 
-.clusterOverview TH.close,
-.clusterOverview TD.close {
+.uiClusterOverview TH.close,
+.uiClusterOverview TD.close {
 	color: #888;
 	background: #f2f2f2;
 }
 
-.clusterOverview-node.master {
+.uiClusterOverview-node.master {
 	background: #fff8dd;
 }
 
-.clusterOverview-title {
+.uiClusterOverview-title {
 	font-weight: bold;
 	font-size: 140%;
 }
-.clusterOverview-routing {
+.uiClusterOverview-routing {
 	position: relative;
 }
-.clusterOverview-nullReplica,
-.clusterOverview-replica {
+.uiClusterOverview-nullReplica,
+.uiClusterOverview-replica {
 	cursor: pointer;
 	float: left;
 	height: 40px;
@@ -597,18 +597,18 @@ SPAN.jsonPretty-boolean { color: purple; }
 	letter-spacing: -5px;
 	text-indent: -7px;
 }
-.clusterOverview-replica.primary {
+.uiClusterOverview-replica.primary {
 	border-width: 4px;
 	margin: 2px;
 }
 
-.clusterOverview-nullReplica {
+.uiClusterOverview-nullReplica {
 	border-color: transparent;
 }
-.clusterOverview-hasAlias {
+.uiClusterOverview-hasAlias {
 	text-align: center;
 }
-.clusterOverview-hasAlias.max {
+.uiClusterOverview-hasAlias.max {
 	-webkit-border-top-right-radius: 8px;
 	-webkit-border-bottom-right-radius: 8px;
 	-moz-border-radius-topright: 8px;
@@ -616,7 +616,7 @@ SPAN.jsonPretty-boolean { color: purple; }
 	border-top-right-radius: 8px;
 	border-bottom-right-radius: 8px;
 }
-.clusterOverview-hasAlias.min {
+.uiClusterOverview-hasAlias.min {
 	-webkit-border-top-left-radius: 8px;
 	-webkit-border-bottom-left-radius: 8px;
 	-moz-border-radius-topleft: 8px;
@@ -624,18 +624,41 @@ SPAN.jsonPretty-boolean { color: purple; }
 	border-top-left-radius: 8px;
 	border-bottom-left-radius: 8px;
 }
-.clusterOverview-hasAlias-remove {
+.uiClusterOverview-hasAlias-remove {
 	float: right;
 	font-weight: bold;
 	cursor: pointer;
 }
-.clusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; float: none; display: inline-block; }
-.clusterOverview-replica.state-INITIALIZING { background: #dddc88; }
-.clusterOverview-replica.state-STARTED { background: #99dd88; }
-.clusterOverview-replica.state-RELOCATING { background: #dc88dd; }
+.uiClusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; float: none; display: inline-block; }
+.uiClusterOverview-replica.state-INITIALIZING { background: #dddc88; }
+.uiClusterOverview-replica.state-STARTED { background: #99dd88; }
+.uiClusterOverview-replica.state-RELOCATING { background: #dc88dd; }
 
-.es-header-top {
-	padding: 3px 10px;
+.uiClusterConnect-name, .uiClusterConnect-status {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 0 10px;
+}
+
+.uiClusterConnect-uri {
+	width: 280px;
+}
+
+.es-filterBrowser-row * {
+	margin-right: 0.4em;
+}
+
+.es-filterBrowser-row BUTTON {
+	height: 22px;
+	position: relative;
+	top: 1px;
+}
+
+.es-header {
+	background: #eee;
+	position: fixed;
+	width: 100%;
+	z-index: 9;
 }
 
 .es-header H1 {
@@ -644,14 +667,8 @@ SPAN.jsonPretty-boolean { color: purple; }
 	padding-right: 25px;
 }
 
-.es-header-clusterName, .es-header-clusterStatus {
-	font-size: 1.2em;
-	font-weight: bold;
-	padding: 0 10px;
-}
-
-.es-header-uri {
-	width: 280px;
+.es-header-top {
+	padding: 3px 10px;
 }
 
 .es-header-menu {
@@ -672,108 +689,6 @@ SPAN.jsonPretty-boolean { color: purple; }
 	height: 14px;
 	cursor: pointer;
 }
-
-.es-filterBrowser-row * {
-	margin-right: 0.4em;
-}
-
-.es-filterBrowser-row BUTTON {
-	height: 22px;
-	position: relative;
-	top: 1px;
-}
-
-.uiHeader * {
-	box-sizing: border-box;
-	font-family: Avenir, Helvetica Neue, Helvetica, sans-serif;
-	font-size: 15px;
-	line-height: 20px;
-}
-
-.uiHeader {
-	font-family: Avenir, Helvetica Neue, Helvetica, sans-serif;
-	font-size: 15px;
-	line-height: 20px;
-	color: #2c3e50;
-
-	display: -webkit-box;
-	height: 50px;
-	background: #2c3e50;
-	padding: 0px 20px;
-	border: 1px solid #233140;
-	border-radius: 6px;
-	color: #ffffff;
-	margin: 35px;
-}
-
-.uiHeader H1 {
-	font-size: 20px;
-	padding: 15px 20px 15px 0;
-	margin: 0;
-	font-weight: normal;
-}
-
-.uiHeader FORM {
-	padding: 11px 20px;
-}
-
-.uiHeader INPUT {
-	display: block;
-	border: 0;
-	padding: 4px 14px;
-	font-size: 13px;
-	border-radius: 15px;
-	width: 156px;
-	height: 28px;
-	color: #95a5a6;
-	vertical-align: middle;
-	outline: 0;
-}
-
-.uiHeader BUTTON {
-	background: transparent;
-	display: block;
-	border: 0;
-	height: 28px;
-	font-size: 13px;
-	padding: 4px 14px;
-	vertical-align: middle;
-	color: white;
-}
-
-.uiHeader BUTTON:hover {
-	color: #1abc9c;
-}
-
-.uiHeader HGROUP {
-	display: -webkit-box;
-	padding: 11px 20px;
-}
-
-.uiHeader HGROUP > * {
-	border-radius: 0;
-	margin: 0;
-}
-
-.uiHeader HGROUP > :first-child {
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
-}
-
-
-.uiHeader HGROUP > :last-child {
-	border-top-right-radius: 15px;
-	border-bottom-right-radius: 15px;
-}
-
-
-.es-header {
-	background: #eee;
-	position: fixed;
-	width: 100%;
-	z-index: 9;
-}
-
 .es-body {
 	padding: 51px 0px 0px 0px;
 }

@@ -1,4 +1,4 @@
-(function( $, app, raphael ) {
+(function( $, app, i18n, raphael ) {
 
 	var ui = app.ns("ui");
 	var ut = app.ns("ut");
@@ -24,8 +24,8 @@
 			this.asTableEl = this.el.find("INPUT[name=asTable]");
 			this.asJsonEl = this.el.find("INPUT[name=asJson]");
 			this.cronEl = this.el.find("SELECT[name=cron]");
-			this.outEl = this.el.find("DIV.anyRequest-out");
-			this.errEl = this.el.find("DIV.anyRequest-jsonErr");
+			this.outEl = this.el.find("DIV.uiAnyRequest-out");
+			this.errEl = this.el.find("DIV.uiAnyRequest-jsonErr");
 			this.typeEl.val("GET");
 			this.attach(parent);
 			this.setHistoryItem(this.history[this.history.length - 1]);
@@ -71,7 +71,7 @@
 				});
 				this.history.slice(250); // make sure history does not get too large
 				app.services.storage.set("anyRequestHistory", this.history);
-				this.el.find("UL.anyRequest-history")
+				this.el.find("UL.uiAnyRequest-history")
 					.empty()
 					.append($( { tag: "UL", children: this.history.map(this._historyItem_template, this) }).children())
 					.children().find(":last-child").each(function(i, j) { j.scrollIntoView(false); }).end()
@@ -159,11 +159,11 @@
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: "anyRequest", children: [
-				{ tag: "DIV", cls: "anyRequest-request", children: [
+				{ tag: "DIV", cls: "uiAnyRequest-request", children: [
 					new app.ui.SidebarSection({
 						open: false,
 						title: i18n.text("AnyRequest.History"),
-						body: { tag: "UL", onclick: this._historyClick_handler, cls: "anyRequest-history", children: this.history.map(this._historyItem_template, this)	}
+						body: { tag: "UL", onclick: this._historyClick_handler, cls: "uiAnyRequest-history", children: this.history.map(this._historyItem_template, this)	}
 					}),
 					new app.ui.SidebarSection({
 						open: true,
@@ -177,7 +177,7 @@
 							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: i18n.text("AnyRequest.Request") }, onclick: this._request_handler },
 							{ tag: "BUTTON", type: "button", text: i18n.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
 							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, i18n.text("AnyRequest.Pretty") ] },
-							{ tag: "DIV", cls: "anyRequest-jsonErr" }
+							{ tag: "DIV", cls: "uiAnyRequest-jsonErr" }
 						]}
 					}),
 					new app.ui.SidebarSection({
@@ -219,7 +219,7 @@
 						] }
 					})
 				] },
-				{ tag: "DIV", cls: "anyRequest-out" }
+				{ tag: "DIV", cls: "uiAnyRequest-out" }
 			] };
 		},
 		_historyItem_template: function(item) {
@@ -233,4 +233,4 @@
 		}
 	});
 	
-})( this.jQuery, this.app, this.Raphael );
+})( this.jQuery, this.app, this.i18n, this.Raphael );

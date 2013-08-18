@@ -1,4 +1,4 @@
-(function( $, app ){
+(function( $, app, i18n ){
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
@@ -55,4 +55,4 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );

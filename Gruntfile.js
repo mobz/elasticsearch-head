@@ -20,6 +20,7 @@ module.exports = function(grunt) {
 			appjs: {
 				src: [
 					'src/app/core/boot.js',
+
 					'src/app/ux/class.js',
 					'src/app/ux/templates.js',
 					'src/app/ux/observable.js',
@@ -68,9 +69,6 @@ module.exports = function(grunt) {
 					'src/app/services/storage.js',
 					'src/app/services/cluster.js',
 
-					'src/app/ui/connect/connect.js',
-					'src/app/ui/header/header.js',
-
 					'src/app/app.js'
 				],
 				dest: 'dist/app.js'
@@ -95,9 +93,6 @@ module.exports = function(grunt) {
 					'src/app/ui/clusterOverview/clusterOverview.css',
 					'src/app/ui/clusterConnect/clusterConnect.css',
 					'src/app/ui/filterBrowser/filterBrowser.css',
-
-					'src/app/ui/header/header.css',
-
 					'src/app/app.css'
 				],
 				dest: 'dist/app.css'

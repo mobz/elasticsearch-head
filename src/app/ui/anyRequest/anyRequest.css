@@ -1,4 +1,4 @@
-.anyRequest-request {
+.uiAnyRequest-request {
 	float: left;
 	width: 350px;
 	padding: 5px;
@@ -7,8 +7,8 @@
 	background: -webkit-linear-gradient(left, #d8e7ff, #e8f1ff);
 }
 
-.anyRequest-request INPUT[type=text],
-.anyRequest-request TEXTAREA {
+.uiAnyRequest-request INPUT[type=text],
+.uiAnyRequest-request TEXTAREA {
 	width: 340px;
 }
 
@@ -16,19 +16,19 @@
 	width: 259px;
 }
 
-.anyRequest-out {
+.uiAnyRequest-out {
 	margin-left: 365px;
 }
 
-.anyRequest-out P {
+.uiAnyRequest-out P {
 	margin-top: 0;
 }
 
-.anyRequest-jsonErr {
+.uiAnyRequest-jsonErr {
 	color: red;
 }
 
-.anyRequest-history {
+.uiAnyRequest-history {
 	margin: 0;
 	padding: 0;
 	list-style: none;

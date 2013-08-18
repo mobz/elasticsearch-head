@@ -1,36 +1,36 @@
-.clusterOverview-cluster {
+.uiClusterOverview-cluster {
 	border-collapse: collapse;
 }
-.clusterOverview-cluster TH,
-.clusterOverview-cluster TD {
+.uiClusterOverview-cluster TH,
+.uiClusterOverview-cluster TD {
 	vertical-align: top;
 	padding: 2px 20px;
 }
 
-.clusterOverview TH {
+.uiClusterOverview TH {
 	font-weight: normal;
 	text-align: left;
 }
 
-.clusterOverview TH.close,
-.clusterOverview TD.close {
+.uiClusterOverview TH.close,
+.uiClusterOverview TD.close {
 	color: #888;
 	background: #f2f2f2;
 }
 
-.clusterOverview-node.master {
+.uiClusterOverview-node.master {
 	background: #fff8dd;
 }
 
-.clusterOverview-title {
+.uiClusterOverview-title {
 	font-weight: bold;
 	font-size: 140%;
 }
-.clusterOverview-routing {
+.uiClusterOverview-routing {
 	position: relative;
 }
-.clusterOverview-nullReplica,
-.clusterOverview-replica {
+.uiClusterOverview-nullReplica,
+.uiClusterOverview-replica {
 	cursor: pointer;
 	float: left;
 	height: 40px;
@@ -42,18 +42,18 @@
 	letter-spacing: -5px;
 	text-indent: -7px;
 }
-.clusterOverview-replica.primary {
+.uiClusterOverview-replica.primary {
 	border-width: 4px;
 	margin: 2px;
 }
 
-.clusterOverview-nullReplica {
+.uiClusterOverview-nullReplica {
 	border-color: transparent;
 }
-.clusterOverview-hasAlias {
+.uiClusterOverview-hasAlias {
 	text-align: center;
 }
-.clusterOverview-hasAlias.max {
+.uiClusterOverview-hasAlias.max {
 	-webkit-border-top-right-radius: 8px;
 	-webkit-border-bottom-right-radius: 8px;
 	-moz-border-radius-topright: 8px;
@@ -61,7 +61,7 @@
 	border-top-right-radius: 8px;
 	border-bottom-right-radius: 8px;
 }
-.clusterOverview-hasAlias.min {
+.uiClusterOverview-hasAlias.min {
 	-webkit-border-top-left-radius: 8px;
 	-webkit-border-bottom-left-radius: 8px;
 	-moz-border-radius-topleft: 8px;
@@ -69,12 +69,12 @@
 	border-top-left-radius: 8px;
 	border-bottom-left-radius: 8px;
 }
-.clusterOverview-hasAlias-remove {
+.uiClusterOverview-hasAlias-remove {
 	float: right;
 	font-weight: bold;
 	cursor: pointer;
 }
-.clusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; float: none; display: inline-block; }
-.clusterOverview-replica.state-INITIALIZING { background: #dddc88; }
-.clusterOverview-replica.state-STARTED { background: #99dd88; }
-.clusterOverview-replica.state-RELOCATING { background: #dc88dd; }
+.uiClusterOverview-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; float: none; display: inline-block; }
+.uiClusterOverview-replica.state-INITIALIZING { background: #dddc88; }
+.uiClusterOverview-replica.state-STARTED { background: #99dd88; }
+.uiClusterOverview-replica.state-RELOCATING { background: #dc88dd; }

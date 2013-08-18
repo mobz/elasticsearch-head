@@ -2208,7 +2208,7 @@
 	});
 
 })( this.app );
-(function( $, app ){
+(function( $, app, i18n ){
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
@@ -2265,8 +2265,9 @@
 		}
 	});
 
-})( this.jQuery, this.app );
-(function( $, app, raphael ) {
+})( this.jQuery, this.app, this.i18n );
+
+(function( $, app, i18n, raphael ) {
 
 	var ui = app.ns("ui");
 	var ut = app.ns("ut");
@@ -2292,8 +2293,8 @@
 			this.asTableEl = this.el.find("INPUT[name=asTable]");
 			this.asJsonEl = this.el.find("INPUT[name=asJson]");
 			this.cronEl = this.el.find("SELECT[name=cron]");
-			this.outEl = this.el.find("DIV.anyRequest-out");
-			this.errEl = this.el.find("DIV.anyRequest-jsonErr");
+			this.outEl = this.el.find("DIV.uiAnyRequest-out");
+			this.errEl = this.el.find("DIV.uiAnyRequest-jsonErr");
 			this.typeEl.val("GET");
 			this.attach(parent);
 			this.setHistoryItem(this.history[this.history.length - 1]);
@@ -2339,7 +2340,7 @@
 				});
 				this.history.slice(250); // make sure history does not get too large
 				app.services.storage.set("anyRequestHistory", this.history);
-				this.el.find("UL.anyRequest-history")
+				this.el.find("UL.uiAnyRequest-history")
 					.empty()
 					.append($( { tag: "UL", children: this.history.map(this._historyItem_template, this) }).children())
 					.children().find(":last-child").each(function(i, j) { j.scrollIntoView(false); }).end()
@@ -2427,11 +2428,11 @@
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: "anyRequest", children: [
-				{ tag: "DIV", cls: "anyRequest-request", children: [
+				{ tag: "DIV", cls: "uiAnyRequest-request", children: [
 					new app.ui.SidebarSection({
 						open: false,
 						title: i18n.text("AnyRequest.History"),
-						body: { tag: "UL", onclick: this._historyClick_handler, cls: "anyRequest-history", children: this.history.map(this._historyItem_template, this)	}
+						body: { tag: "UL", onclick: this._historyClick_handler, cls: "uiAnyRequest-history", children: this.history.map(this._historyItem_template, this)	}
 					}),
 					new app.ui.SidebarSection({
 						open: true,
@@ -2445,7 +2446,7 @@
 							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: i18n.text("AnyRequest.Request") }, onclick: this._request_handler },
 							{ tag: "BUTTON", type: "button", text: i18n.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
 							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, i18n.text("AnyRequest.Pretty") ] },
-							{ tag: "DIV", cls: "anyRequest-jsonErr" }
+							{ tag: "DIV", cls: "uiAnyRequest-jsonErr" }
 						]}
 					}),
 					new app.ui.SidebarSection({
@@ -2487,7 +2488,7 @@
 						] }
 					})
 				] },
-				{ tag: "DIV", cls: "anyRequest-out" }
+				{ tag: "DIV", cls: "uiAnyRequest-out" }
 			] };
 		},
 		_historyItem_template: function(item) {
@@ -2501,7 +2502,8 @@
 		}
 	});
 	
-})( this.jQuery, this.app, this.Raphael );
+})( this.jQuery, this.app, this.i18n, this.Raphael );
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -2536,7 +2538,7 @@
 			});
 
 			this.el = $(this._main_template());
-			this.tablEl = this.el.find(".clusterOverview-table");
+			this.tablEl = this.el.find(".uiClusterOverview-table");
 			this.cluster = this.config.cluster;
 			this.redraw("reset");
 			this.on( "drawn", function( self ) {
@@ -2778,7 +2780,7 @@
 		_replica_template: function(replica) {
 			var r = replica.replica;
 			return { tag: "DIV",
-				cls: "clusterOverview-replica" + (r.primary ? " primary" : "") + ( " state-" + r.state ),
+				cls: "uiClusterOverview-replica" + (r.primary ? " primary" : "") + ( " state-" + r.state ),
 				text: r.shard.toString(),
 				onclick: function() { new ui.JsonPanel({
 					json: replica.status || replica.replica,
@@ -2787,7 +2789,7 @@
 			};
 		},
 		_routing_template: function(routing) {
-			var cell = { tag: "TD", cls: "clusterOverview-routing" + (routing.open ? "" : " close"), children: [] };
+			var cell = { tag: "TD", cls: "uiClusterOverview-routing" + (routing.open ? "" : " close"), children: [] };
 			for(var i = 0; i < routing.replicas.length; i++) {
 				if(i % routing.max_number_of_shards === 0 && i > 0) {
 					cell.children.push({ tag: "BR" });
@@ -2795,23 +2797,23 @@
 				if( i in (routing.replicas)) {
 					cell.children.push(this._replica_template(routing.replicas[i]));
 				} else {
-					cell.children.push( { tag: "DIV", cls: "clusterOverview-nullReplica" } );
+					cell.children.push( { tag: "DIV", cls: "uiClusterOverview-nullReplica" } );
 				}
 			}
 			return cell;
 		},
 		_node_template: function(node) {
-			return { tag: "TR", cls: "clusterOverview-node" + (node.master_node ? " master": ""), children: [
+			return { tag: "TR", cls: "uiClusterOverview-node" + (node.master_node ? " master": ""), children: [
 				{ tag: "TH", children: node.name === "Unassigned" ? [
-					{ tag: "DIV", cls: "clusterOverview-title", text: node.name }
+					{ tag: "DIV", cls: "uiClusterOverview-title", text: node.name }
 				] : [
 					{ tag: "DIV", children: [
-						{ tag: "SPAN", cls: "clusterOverview-title", text: node.cluster.name },
+						{ tag: "SPAN", cls: "uiClusterOverview-title", text: node.cluster.name },
 						" ",
 						{ tag: "SPAN", text: node.name }
 					]},
 					{ tag: "DIV", text: node.cluster.http_address },
-					{ tag: "DIV", cls: "clusterOverview-controls", children: [
+					{ tag: "DIV", cls: "uiClusterOverview-controls", children: [
 						new ui.MenuButton({
 							label: i18n.text("NodeInfoMenu.Title"),
 							menu: new ui.MenuPanel({
@@ -2838,10 +2840,10 @@
 			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? index.status.index.primary_size + " (" + index.status.index.size + ")" : "unknown" ) ); 
 			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.docs ? index.status.docs.num_docs + " (" + index.status.docs.max_doc + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
-				{ tag: "DIV", cls: "clusterOverview-title", text: index.name },
+				{ tag: "DIV", cls: "uiClusterOverview-title", text: index.name },
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
-				{ tag: "DIV", cls: "clusterOverview-controls", children: [
+				{ tag: "DIV", cls: "uiClusterOverview-controls", children: [
 					new ui.MenuButton({
 						label: i18n.text("IndexInfoMenu.Title"),
 						menu: new ui.MenuPanel({
@@ -2874,12 +2876,12 @@
 					return {
 						tag: "TD",
 						css: { background: "#" + "9ce9c7fc9".substr((row+6)%7,3) },
-						cls: "clusterOverview-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
+						cls: "uiClusterOverview-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
 						text: alias.name,
 						children: [
 							{	tag: 'SPAN',
 								text: i18n.text("General.CloseGlyph"),
-								cls: 'clusterOverview-hasAlias-remove',
+								cls: 'uiClusterOverview-hasAlias-remove',
 								onclick: function() {
 									var command = {
 										"actions" : [
@@ -2916,14 +2918,14 @@
 				}
 				return 0;
 			}
-			return { tag: "TABLE", cls: "clusterOverview-cluster", children: [
+			return { tag: "TABLE", cls: "uiClusterOverview-cluster", children: [
 				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
 				cluster.aliases.length && { tag: "TBODY", children: cluster.aliases.map(this._alias_template, this) },
 				{ tag: "TBODY", children: cluster.nodes.sort(nodeNameCmp).map(this._node_template, this) }
 			] };
 		},
 		_main_template: function() {
-			return { tag: "DIV", id: this.id(), cls: "clusterOverview", children: [
+			return { tag: "DIV", id: this.id(), cls: "uiClusterOverview", children: [
 				new ui.Toolbar({
 					label: i18n.text("Overview.PageTitle"),
 					left: [
@@ -2937,7 +2939,7 @@
 						this._refreshButton
 					]
 				}),
-				{ tag: "DIV", cls: "clusterOverview-table" }
+				{ tag: "DIV", cls: "uiClusterOverview-table" }
 			] };
 		}
 	});
@@ -3078,19 +3080,19 @@
 	});
 	
 })( this.jQuery, this.app );
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
-		ui.ClusterConnect = ui.AbstractQuery.extend({
+	ui.ClusterConnect = ui.AbstractQuery.extend({
 		
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
 			this.attach( parent );
-			this.nameEl = this.el.find(".es-header-clusterName");
-			this.statEl = this.el.find(".es-header-clusterStatus");
-			this.statEl.text("cluster health: not connected").css("background", "red");
+			this.nameEl = this.el.find(".uiClusterConnect-name");
+			this.statEl = this.el.find(".uiClusterConnect-status");
+			this.statEl.text( i18n.text("Header.ClusterNotConnected") ).css("background", "grey");
 			this._request_handler({ type: "GET", path: "", success: this._node_handler });
 			this._request_handler({	type: "GET", path: "_cluster/health", success: this._health_handler });
 		},
@@ -3104,32 +3106,34 @@
 		
 		_health_handler: function(data) {
 			if(data) {
-				this.statEl.text(i18n.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) ).css("background", data.status);
+				this.statEl
+					.text( i18n.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) )
+					.css( "background", data.status );
 				this.fire("status", data.status);
 			}
 		},
 		
 		_reconnect_handler: function() {
-			var base_uri = this.el.find(".es-header-uri").val();
+			var base_uri = this.el.find(".uiClusterConnect-uri").val();
 			$("body").empty().append(new app.App("body", { id: "es", base_uri: base_uri }));
 		},
 		
 		_main_template: function() {
-			return { tag: "SPAN", cls: "es-cluster", children: [
-				{ tag: "INPUT", type: "text", cls: "es-header-uri", onkeyup: function( jEv ) {
+			return { tag: "SPAN", cls: "uiClusterConnect", children: [
+				{ tag: "INPUT", type: "text", cls: "uiClusterConnect-uri", onkeyup: function( jEv ) {
 					if(jEv.which === 13) {
 						jEv.preventDefault();
 						this._reconnect_handler();
 					}
 				}.bind(this), id: this.id("baseUri"), value: this.config.base_uri },
 				{ tag: "BUTTON", type: "button", text: i18n.text("Header.Connect"), onclick: this._reconnect_handler },
-				{ tag: "SPAN", cls: "es-header-clusterName" },
-				{ tag: "SPAN", cls: "es-header-clusterStatus" }
+				{ tag: "SPAN", cls: "uiClusterConnect-name" },
+				{ tag: "SPAN", cls: "uiClusterConnect-status" }
 			]};
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -3496,40 +3500,6 @@
 	});
 
 })( this.jQuery, this.app );
-(function( $, app ) {
-
-	var ui = app.ns("ui");
-
-	ui.Connect = ui.SplitButton.extend({
-		defaults: {
-			label: "Connect",
-			items: [
-				{ label: "localhost:9200", value: "http://localhost:9200", selected: true },
-				{ label: "Connection Manager...", value: -1 }
-			]
-		}
-	});
-
-})( this.jQuery, this.app );
-
-(function( $, app ) {
-
-	var ui = app.ns("ui");
-
-	ui.Header = ui.AbstractWidget.extend({
-		init: function() {
-			this._super();
-			this.el = $( this._main_template() );
-		},
-		_main_template: function() { return (
-			{ tag: "DIV", cls: "uiHeader", children: [
-				{ tag: "H1", text: "elasticsearch" },
-				new ui.Connect({})
-			] }
-		); }
-	});
-
-})( this.jQuery, this.app );
 (function( app ) {
 
 	var ui = app.ns("ui");
@@ -3635,7 +3605,6 @@
 
 		_main_template: function() {
 			return { tag: "DIV", cls: "es", children: [
-//				new ui.Header({}),
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
 					{ tag: "DIV", cls: "es-header-top", children: [
 						new ui.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),

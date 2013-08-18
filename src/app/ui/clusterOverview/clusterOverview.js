@@ -32,7 +32,7 @@
 			});
 
 			this.el = $(this._main_template());
-			this.tablEl = this.el.find(".clusterOverview-table");
+			this.tablEl = this.el.find(".uiClusterOverview-table");
 			this.cluster = this.config.cluster;
 			this.redraw("reset");
 			this.on( "drawn", function( self ) {
@@ -274,7 +274,7 @@
 		_replica_template: function(replica) {
 			var r = replica.replica;
 			return { tag: "DIV",
-				cls: "clusterOverview-replica" + (r.primary ? " primary" : "") + ( " state-" + r.state ),
+				cls: "uiClusterOverview-replica" + (r.primary ? " primary" : "") + ( " state-" + r.state ),
 				text: r.shard.toString(),
 				onclick: function() { new ui.JsonPanel({
 					json: replica.status || replica.replica,
@@ -283,7 +283,7 @@
 			};
 		},
 		_routing_template: function(routing) {
-			var cell = { tag: "TD", cls: "clusterOverview-routing" + (routing.open ? "" : " close"), children: [] };
+			var cell = { tag: "TD", cls: "uiClusterOverview-routing" + (routing.open ? "" : " close"), children: [] };
 			for(var i = 0; i < routing.replicas.length; i++) {
 				if(i % routing.max_number_of_shards === 0 && i > 0) {
 					cell.children.push({ tag: "BR" });
@@ -291,23 +291,23 @@
 				if( i in (routing.replicas)) {
 					cell.children.push(this._replica_template(routing.replicas[i]));
 				} else {
-					cell.children.push( { tag: "DIV", cls: "clusterOverview-nullReplica" } );
+					cell.children.push( { tag: "DIV", cls: "uiClusterOverview-nullReplica" } );
 				}
 			}
 			return cell;
 		},
 		_node_template: function(node) {
-			return { tag: "TR", cls: "clusterOverview-node" + (node.master_node ? " master": ""), children: [
+			return { tag: "TR", cls: "uiClusterOverview-node" + (node.master_node ? " master": ""), children: [
 				{ tag: "TH", children: node.name === "Unassigned" ? [
-					{ tag: "DIV", cls: "clusterOverview-title", text: node.name }
+					{ tag: "DIV", cls: "uiClusterOverview-title", text: node.name }
 				] : [
 					{ tag: "DIV", children: [
-						{ tag: "SPAN", cls: "clusterOverview-title", text: node.cluster.name },
+						{ tag: "SPAN", cls: "uiClusterOverview-title", text: node.cluster.name },
 						" ",
 						{ tag: "SPAN", text: node.name }
 					]},
 					{ tag: "DIV", text: node.cluster.http_address },
-					{ tag: "DIV", cls: "clusterOverview-controls", children: [
+					{ tag: "DIV", cls: "uiClusterOverview-controls", children: [
 						new ui.MenuButton({
 							label: i18n.text("NodeInfoMenu.Title"),
 							menu: new ui.MenuPanel({
@@ -334,10 +334,10 @@
 			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? index.status.index.primary_size + " (" + index.status.index.size + ")" : "unknown" ) ); 
 			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.docs ? index.status.docs.num_docs + " (" + index.status.docs.max_doc + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
-				{ tag: "DIV", cls: "clusterOverview-title", text: index.name },
+				{ tag: "DIV", cls: "uiClusterOverview-title", text: index.name },
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
-				{ tag: "DIV", cls: "clusterOverview-controls", children: [
+				{ tag: "DIV", cls: "uiClusterOverview-controls", children: [
 					new ui.MenuButton({
 						label: i18n.text("IndexInfoMenu.Title"),
 						menu: new ui.MenuPanel({
@@ -370,12 +370,12 @@
 					return {
 						tag: "TD",
 						css: { background: "#" + "9ce9c7fc9".substr((row+6)%7,3) },
-						cls: "clusterOverview-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
+						cls: "uiClusterOverview-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
 						text: alias.name,
 						children: [
 							{	tag: 'SPAN',
 								text: i18n.text("General.CloseGlyph"),
-								cls: 'clusterOverview-hasAlias-remove',
+								cls: 'uiClusterOverview-hasAlias-remove',
 								onclick: function() {
 									var command = {
 										"actions" : [
@@ -412,14 +412,14 @@
 				}
 				return 0;
 			}
-			return { tag: "TABLE", cls: "clusterOverview-cluster", children: [
+			return { tag: "TABLE", cls: "uiClusterOverview-cluster", children: [
 				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
 				cluster.aliases.length && { tag: "TBODY", children: cluster.aliases.map(this._alias_template, this) },
 				{ tag: "TBODY", children: cluster.nodes.sort(nodeNameCmp).map(this._node_template, this) }
 			] };
 		},
 		_main_template: function() {
-			return { tag: "DIV", id: this.id(), cls: "clusterOverview", children: [
+			return { tag: "DIV", id: this.id(), cls: "uiClusterOverview", children: [
 				new ui.Toolbar({
 					label: i18n.text("Overview.PageTitle"),
 					left: [
@@ -433,7 +433,7 @@
 						this._refreshButton
 					]
 				}),
-				{ tag: "DIV", cls: "clusterOverview-table" }
+				{ tag: "DIV", cls: "uiClusterOverview-table" }
 			] };
 		}
 	});
