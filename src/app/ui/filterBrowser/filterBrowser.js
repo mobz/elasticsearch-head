@@ -13,7 +13,7 @@
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
-			this.filtersEl = this.el.find(".es-filterBrowser-filters");
+			this.filtersEl = this.el.find(".uiFilterBrowser-filters");
 			this.attach( parent );
 			new data.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
 				this.metadata = metadata;
@@ -55,7 +55,7 @@
 		},
 		
 		_removeFilterRow_handler: function(jEv) {
-			$(jEv.target).closest("DIV.es-filterBrowser-row").remove();
+			$(jEv.target).closest("DIV.uiFilterBrowser-row").remove();
 			if(this.filtersEl.children().length === 0) {
 				this._addFilterRow_handler();
 			}
@@ -64,7 +64,7 @@
 		_search_handler: function() {
 			var search = new data.BoolQuery();
 			this.fire("staringSearch");
-			this.filtersEl.find(".es-filterBrowser-row").each(function(i, row) {
+			this.filtersEl.find(".uiFilterBrowser-row").each(function(i, row) {
 				row = $(row);
 				var bool = row.find(".es-bool").val();
 				var field = row.find(".es-field").val();
@@ -95,7 +95,7 @@
 				}
 				search.addClause(value, field, op, bool);
 			});
-			if(this.el.find(".es-filterBrowser-showSrc").attr("checked")) {
+			if(this.el.find(".uiFilterBrowser-showSrc").attr("checked")) {
 				this.fire("searchSource", search.search);
 			}
 			this._request_handler({
@@ -106,7 +106,7 @@
 		},
 		
 		_results_handler: function(data) {
-			if(this.el.find(".es-filterBrowser-outputFormat").val() === "Table") {
+			if(this.el.find(".uiFilterBrowser-outputFormat").val() === "Table") {
 				this.fire("tableResults", data, this.metadata);
 			} else {
 				this.fire("jsonResults", data);
@@ -149,17 +149,17 @@
 		
 		_main_template: function() {
 			return { tag: "DIV", children: [
-				{ tag: "DIV", cls: "es-filterBrowser-filters" },
+				{ tag: "DIV", cls: "uiFilterBrowser-filters" },
 				{ tag: "BUTTON", type: "button", text: i18n.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
+					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "uiFilterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
 				},
-				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
+				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "uiFilterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
 		},
 		
 		_filter_template: function() {
-			return { tag: "DIV", cls: "es-filterBrowser-row", children: [
+			return { tag: "DIV", cls: "uiFilterBrowser-row", children: [
 				{ tag: "SELECT", cls: "es-bool", children: ["must", "must_not", "should"].map(ut.option_template) },
 				{ tag: "SELECT", cls: "es-field", onchange: this._changeQueryField_handler, children: this.filters.map(function(f) {
 					return { tag: "OPTION", data: { spec: f }, value: f.path.join("."), text: f.path.join(".") };

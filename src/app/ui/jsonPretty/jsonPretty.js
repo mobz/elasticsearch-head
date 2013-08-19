@@ -14,15 +14,15 @@
 		},
 		
 		_click_handler: function(jEv) {
-			var t = $(jEv.target).closest(".jsonPretty-name").closest("LI");
-			if(t.length === 0 || t.parents(".jsonPretty-minimised").length > 0) { return; }
-			t.toggleClass("jsonPretty-minimised");
+			var t = $(jEv.target).closest(".uiJsonPretty-name").closest("LI");
+			if(t.length === 0 || t.parents(".uiJsonPretty-minimised").length > 0) { return; }
+			t.toggleClass("uiJsonPretty-minimised");
 			jEv.stopPropagation();
 		},
 		
 		_main_template: function() {
 			try {
-					return { tag: "DIV", cls: "jsonPretty", children: this.pretty.parse(this.config.obj) };
+					return { tag: "DIV", cls: "uiJsonPretty", children: this.pretty.parse(this.config.obj) };
 			}	catch (error) {
 					throw "JsonPretty error: " + error.message;
 			}
@@ -42,14 +42,14 @@
 				var results = value.map(function(v) {
 					return { tag: "LI", cls: this.expando(v), child: this['parse'](v) };
 				}, this);
-				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-array", children: results } : null), "]" ];
+				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-array", children: results } : null), "]" ];
 			},
 			"object": function (value) {
 				var results = [];
 				for (var member in value) {
 					results.push({ tag: "LI", cls: this.expando(value[member]), children:  [ this['value']('name', member), ': ', this['parse'](value[member]) ] });
 				}
-				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-object", children: results } : null ),  "}" ];
+				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-object", children: results } : null ),  "}" ];
 			},
 			"number": function (value) {
 				return this['value']('number', value.toString());
@@ -64,7 +64,7 @@
 				if (/^(http|https|file):\/\/[^\s]+$/.test(value)) {
 					return this['value'](type, { tag: "A", href: value, target: "_blank", text: value } );
 				}
-				return { tag: "SPAN", cls: "jsonPretty-" + type, text: value };
+				return { tag: "SPAN", cls: "uiJsonPretty-" + type, text: value };
 			}
 		}
 	});

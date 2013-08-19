@@ -9,7 +9,7 @@
 			autoDisable: false         // automatically disable the button when clicked
 		},
 
-		baseClass: "uiButton",
+		_baseCls: "uiButton",
 
 		init: function(parent) {
 			this._super();
@@ -42,7 +42,7 @@
 		},
 
 		button_template: function() { return (
-			{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this.baseClass, children: [
+			{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this._baseCls, children: [
 				{ tag: 'DIV', cls: 'uiButton-content', child:
 					{ tag: 'DIV', cls: 'uiButton-label', text: this.config.label }
 				}

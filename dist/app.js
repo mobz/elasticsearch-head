@@ -1096,6 +1096,49 @@
 	});
 
 })( this.app );
+(function( app ) {
+
+	var services = app.ns("services");
+
+	services.storage = (function() {
+		var storage = {};
+		return {
+			get: function(k) { try { return JSON.parse(localStorage[k] || storage[k]); } catch(e) { return null; } },
+			set: function(k, v) { v = JSON.stringify(v); localStorage[k] = v; storage[k] = v; }
+		};
+	})();
+
+})( this.app );
+
+
+
+(function( $, app ) {
+
+	var services = app.ns("services");
+	var ux = app.ns("ux");
+
+	services.Cluster = ux.Class.extend({
+		defaults: {
+			base_uri: "http://localhost:9200/"
+		},
+		request: function( params ) {
+			return $.ajax( acx.extend({
+				url: this.config.base_uri + params.path,
+				dataType: "json",
+				error: function(xhr, type, message) {
+					if("console" in window) {
+						console.log({ "XHR Error": type, "message": message });
+					}
+				}
+			},  params) );
+		},
+		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
+		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
+		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
+		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
+	});
+
+})( this.jQuery, this.app );
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -1213,7 +1256,7 @@
 			autoDisable: false         // automatically disable the button when clicked
 		},
 
-		baseClass: "uiButton",
+		_baseCls: "uiButton",
 
 		init: function(parent) {
 			this._super();
@@ -1246,7 +1289,7 @@
 		},
 
 		button_template: function() { return (
-			{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this.baseClass, children: [
+			{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this._baseCls, children: [
 				{ tag: 'DIV', cls: 'uiButton-content', child:
 					{ tag: 'DIV', cls: 'uiButton-label', text: this.config.label }
 				}
@@ -1264,7 +1307,7 @@
 		defaults: {
 			menu: null
 		},
-		baseClass: "uiButton uiMenuButton",
+		_baseCls: "uiButton uiMenuButton",
 		init: function(parent) {
 			this._super(parent);
 			this.menu = this.config.menu;
@@ -1288,7 +1331,7 @@
 			items: [],
 			label: ""
 		},
-		baseClass: "uiSplitButton",
+		_baseCls: "uiSplitButton",
 		init: function( parent ) {
 			this._super( parent );
 			this.items = this.config.items.map( function( item ) {
@@ -1314,7 +1357,7 @@
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
 				menu: new (app.ui.MenuPanel.extend({
-					baseClass: "uiSplitMenuPanel uiMenuPanel",
+					_baseCls: "uiSplitMenuPanel uiMenuPanel",
 					_getPosition: function( jEv ) {
 						var parent = $(jEv.target).closest("BUTTON");
 						return parent.vOffset()
@@ -1335,7 +1378,7 @@
 			this.button.enable();
 		},
 		_main_template: function() {
-			return { tag: "DIV", cls: this.baseClass, children: [
+			return { tag: "DIV", cls: this._baseCls, children: [
 				this.button, this.menuButton
 			] };
 		}
@@ -1460,6 +1503,9 @@
 		defaults: {
 	//		title: ""   // (required) text for the panel title
 		},
+
+		_baseCls: "uiPanel",
+
 		init: function() {
 			this._super();
 			this.body = $(this._body_template());
@@ -1474,15 +1520,13 @@
 			this.config.open && this.open();
 		},
 
-		theme: "",
-
 		setBody: function(body) {
 				this.body.empty().append(body);
 		},
 		_body_template: function() { return { tag: "DIV", cls: "uiPanel-body", css: { height: this.config.height + (this.config.height === 'auto' ? "" : "px" ) }, child: this.config.body }; },
 		_title_template: function() { return { tag: "SPAN", cls: "uiPanel-title", text: this.config.title }; },
 		_main_template: function() { return (
-			{ tag: "DIV", id: this.id(), cls: "uiPanel " + this.theme, children: [
+			{ tag: "DIV", id: this.id(), cls: this._baseCls, children: [
 				{ tag: "DIV", cls: "uiPanel-titleBar", children: [
 					{ tag: "DIV", cls: "uiPanel-close", onclick: this._close_handler, text: "x" },
 					this.title
@@ -1498,7 +1542,7 @@
 	var ui = app.ns("ui");
 
 	ui.InfoPanel = ui.DraggablePanel.extend({
-		theme: "dark"
+		_baseCls: "uiPanel uiInfoPanel"
 	});
 
 })( this.app );
@@ -1535,7 +1579,7 @@
 			items: [],		// (required) an array of menu items
 			modal: false
 		},
-		baseClass: "uiMenuPanel",
+		_baseCls: "uiMenuPanel",
 		init: function() {
 			this._super();
 			this.el = $(this._main_template());
@@ -1549,7 +1593,7 @@
 			$(document).unbind("click", this._close_handler);
 		},
 		_main_template: function() {
-			return { tag: "DIV", cls: this.baseClass, children: this.config.items.map(this._menuItem_template, this) };
+			return { tag: "DIV", cls: this._baseCls, children: this.config.items.map(this._menuItem_template, this) };
 		},
 		_menuItem_template: function(item) {
 			var dx = item.disabled ? { onclick: function() {} } : {};
@@ -1686,15 +1730,15 @@
 		},
 		
 		_click_handler: function(jEv) {
-			var t = $(jEv.target).closest(".jsonPretty-name").closest("LI");
-			if(t.length === 0 || t.parents(".jsonPretty-minimised").length > 0) { return; }
-			t.toggleClass("jsonPretty-minimised");
+			var t = $(jEv.target).closest(".uiJsonPretty-name").closest("LI");
+			if(t.length === 0 || t.parents(".uiJsonPretty-minimised").length > 0) { return; }
+			t.toggleClass("uiJsonPretty-minimised");
 			jEv.stopPropagation();
 		},
 		
 		_main_template: function() {
 			try {
-					return { tag: "DIV", cls: "jsonPretty", children: this.pretty.parse(this.config.obj) };
+					return { tag: "DIV", cls: "uiJsonPretty", children: this.pretty.parse(this.config.obj) };
 			}	catch (error) {
 					throw "JsonPretty error: " + error.message;
 			}
@@ -1714,14 +1758,14 @@
 				var results = value.map(function(v) {
 					return { tag: "LI", cls: this.expando(v), child: this['parse'](v) };
 				}, this);
-				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-array", children: results } : null), "]" ];
+				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-array", children: results } : null), "]" ];
 			},
 			"object": function (value) {
 				var results = [];
 				for (var member in value) {
 					results.push({ tag: "LI", cls: this.expando(value[member]), children:  [ this['value']('name', member), ': ', this['parse'](value[member]) ] });
 				}
-				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "jsonPretty-object", children: results } : null ),  "}" ];
+				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-object", children: results } : null ),  "}" ];
 			},
 			"number": function (value) {
 				return this['value']('number', value.toString());
@@ -1736,7 +1780,7 @@
 				if (/^(http|https|file):\/\/[^\s]+$/.test(value)) {
 					return this['value'](type, { tag: "A", href: value, target: "_blank", text: value } );
 				}
-				return { tag: "SPAN", cls: "jsonPretty-" + type, text: value };
+				return { tag: "SPAN", cls: "uiJsonPretty-" + type, text: value };
 			}
 		}
 	});
@@ -1804,6 +1848,9 @@
 			height: 500,
 			width: 600
 		},
+
+		_baseCls: "uiPanel uiInfoPanel uiJsonPanel",
+
 		_body_template: function() {
 			var body = this._super();
 			body.child = new ui.JsonPretty({ obj: this.config.json });
@@ -2945,7 +2992,7 @@
 	});
 
 })( this.jQuery, this.app );
-(function( app, raphael ) {
+(function( app, i18n, raphael ) {
 
 	var ui = app.ns("ui");
 
@@ -3044,13 +3091,13 @@
 			});
 		},
 		_main_template: function() { return (
-			{ tag: "DIV", cls: "dateHistogram loading", css: { height: "50px" }, children: [
+			{ tag: "DIV", cls: "uiDateHistogram loading", css: { height: "50px" }, children: [
 				i18n.text("General.LoadingFacets")
 			] }
 		); }
 	});
 
-})( this.app, this.Raphael );
+})( this.app, this.i18n, this.Raphael );
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -3236,7 +3283,7 @@
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
-			this.filtersEl = this.el.find(".es-filterBrowser-filters");
+			this.filtersEl = this.el.find(".uiFilterBrowser-filters");
 			this.attach( parent );
 			new data.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
 				this.metadata = metadata;
@@ -3278,7 +3325,7 @@
 		},
 		
 		_removeFilterRow_handler: function(jEv) {
-			$(jEv.target).closest("DIV.es-filterBrowser-row").remove();
+			$(jEv.target).closest("DIV.uiFilterBrowser-row").remove();
 			if(this.filtersEl.children().length === 0) {
 				this._addFilterRow_handler();
 			}
@@ -3287,7 +3334,7 @@
 		_search_handler: function() {
 			var search = new data.BoolQuery();
 			this.fire("staringSearch");
-			this.filtersEl.find(".es-filterBrowser-row").each(function(i, row) {
+			this.filtersEl.find(".uiFilterBrowser-row").each(function(i, row) {
 				row = $(row);
 				var bool = row.find(".es-bool").val();
 				var field = row.find(".es-field").val();
@@ -3318,7 +3365,7 @@
 				}
 				search.addClause(value, field, op, bool);
 			});
-			if(this.el.find(".es-filterBrowser-showSrc").attr("checked")) {
+			if(this.el.find(".uiFilterBrowser-showSrc").attr("checked")) {
 				this.fire("searchSource", search.search);
 			}
 			this._request_handler({
@@ -3329,7 +3376,7 @@
 		},
 		
 		_results_handler: function(data) {
-			if(this.el.find(".es-filterBrowser-outputFormat").val() === "Table") {
+			if(this.el.find(".uiFilterBrowser-outputFormat").val() === "Table") {
 				this.fire("tableResults", data, this.metadata);
 			} else {
 				this.fire("jsonResults", data);
@@ -3372,17 +3419,17 @@
 		
 		_main_template: function() {
 			return { tag: "DIV", children: [
-				{ tag: "DIV", cls: "es-filterBrowser-filters" },
+				{ tag: "DIV", cls: "uiFilterBrowser-filters" },
 				{ tag: "BUTTON", type: "button", text: i18n.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "es-filterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
+					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "uiFilterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
 				},
-				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "es-filterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
+				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "uiFilterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
 		},
 		
 		_filter_template: function() {
-			return { tag: "DIV", cls: "es-filterBrowser-row", children: [
+			return { tag: "DIV", cls: "uiFilterBrowser-row", children: [
 				{ tag: "SELECT", cls: "es-bool", children: ["must", "must_not", "should"].map(ut.option_template) },
 				{ tag: "SELECT", cls: "es-field", onchange: this._changeQueryField_handler, children: this.filters.map(function(f) {
 					return { tag: "OPTION", data: { spec: f }, value: f.path.join("."), text: f.path.join(".") };
@@ -3411,7 +3458,7 @@
 	});
 	
 })( this.jQuery, this.app );
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
@@ -3433,12 +3480,12 @@
 		_update_handler: function(data) {
 			var options = [];
 			for(var name in data.indices) { options.push(this._option_template(name, data.indices[name])); }
-			this.el.find(".es-indexSelector-select").empty().append(this._select_template(options));
+			this.el.find(".uiIndexSelector-select").empty().append(this._select_template(options));
 			this._indexChanged_handler();
 		},
 		
 		_main_template: function() {
-			return { tag: "DIV", cls: "es-indexSelector", children: i18n.complex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "es-indexSelector-select" } ) };
+			return { tag: "DIV", cls: "uiIndexSelector", children: i18n.complex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "uiIndexSelector-select" } ) };
 		},
 
 		_indexChanged_handler: function() {
@@ -3454,52 +3501,9 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
 
 
-(function( app ) {
-
-	var services = app.ns("services");
-
-	services.storage = (function() {
-		var storage = {};
-		return {
-			get: function(k) { try { return JSON.parse(localStorage[k] || storage[k]); } catch(e) { return null; } },
-			set: function(k, v) { v = JSON.stringify(v); localStorage[k] = v; storage[k] = v; }
-		};
-	})();
-
-})( this.app );
-
-
-
-(function( $, app ) {
-
-	var services = app.ns("services");
-	var ux = app.ns("ux");
-
-	services.Cluster = ux.Class.extend({
-		defaults: {
-			base_uri: "http://localhost:9200/"
-		},
-		request: function( params ) {
-			return $.ajax( acx.extend({
-				url: this.config.base_uri + params.path,
-				dataType: "json",
-				error: function(xhr, type, message) {
-					if("console" in window) {
-						console.log({ "XHR Error": type, "message": message });
-					}
-				}
-			},  params) );
-		},
-		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
-		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
-		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
-		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
-	});
-
-})( this.jQuery, this.app );
 (function( app ) {
 
 	var ui = app.ns("ui");

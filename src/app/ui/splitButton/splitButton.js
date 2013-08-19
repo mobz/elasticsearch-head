@@ -7,7 +7,7 @@
 			items: [],
 			label: ""
 		},
-		baseClass: "uiSplitButton",
+		_baseCls: "uiSplitButton",
 		init: function( parent ) {
 			this._super( parent );
 			this.items = this.config.items.map( function( item ) {
@@ -33,7 +33,7 @@
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
 				menu: new (app.ui.MenuPanel.extend({
-					baseClass: "uiSplitMenuPanel uiMenuPanel",
+					_baseCls: "uiSplitMenuPanel uiMenuPanel",
 					_getPosition: function( jEv ) {
 						var parent = $(jEv.target).closest("BUTTON");
 						return parent.vOffset()
@@ -54,7 +54,7 @@
 			this.button.enable();
 		},
 		_main_template: function() {
-			return { tag: "DIV", cls: this.baseClass, children: [
+			return { tag: "DIV", cls: this._baseCls, children: [
 				this.button, this.menuButton
 			] };
 		}

@@ -7,7 +7,7 @@
 			items: [],		// (required) an array of menu items
 			modal: false
 		},
-		baseClass: "uiMenuPanel",
+		_baseCls: "uiMenuPanel",
 		init: function() {
 			this._super();
 			this.el = $(this._main_template());
@@ -21,7 +21,7 @@
 			$(document).unbind("click", this._close_handler);
 		},
 		_main_template: function() {
-			return { tag: "DIV", cls: this.baseClass, children: this.config.items.map(this._menuItem_template, this) };
+			return { tag: "DIV", cls: this._baseCls, children: this.config.items.map(this._menuItem_template, this) };
 		},
 		_menuItem_template: function(item) {
 			var dx = item.disabled ? { onclick: function() {} } : {};

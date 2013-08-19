@@ -1,4 +1,4 @@
-(function( app, raphael ) {
+(function( app, i18n, raphael ) {
 
 	var ui = app.ns("ui");
 
@@ -97,10 +97,10 @@
 			});
 		},
 		_main_template: function() { return (
-			{ tag: "DIV", cls: "dateHistogram loading", css: { height: "50px" }, children: [
+			{ tag: "DIV", cls: "uiDateHistogram loading", css: { height: "50px" }, children: [
 				i18n.text("General.LoadingFacets")
 			] }
 		); }
 	});
 
-})( this.app, this.Raphael );
+})( this.app, this.i18n, this.Raphael );

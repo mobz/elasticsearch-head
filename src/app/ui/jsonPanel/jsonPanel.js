@@ -11,6 +11,9 @@
 			height: 500,
 			width: 600
 		},
+
+		_baseCls: "uiPanel uiInfoPanel uiJsonPanel",
+
 		_body_template: function() {
 			var body = this._super();
 			body.child = new ui.JsonPretty({ obj: this.config.json });

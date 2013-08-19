@@ -6,7 +6,7 @@
 		defaults: {
 			menu: null
 		},
-		baseClass: "uiButton uiMenuButton",
+		_baseCls: "uiButton uiMenuButton",
 		init: function(parent) {
 			this._super(parent);
 			this.menu = this.config.menu;

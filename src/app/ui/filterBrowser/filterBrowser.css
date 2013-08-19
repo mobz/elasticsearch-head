@@ -1,8 +1,8 @@
-.es-filterBrowser-row * {
+.uiFilterBrowser-row * {
 	margin-right: 0.4em;
 }
 
-.es-filterBrowser-row BUTTON {
+.uiFilterBrowser-row BUTTON {
 	height: 22px;
 	position: relative;
 	top: 1px;

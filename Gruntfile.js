@@ -35,6 +35,9 @@ module.exports = function(grunt) {
 					'src/app/data/queryDataSourceInterface.js',
 					'src/app/data/boolQuery.js',
 
+					'src/app/services/storage.js',
+					'src/app/services/cluster.js',
+
 					'src/app/ui/abstractWidget/abstractWidget.js',
 					'src/app/ui/abstractField/abstractField.js',
 					'src/app/ui/textField/textField.js',
@@ -66,9 +69,6 @@ module.exports = function(grunt) {
 					'src/app/ui/filterBrowser/filterBrowser.js',
 					'src/app/ui/indexSelector/indexSelector.js',
 
-					'src/app/services/storage.js',
-					'src/app/services/cluster.js',
-
 					'src/app/app.js'
 				],
 				dest: 'dist/app.js'
@@ -81,9 +81,11 @@ module.exports = function(grunt) {
 					'src/app/ui/splitButton/splitButton.css',
 					'src/app/ui/toolbar/toolbar.css',
 					'src/app/ui/abstractPanel/abstractPanel.css',
+					'src/app/ui/infoPanel/infoPanel.css',
 					'src/app/ui/menuPanel/menuPanel.css',
 					'src/app/ui/table/table.css',
 					'src/app/ui/jsonPretty/jsonPretty.css',
+					'src/app/ui/jsonPanel/jsonPanel.css',
 					'src/app/ui/panelForm/panelForm.css',
 					'src/app/ui/sidebarSection/sidebarSection.css',
 					'src/app/ui/resultTable/resultTable.css',

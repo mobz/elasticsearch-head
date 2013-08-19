@@ -1,4 +1,4 @@
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
@@ -20,12 +20,12 @@
 		_update_handler: function(data) {
 			var options = [];
 			for(var name in data.indices) { options.push(this._option_template(name, data.indices[name])); }
-			this.el.find(".es-indexSelector-select").empty().append(this._select_template(options));
+			this.el.find(".uiIndexSelector-select").empty().append(this._select_template(options));
 			this._indexChanged_handler();
 		},
 		
 		_main_template: function() {
-			return { tag: "DIV", cls: "es-indexSelector", children: i18n.complex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "es-indexSelector-select" } ) };
+			return { tag: "DIV", cls: "uiIndexSelector", children: i18n.complex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "uiIndexSelector-select" } ) };
 		},
 
 		_indexChanged_handler: function() {
@@ -41,5 +41,5 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
 
