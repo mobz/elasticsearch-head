@@ -8,8 +8,6 @@
 			height: 400
 		},
 
-		baseCls: "uiTable uiResultTable",
-
 		init: function() {
 			this._super();
 			this.on("rowClick", this._showPreview_handler);

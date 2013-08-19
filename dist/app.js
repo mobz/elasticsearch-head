@@ -1357,7 +1357,7 @@
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
 				menu: new (app.ui.MenuPanel.extend({
-					_baseCls: "uiSplitMenuPanel uiMenuPanel",
+					_baseCls: "uiSplitButton-panel uiMenuPanel",
 					_getPosition: function( jEv ) {
 						var parent = $(jEv.target).closest("BUTTON");
 						return parent.vOffset()
@@ -1619,7 +1619,7 @@
 			height: 0,
 			width: 0
 		},
-		baseCls: "uiTable",
+		_baseCls: "uiTable",
 		init: function(parent) {
 			this._super();
 			this.initElements(parent);
@@ -1668,7 +1668,7 @@
 			}
 		},
 		_main_template: function() {
-			return { tag: "DIV", id: this.id(), css: { width: this.config.width + "px" }, cls: this.baseCls, children: [
+			return { tag: "DIV", id: this.id(), css: { width: this.config.width + "px" }, cls: this._baseCls, children: [
 				{ tag: "DIV", cls: "uiTable-tools" },
 				{ tag: "DIV", cls: "uiTable-headers",
 					onClick: this._headerClick_handler
@@ -1860,7 +1860,7 @@
 
 })( this.app );
 
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
@@ -1873,34 +1873,35 @@
 		},
 		init: function() {
 			this._super();
-			this.el = $(this._main_template());
-			this.body = this.el.children(".sidebarSection-body");
+			this.el = $( this._main_template() );
+			this.body = this.el.children(".uiSidebarSection-body");
 			this.config.open && ( this.el.addClass("shown") && this.body.css("display", "block") );
 		},
 		_showSection_handler: function(jEv) {
-			var shown = $(jEv.target).closest(".sidebarSection")
+			var shown = $(jEv.target).closest(".uiSidebarSection")
 				.toggleClass("shown")
-					.children(".sidebarSection-body").slideToggle(200, function() { this.fire("animComplete", this); }.bind(this))
+					.children(".uiSidebarSection-body").slideToggle(200, function() { this.fire("animComplete", this); }.bind(this))
 				.end()
 				.hasClass("shown");
 			this.fire(shown ? "show" : "hide", this);
 		},
 		_showHelp_handler: function(jEv) {
-			new app.ui.HelpPanel({ref: this.config.help});
+			new ui.HelpPanel({ref: this.config.help});
 			jEv.stopPropagation();
 		},
 		_main_template: function() { return (
-			{ tag: "DIV", cls: "sidebarSection", children: [
-				(this.config.title && { tag: "DIV", cls: "sidebarSection-head", onclick: this._showSection_handler, children: [
+			{ tag: "DIV", cls: "uiSidebarSection", children: [
+				(this.config.title && { tag: "DIV", cls: "uiSidebarSection-head", onclick: this._showSection_handler, children: [
 					this.config.title,
-					( this.config.help && { tag: "SPAN", cls: "sidebarSection-help pull-right", onclick: this._showHelp_handler, text: i18n.text("General.HelpGlyph") } )
+					( this.config.help && { tag: "SPAN", cls: "uiSidebarSection-help pull-right", onclick: this._showHelp_handler, text: i18n.text("General.HelpGlyph") } )
 				] }),
-				{ tag: "DIV", cls: "sidebarSection-body", child: this.config.body }
+				{ tag: "DIV", cls: "uiSidebarSection-body", child: this.config.body }
 			] }
 		); }
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -1910,8 +1911,6 @@
 			width: 500,
 			height: 400
 		},
-
-		baseCls: "uiTable uiResultTable",
 
 		init: function() {
 			this._super();
@@ -1959,7 +1958,7 @@
 
 })( this.jQuery, this.app );
 
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 	var ut = app.ns("ut");
@@ -1999,7 +1998,7 @@
 		},
 		_selectAlias_handler: function(jEv) {
 			var indices = (jEv.target.selectedIndex === 0) ? [] : this.metadata.getIndices($(jEv.target).val());
-			$(".queryFilter-index").each(function(i, el) {
+			$(".uiQueryFilter-index").each(function(i, el) {
 				var jEl = $(el);
 				if(indices.contains(jEl.text()) !== jEl.hasClass("selected")) {
 					jEl.click();
@@ -2008,13 +2007,13 @@
 			this.requestUpdate(jEv);
 		},
 		_selectIndex_handler: function(jEv) {
-			var jEl = $(jEv.target).closest(".queryFilter-index");
+			var jEl = $(jEv.target).closest(".uiQueryFilter-index");
 			jEl.toggleClass("selected");
 			var selected = jEl.hasClass("selected");
 			this.query.setIndex(jEl.text(), selected);
 			if(selected) {
 				var types = this.metadata.getTypes(this.query.indices);
-				this.el.find("DIV.queryFilter-type.selected").each(function(n, el) {
+				this.el.find("DIV.uiQueryFilter-type.selected").each(function(n, el) {
 					if(! types.contains($(el).text())) {
 						$(el).click();
 					}
@@ -2023,20 +2022,20 @@
 			this.requestUpdate(jEv);
 		},
 		_selectType_handler: function(jEv) {
-			var jEl = $(jEv.target).closest(".queryFilter-type");
+			var jEl = $(jEv.target).closest(".uiQueryFilter-type");
 			jEl.toggleClass("selected");
 			var type = jEl.text(), selected = jEl.hasClass("selected");
 			this.query.setType(type, selected);
 			if(selected) {
 				var indices = this.metadata.types[type].indices;
 				// es throws a 500 if searching an index for a type it does not contain - so we prevent that
-				this.el.find("DIV.queryFilter-index.selected").each(function(n, el) {
+				this.el.find("DIV.uiQueryFilter-index.selected").each(function(n, el) {
 					if(! indices.contains($(el).text())) {
 						$(el).click();
 					}
 				});
 				// es throws a 500 if you specify types from different indicies with _all
-				jEl.siblings(".queryFilter-type.selected").forEach(function(el) {
+				jEl.siblings(".uiQueryFilter-type.selected").forEach(function(el) {
 					if(this.metadata.types[$(el).text()].indices.intersection(indices).length === 0) {
 						$(el).click();
 					}
@@ -2084,7 +2083,7 @@
 					var part = fieldNameParts.length - 1;
 					var name = fieldNameParts[part];
 					while (part >= 1) {
-						if (fieldNameParts[part] != fieldNameParts[part - 1]) {
+						if (fieldNameParts[part] !== fieldNameParts[part - 1]) {
 							name = fieldNameParts[part - 1] + "." + name;
 						}
 						part--;
@@ -2119,9 +2118,9 @@
 				uqid = this.query.addClause( value, spec.field_name, "range", "must");
 			}
 			jEl.data("lastRange", range);
-			jEl.siblings(".queryFilter-rangeHintFrom")
+			jEl.siblings(".uiQueryFilter-rangeHintFrom")
 				.text(i18n.text("QueryFilter.DateRangeHint.from", range.start && new Date(range.start).toUTCString()));
-			jEl.siblings(".queryFilter-rangeHintTo")
+			jEl.siblings(".uiQueryFilter-rangeHintTo")
 				.text(i18n.text("QueryFilter.DateRangeHint.to", range.end && new Date(range.end).toUTCString()));
 			jEl.data("uqid", uqid);
 			this.requestUpdate(jEv);
@@ -2163,7 +2162,7 @@
 			this.requestUpdate(jEv);
 		},
 		_main_template: function() {
-			return { tag: "DIV", id: this.id(), cls: "queryFilter", children: [
+			return { tag: "DIV", id: this.id(), cls: "uiQueryFilter", children: [
 				this._aliasSelector_template(),
 				this._indexSelector_template(),
 				this._typesSelector_template(),
@@ -2173,28 +2172,28 @@
 		_aliasSelector_template: function() {
 			var aliases = acx.eachMap(this.metadata.aliases, function(alias) { return alias; } );
 			aliases.unshift( i18n.text("QueryFilter.AllIndices") );
-			return { tag: "DIV", cls: "section queryFilter-aliases", child:
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-aliases", child:
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
 		_indexSelector_template: function() {
-			return { tag: "DIV", cls: "section queryFilter-indices", children: [
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-indices", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Indices") },
 				{ tag: "DIV", onClick: this._selectIndex_handler, children: acx.eachMap(this.metadata.indices, function(name, data) {
-					return { tag: "DIV", cls: "booble queryFilter-index", text: name };
+					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-index", text: name };
 				})}
 			] };
 		},
 		_typesSelector_template: function() {
-			return { tag: "DIV", cls: "section queryFilter-types", children: [
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-types", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Types") },
 				{ tag: "DIV", onClick: this._selectType_handler, children: acx.eachMap(this.metadata.types, function(name, data) {
-					return { tag: "DIV", cls: "booble queryFilter-type", text: name };
+					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-type", text: name };
 				})}
 			] };
 		},
 		_filters_template: function() {
-			return { tag: "DIV", cls: "section queryFilter-filters", children: [
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-filters", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Fields") },
 				{ tag: "DIV", children: acx.eachMap(this.metadata.fields, function(name, data) {
 					return new app.ui.SidebarSection({
@@ -2211,8 +2210,8 @@
 		_dateFilter_template: function(spec) {
 			return { tag: "DIV", children: [
 				{ tag: "INPUT", data: { spec: spec }, onKeyup: this._dateFilterChange_handler },
-				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: i18n.text("QueryFilter.DateRangeHint.from", "")},
-				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: i18n.text("QueryFilter.DateRangeHint.to", "") }
+				{ tag: "PRE", cls: "uiQueryFilter-rangeHintFrom", text: i18n.text("QueryFilter.DateRangeHint.from", "")},
+				{ tag: "PRE", cls: "uiQueryFilter-rangeHintTo", text: i18n.text("QueryFilter.DateRangeHint.to", "") }
 			]};
 		},
 		_numericFilter_template: function(spec) {
@@ -2227,8 +2226,8 @@
 		},
 		_multiFieldFilter_template: function(section, spec) {
 			return {
-				tag : "DIV", cls : "subMultiFields", children : acx.eachMap(spec.fields, function(name, data) {
-					if (name == spec.field_name) {
+				tag : "DIV", cls : "uiQueryFilter-subMultiFields", children : acx.eachMap(spec.fields, function(name, data) {
+					if (name === spec.field_name) {
 						section.config.title = spec.field_name + "." + name;
 						return this._openFilter_handler(section);
 					}
@@ -2240,7 +2239,8 @@
 		}	
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
+
 (function( app ) {
 
 	var ui = app.ns("ui");
@@ -3181,7 +3181,7 @@
 	});
 
 })( this.jQuery, this.app, this.i18n );
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
@@ -3197,7 +3197,7 @@
 				base_uri: this.config.base_uri
 			});
 			this.el = $(this._main_template());
-			this.out = this.el.find("DIV.es-structuredQuery-out");
+			this.out = this.el.find("DIV.uiStructuredQuery-out");
 			this.attach( parent );
 		},
 		
@@ -3207,16 +3207,16 @@
 				cluster: this.config.cluster,
 				base_uri: this.config.base_uri,
 				index: index,
-				onStaringSearch: function() { this.el.find("DIV.es-structuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
+				onStaringSearch: function() { this.el.find("DIV.uiStructuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.uiStructuredQuery-src").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
 				onJsonResults: this._jsonResults_handler,
 				onTableResults: this._tableResults_handler
 			});
-			this.el.find(".es-structuredQuery-body").append(this.filter);
+			this.el.find(".uiStructuredQuery-body").append(this.filter);
 		},
 		
 		_jsonResults_handler: function(results) {
-			this.el.find("DIV.es-structuredQuery-out").empty().append( new ui.JsonPretty({ obj: results }));
+			this.el.find("DIV.uiStructuredQuery-out").empty().append( new ui.JsonPretty({ obj: results }));
 		},
 		
 		_tableResults_handler: function(results, metadata) {
@@ -3240,7 +3240,7 @@
 		},
 		
 		_searchSource_handler: function(src) {
-			var searchSourceDiv = this.el.find("DIV.es-searchSource");
+			var searchSourceDiv = this.el.find("DIV.uiStructuredQuery-src");
 			searchSourceDiv.empty().append(new app.ui.JsonPretty({ obj: src }));
 			if(typeof JSON !== "undefined") {
 				var showRawJSON = $({ tag: "BUTTON", type: "button", text: i18n.text("StructuredQuery.ShowRawJson"), id: "showRawJSON", value: JSON.stringify(src), onclick: this._showRawJSON });
@@ -3252,9 +3252,9 @@
 		_main_template: function() {
 			return { tag: "DIV", children: [
 				this.selector,
-				{ tag: "DIV", cls: "es-structuredQuery-body" },
-				{ tag: "DIV", cls: "es-searchSource", css: { display: "none" } },
-				{ tag: "DIV", cls: "es-structuredQuery-out" }
+				{ tag: "DIV", cls: "uiStructuredQuery-body" },
+				{ tag: "DIV", cls: "uiStructuredQuery-src", css: { display: "none" } },
+				{ tag: "DIV", cls: "uiStructuredQuery-out" }
 			]};
 		}
 	});
@@ -3266,7 +3266,7 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
 
 (function( $, app ) {
 

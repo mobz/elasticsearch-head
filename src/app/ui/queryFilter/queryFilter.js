@@ -1,4 +1,4 @@
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 	var ut = app.ns("ut");
@@ -38,7 +38,7 @@
 		},
 		_selectAlias_handler: function(jEv) {
 			var indices = (jEv.target.selectedIndex === 0) ? [] : this.metadata.getIndices($(jEv.target).val());
-			$(".queryFilter-index").each(function(i, el) {
+			$(".uiQueryFilter-index").each(function(i, el) {
 				var jEl = $(el);
 				if(indices.contains(jEl.text()) !== jEl.hasClass("selected")) {
 					jEl.click();
@@ -47,13 +47,13 @@
 			this.requestUpdate(jEv);
 		},
 		_selectIndex_handler: function(jEv) {
-			var jEl = $(jEv.target).closest(".queryFilter-index");
+			var jEl = $(jEv.target).closest(".uiQueryFilter-index");
 			jEl.toggleClass("selected");
 			var selected = jEl.hasClass("selected");
 			this.query.setIndex(jEl.text(), selected);
 			if(selected) {
 				var types = this.metadata.getTypes(this.query.indices);
-				this.el.find("DIV.queryFilter-type.selected").each(function(n, el) {
+				this.el.find("DIV.uiQueryFilter-type.selected").each(function(n, el) {
 					if(! types.contains($(el).text())) {
 						$(el).click();
 					}
@@ -62,20 +62,20 @@
 			this.requestUpdate(jEv);
 		},
 		_selectType_handler: function(jEv) {
-			var jEl = $(jEv.target).closest(".queryFilter-type");
+			var jEl = $(jEv.target).closest(".uiQueryFilter-type");
 			jEl.toggleClass("selected");
 			var type = jEl.text(), selected = jEl.hasClass("selected");
 			this.query.setType(type, selected);
 			if(selected) {
 				var indices = this.metadata.types[type].indices;
 				// es throws a 500 if searching an index for a type it does not contain - so we prevent that
-				this.el.find("DIV.queryFilter-index.selected").each(function(n, el) {
+				this.el.find("DIV.uiQueryFilter-index.selected").each(function(n, el) {
 					if(! indices.contains($(el).text())) {
 						$(el).click();
 					}
 				});
 				// es throws a 500 if you specify types from different indicies with _all
-				jEl.siblings(".queryFilter-type.selected").forEach(function(el) {
+				jEl.siblings(".uiQueryFilter-type.selected").forEach(function(el) {
 					if(this.metadata.types[$(el).text()].indices.intersection(indices).length === 0) {
 						$(el).click();
 					}
@@ -123,7 +123,7 @@
 					var part = fieldNameParts.length - 1;
 					var name = fieldNameParts[part];
 					while (part >= 1) {
-						if (fieldNameParts[part] != fieldNameParts[part - 1]) {
+						if (fieldNameParts[part] !== fieldNameParts[part - 1]) {
 							name = fieldNameParts[part - 1] + "." + name;
 						}
 						part--;
@@ -158,9 +158,9 @@
 				uqid = this.query.addClause( value, spec.field_name, "range", "must");
 			}
 			jEl.data("lastRange", range);
-			jEl.siblings(".queryFilter-rangeHintFrom")
+			jEl.siblings(".uiQueryFilter-rangeHintFrom")
 				.text(i18n.text("QueryFilter.DateRangeHint.from", range.start && new Date(range.start).toUTCString()));
-			jEl.siblings(".queryFilter-rangeHintTo")
+			jEl.siblings(".uiQueryFilter-rangeHintTo")
 				.text(i18n.text("QueryFilter.DateRangeHint.to", range.end && new Date(range.end).toUTCString()));
 			jEl.data("uqid", uqid);
 			this.requestUpdate(jEv);
@@ -202,7 +202,7 @@
 			this.requestUpdate(jEv);
 		},
 		_main_template: function() {
-			return { tag: "DIV", id: this.id(), cls: "queryFilter", children: [
+			return { tag: "DIV", id: this.id(), cls: "uiQueryFilter", children: [
 				this._aliasSelector_template(),
 				this._indexSelector_template(),
 				this._typesSelector_template(),
@@ -212,28 +212,28 @@
 		_aliasSelector_template: function() {
 			var aliases = acx.eachMap(this.metadata.aliases, function(alias) { return alias; } );
 			aliases.unshift( i18n.text("QueryFilter.AllIndices") );
-			return { tag: "DIV", cls: "section queryFilter-aliases", child:
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-aliases", child:
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
 		_indexSelector_template: function() {
-			return { tag: "DIV", cls: "section queryFilter-indices", children: [
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-indices", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Indices") },
 				{ tag: "DIV", onClick: this._selectIndex_handler, children: acx.eachMap(this.metadata.indices, function(name, data) {
-					return { tag: "DIV", cls: "booble queryFilter-index", text: name };
+					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-index", text: name };
 				})}
 			] };
 		},
 		_typesSelector_template: function() {
-			return { tag: "DIV", cls: "section queryFilter-types", children: [
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-types", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Types") },
 				{ tag: "DIV", onClick: this._selectType_handler, children: acx.eachMap(this.metadata.types, function(name, data) {
-					return { tag: "DIV", cls: "booble queryFilter-type", text: name };
+					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-type", text: name };
 				})}
 			] };
 		},
 		_filters_template: function() {
-			return { tag: "DIV", cls: "section queryFilter-filters", children: [
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-filters", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Fields") },
 				{ tag: "DIV", children: acx.eachMap(this.metadata.fields, function(name, data) {
 					return new app.ui.SidebarSection({
@@ -250,8 +250,8 @@
 		_dateFilter_template: function(spec) {
 			return { tag: "DIV", children: [
 				{ tag: "INPUT", data: { spec: spec }, onKeyup: this._dateFilterChange_handler },
-				{ tag: "PRE", cls: "queryFilter-rangeHintFrom", text: i18n.text("QueryFilter.DateRangeHint.from", "")},
-				{ tag: "PRE", cls: "queryFilter-rangeHintTo", text: i18n.text("QueryFilter.DateRangeHint.to", "") }
+				{ tag: "PRE", cls: "uiQueryFilter-rangeHintFrom", text: i18n.text("QueryFilter.DateRangeHint.from", "")},
+				{ tag: "PRE", cls: "uiQueryFilter-rangeHintTo", text: i18n.text("QueryFilter.DateRangeHint.to", "") }
 			]};
 		},
 		_numericFilter_template: function(spec) {
@@ -266,8 +266,8 @@
 		},
 		_multiFieldFilter_template: function(section, spec) {
 			return {
-				tag : "DIV", cls : "subMultiFields", children : acx.eachMap(spec.fields, function(name, data) {
-					if (name == spec.field_name) {
+				tag : "DIV", cls : "uiQueryFilter-subMultiFields", children : acx.eachMap(spec.fields, function(name, data) {
+					if (name === spec.field_name) {
 						section.config.title = spec.field_name + "." + name;
 						return this._openFilter_handler(section);
 					}
@@ -279,4 +279,4 @@
 		}	
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );

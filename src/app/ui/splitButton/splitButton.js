@@ -33,7 +33,7 @@
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
 				menu: new (app.ui.MenuPanel.extend({
-					_baseCls: "uiSplitMenuPanel uiMenuPanel",
+					_baseCls: "uiSplitButton-panel uiMenuPanel",
 					_getPosition: function( jEv ) {
 						var parent = $(jEv.target).closest("BUTTON");
 						return parent.vOffset()

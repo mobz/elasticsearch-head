@@ -1,4 +1,4 @@
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
@@ -14,7 +14,7 @@
 				base_uri: this.config.base_uri
 			});
 			this.el = $(this._main_template());
-			this.out = this.el.find("DIV.es-structuredQuery-out");
+			this.out = this.el.find("DIV.uiStructuredQuery-out");
 			this.attach( parent );
 		},
 		
@@ -24,16 +24,16 @@
 				cluster: this.config.cluster,
 				base_uri: this.config.base_uri,
 				index: index,
-				onStaringSearch: function() { this.el.find("DIV.es-structuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.es-searchSource").hide(); }.bind(this),
+				onStaringSearch: function() { this.el.find("DIV.uiStructuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.uiStructuredQuery-src").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
 				onJsonResults: this._jsonResults_handler,
 				onTableResults: this._tableResults_handler
 			});
-			this.el.find(".es-structuredQuery-body").append(this.filter);
+			this.el.find(".uiStructuredQuery-body").append(this.filter);
 		},
 		
 		_jsonResults_handler: function(results) {
-			this.el.find("DIV.es-structuredQuery-out").empty().append( new ui.JsonPretty({ obj: results }));
+			this.el.find("DIV.uiStructuredQuery-out").empty().append( new ui.JsonPretty({ obj: results }));
 		},
 		
 		_tableResults_handler: function(results, metadata) {
@@ -57,7 +57,7 @@
 		},
 		
 		_searchSource_handler: function(src) {
-			var searchSourceDiv = this.el.find("DIV.es-searchSource");
+			var searchSourceDiv = this.el.find("DIV.uiStructuredQuery-src");
 			searchSourceDiv.empty().append(new app.ui.JsonPretty({ obj: src }));
 			if(typeof JSON !== "undefined") {
 				var showRawJSON = $({ tag: "BUTTON", type: "button", text: i18n.text("StructuredQuery.ShowRawJson"), id: "showRawJSON", value: JSON.stringify(src), onclick: this._showRawJSON });
@@ -69,9 +69,9 @@
 		_main_template: function() {
 			return { tag: "DIV", children: [
 				this.selector,
-				{ tag: "DIV", cls: "es-structuredQuery-body" },
-				{ tag: "DIV", cls: "es-searchSource", css: { display: "none" } },
-				{ tag: "DIV", cls: "es-structuredQuery-out" }
+				{ tag: "DIV", cls: "uiStructuredQuery-body" },
+				{ tag: "DIV", cls: "uiStructuredQuery-src", css: { display: "none" } },
+				{ tag: "DIV", cls: "uiStructuredQuery-out" }
 			]};
 		}
 	});
@@ -83,4 +83,4 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );

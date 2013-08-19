@@ -88,12 +88,12 @@ module.exports = function(grunt) {
 					'src/app/ui/jsonPanel/jsonPanel.css',
 					'src/app/ui/panelForm/panelForm.css',
 					'src/app/ui/sidebarSection/sidebarSection.css',
-					'src/app/ui/resultTable/resultTable.css',
 					'src/app/ui/queryFilter/queryFilter.css',
 					'src/app/ui/browser/browser.css',
 					'src/app/ui/anyRequest/anyRequest.css',
 					'src/app/ui/clusterOverview/clusterOverview.css',
 					'src/app/ui/clusterConnect/clusterConnect.css',
+					'src/app/ui/structuredQuery/structuredQuery.css',
 					'src/app/ui/filterBrowser/filterBrowser.css',
 					'src/app/app.css'
 				],
