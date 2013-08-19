@@ -68,6 +68,7 @@ module.exports = function(grunt) {
 					'src/app/ui/structuredQuery/structuredQuery.js',
 					'src/app/ui/filterBrowser/filterBrowser.js',
 					'src/app/ui/indexSelector/indexSelector.js',
+					'src/app/ui/header/header.js',
 
 					'src/app/app.js'
 				],
@@ -95,6 +96,7 @@ module.exports = function(grunt) {
 					'src/app/ui/clusterConnect/clusterConnect.css',
 					'src/app/ui/structuredQuery/structuredQuery.css',
 					'src/app/ui/filterBrowser/filterBrowser.css',
+					'src/app/ui/header/header.css',
 					'src/app/app.css'
 				],
 				dest: 'dist/app.css'

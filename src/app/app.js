@@ -28,6 +28,7 @@
 			this.attach( parent );
 			this.instances = {};
 			this.quicks = {};
+			this.el.find(".es-header-menu-item:first").click();
 		},
 
 		quick: function(title, path) {
@@ -39,7 +40,7 @@
 		
 		show: function(type, config, jEv) {
 			if(! this.instances[type]) {
-				var page = this.instances[type] = new ( ui[type] || es.ui[type] )(config);
+				var page = this.instances[type] = new ui[type]( config );
 				this.el.find("#"+this.id("body")).append( page );
 			}
 			$(jEv.target).closest("DIV.es-header-menu-item").addClass("active").siblings().removeClass("active");
@@ -104,10 +105,7 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "es", children: [
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
-					{ tag: "DIV", cls: "es-header-top", children: [
-						new ui.ClusterConnect({ base_uri: this.base_uri, onStatus: this._status_handler, onReconnect: this._reconnect_handler }),
-						{ tag: "H1", text: i18n.text("General.ElasticSearch") }
-					]},
+					new ui.Header({ base_uri: this.base_uri }),
 					{ tag: "DIV", cls: "es-header-menu", children: [
 						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
 						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
@@ -145,15 +143,8 @@
 
 			$('.es-header-menu').append($el);
 			return $el;
-		},
-		
-		_status_handler: function(status) {
-			this.el.find(".es-header-menu-item:first").click();
-		},
-		_reconnect_handler: function() {
-			localStorage["base_uri"] = this.base_uri;
 		}
-
+		
 	});
 
 })( this.app );

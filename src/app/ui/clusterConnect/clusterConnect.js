@@ -18,7 +18,7 @@
 		_node_handler: function(data) {
 			if(data) {
 				this.nameEl.text(data.name);
-				this.fire("reconnect", this.base_uri);
+				localStorage["base_uri"] = this.config.base_uri;
 			}
 		},
 		
@@ -27,7 +27,6 @@
 				this.statEl
 					.text( i18n.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) )
 					.css( "background", data.status );
-				this.fire("status", data.status);
 			}
 		},
 		

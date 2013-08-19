@@ -656,6 +656,10 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 	top: 1px;
 }
 
+.uiHeader {
+	padding: 3px 10px;
+}
+
 .es-header {
 	background: #eee;
 	position: fixed;
@@ -667,10 +671,6 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 	margin: -2px 0 -4px 0;
 	float: left;
 	padding-right: 25px;
-}
-
-.es-header-top {
-	padding: 3px 10px;
 }
 
 .es-header-menu {
