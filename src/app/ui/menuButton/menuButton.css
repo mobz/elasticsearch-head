@@ -4,10 +4,6 @@
 
 .uiMenuButton.active .uiButton-content,
 .uiMenuButton:active .uiButton-content {
-	-webkit-border-bottom-right-radius: 0px;
-	-webkit-border-bottom-left-radius: 0px;
-	-moz-border-radius-bottomright: 0px;
-	-moz-border-radius-bottomleft: 0px;
 	border-bottom-right-radius: 0px;
 	border-bottom-left-radius: 0px;
 }
@@ -15,8 +11,6 @@
 .uiMenuButton .uiButton-content {
 	padding-right: 3px;
 	border-radius: 8px;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
 	height: auto;
 	min-width: 0;
 }

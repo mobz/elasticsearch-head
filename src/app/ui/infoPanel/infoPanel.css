@@ -2,23 +2,19 @@
 .uiInfoPanel {
 	background: rgba(0, 0, 0, 0.75);
 	color: white;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
+	border-radius: 8px;
 	padding: 1px;
 }
 .uiInfoPanel .uiPanel-titleBar {
 	background: rgba(74, 74, 74, 0.75);
 	background: -moz-linear-gradient(top, rgba(84, 84, 84, 0.75), rgba(54, 54, 54, 0.75), rgba(64, 64, 64, 0.75));
 	background: -webkit-linear-gradient(top, rgba(84, 84, 84, 0.75), rgba(54, 54, 54, 0.75), rgba(64, 64, 64, 0.75));
-	-moz-border-radius: 8px 8px 0px 0px;
-	-webkit-border-top-right-radius: 8px;
-	-webkit-border-top-left-radius: 8px;
+	border-radius: 8px 8px 0 0;
 	padding: 1px 0 2px 0;
 	border-bottom: 0;
 }
 .uiInfoPanel .uiPanel-close {
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
+	border-radius: 6px;
 	height: 13px;
 	width: 13px;
 	background: #ccc;
@@ -37,8 +33,6 @@
 .uiInfoPanel .uiPanel-body {
 	background: transparent;
 	padding: 20px;
-	-moz-border-radius: 0 0 8px 8px;
-	-webkit-border-bottom-right-radius: 8px;
-	-webkit-border-bottom-left-radius: 8px;
+	border-radius: 0 0 8px 8px;
 	border: 1px solid #222;
 }
