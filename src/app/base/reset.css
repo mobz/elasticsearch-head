@@ -25,6 +25,9 @@ TEXTAREA, CODE {
 	font-size: 13px;
 }
 
+BUTTON::-moz-focus-inner {
+	border: none;
+}
 
 .pull-left {
 	float: left;

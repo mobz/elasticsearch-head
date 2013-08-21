@@ -1,3 +1,19 @@
+.uiClusterOverview .uiMenuButton .uiButton-content {
+	padding-right: 3px;
+	border-radius: 8px;
+	height: 14px;
+}
+
+.uiClusterOverview .uiMenuButton.active .uiButton-content,
+.uiClusterOverview .uiMenuButton:active .uiButton-content {
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+.uiClusterOverview .uiMenuButton .uiButton-label {
+	padding: 0px 17px 0px 7px;
+}
+
 .uiClusterOverview-cluster {
 	border-collapse: collapse;
 }

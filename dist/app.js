@@ -1357,14 +1357,7 @@
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
 				menu: new (app.ui.MenuPanel.extend({
-					_baseCls: "uiSplitButton-panel uiMenuPanel",
-					_getPosition: function( jEv ) {
-						var parent = $(jEv.target).closest("BUTTON");
-						return parent.vOffset()
-							.add(parent.vSize())
-							.addX( -this.el.vOuterSize().x )
-							.asOffset();
-					}
+					_baseCls: "uiSplitButton-panel uiMenuPanel"
 				}))({
 					items: this.items
 				})
@@ -1600,9 +1593,11 @@
 			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: acx.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
 		},
 		_getPosition: function(jEv) {
+			var right = !! $(jEv.target).parents(".pull-right").length;
 			var parent = $(jEv.target).closest("BUTTON");
 			return parent.vOffset()
 				.addY(parent.vSize().y)
+				.addX( right ? parent.vSize().x - this.el.vOuterSize().x : 0 )
 				.asOffset();
 		}
 	});
@@ -3509,6 +3504,7 @@
 
 	ui.Header = ui.AbstractWidget.extend({
 		defaults: {
+			cluster: null,
 			base_uri: null
 		},
 		_baseCls: "uiHeader",
@@ -3516,18 +3512,54 @@
 			this._clusterConnect = new ui.ClusterConnect({
 				base_uri: this.config.base_uri
 			});
+			var quicks = [
+				{ text: i18n.text("Nav.Info"), path: "" },
+				{ text: i18n.text("Nav.Status"), path: "_status" },
+				{ text: i18n.text("Nav.NodeStats"), path: "_cluster/nodes/stats" },
+				{ text: i18n.text("Nav.ClusterNodes"), path: "_cluster/nodes" },
+				{ text: i18n.text("Nav.ClusterState"), path: "_cluster/state" },
+				{ text: i18n.text("Nav.ClusterHealth"), path: "_cluster/health" }
+			];
+			var cluster = this.config.cluster;
+			var quickPanels = {};
+			var menuItems = quicks.map( function( item ) {
+				return { text: item.text, onclick: function() {
+					cluster.get( item.path, function( data ) {
+						quickPanels[ item.path ] && quickPanels[ item.path ].remove();
+						quickPanels[ item.path ] = new ui.JsonPanel({
+							title: item.text,
+							json: data
+						});
+					} );
+				} };
+			}, this );
+			this._quickMenu = new ui.MenuButton({
+				label: i18n.text("NodeInfoMenu.Title"),
+				menu: new ui.MenuPanel({
+					items: menuItems
+				})
+			});
 			this.el = $( this._main_template() );
+		},
+		quick: function(title, path) {
+			this.quicks[path] && this.quicks[path].remove();
+			this.cluster.get(path, function(data) {
+				this.quicks[path] = new ui.JsonPanel({ title: title, json: data });
+			}.bind(this));
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: this._baseCls, children: [
 				this._clusterConnect,
-				{ tag: "H1", text: i18n.text("General.ElasticSearch") }
+				{ tag: "H1", text: i18n.text("General.ElasticSearch") },
+				{ tag: "SPAN", cls: "pull-right", children: [
+					this._quickMenu
+				] }
 			] }
 		); }
-
 	} );
 
 })( this.jQuery, this.app, this.i18n );
+
 (function( app ) {
 
 	var ui = app.ns("ui");
@@ -3557,15 +3589,7 @@
 			this.el = $(this._main_template());
 			this.attach( parent );
 			this.instances = {};
-			this.quicks = {};
 			this.el.find(".es-header-menu-item:first").click();
-		},
-
-		quick: function(title, path) {
-			this.quicks[path] && this.quicks[path].remove();
-			this.cluster.get(path, function(data) {
-				this.quicks[path] = new ui.JsonPanel({ title: title, json: data });
-			}.bind(this));
 		},
 		
 		show: function(type, config, jEv) {
@@ -3624,18 +3648,12 @@
 		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv); },
 		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterHealth_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterHealth"), "_cluster/health" ); },
-		_openClusterState_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterState"), "_cluster/state" ); },
-		_openClusterNodes_handler: function(jEv) { this.quick( i18n.text("Nav.ClusterNodes"), "_cluster/nodes" ); },
-		_openClusterNodesStats_handler: function(jEv) { this.quick( i18n.text("Nav.NodeStats"), "_cluster/nodes/stats" ); },
-		_openStatus_handler: function(jEv) { this.quick( i18n.text("Nav.Status"), "_status" ); },
-		_openInfo_handler: function(jEv) { this.quick( i18n.text("Nav.Info"), "" ); },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
 
 		_main_template: function() {
 			return { tag: "DIV", cls: "es", children: [
 				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
-					new ui.Header({ base_uri: this.base_uri }),
+					new ui.Header({ cluster: this.cluster, base_uri: this.base_uri }),
 					{ tag: "DIV", cls: "es-header-menu", children: [
 						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
 						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
@@ -3645,12 +3663,6 @@
 						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterHealth"), onclick: this._openClusterHealth_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterState"), onclick: this._openClusterState_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.ClusterNodes"), onclick: this._openClusterNodes_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.NodeStats"), onclick: this._openClusterNodesStats_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.Status"), onclick: this._openStatus_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-right", text: i18n.text("Nav.Info"), onclick: this._openInfo_handler }
 					]}
 				]},
 				{ tag: "DIV", id: this.id("body"), cls: "es-body" }

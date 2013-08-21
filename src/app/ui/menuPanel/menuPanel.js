@@ -28,9 +28,11 @@
 			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: acx.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
 		},
 		_getPosition: function(jEv) {
+			var right = !! $(jEv.target).parents(".pull-right").length;
 			var parent = $(jEv.target).closest("BUTTON");
 			return parent.vOffset()
 				.addY(parent.vSize().y)
+				.addX( right ? parent.vSize().x - this.el.vOuterSize().x : 0 )
 				.asOffset();
 		}
 	});
