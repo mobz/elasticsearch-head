@@ -53,7 +53,7 @@
 				if (!this.instances[type + type_index.toString()]) {
 					// Found an available type name, so put it together and add it to the UI
 					type_name = type + type_index.toString();
-					page = this.instances[type_name] = new es.ui[type](config);
+					page = this.instances[type_name] = new ui[type](config);
 					this.el.find("#"+this.id("body")).append( page );
 				}
 			}
