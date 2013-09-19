@@ -37,7 +37,7 @@
 		},
 		
 		_tableResults_handler: function(results, metadata) {
-			// hack up a QueryDataSourceInterface so that StructuredQuery keeps working without using an es.Query object
+			// hack up a QueryDataSourceInterface so that StructuredQuery keeps working without using a Query object
 			var qdi = new data.QueryDataSourceInterface({ metadata: metadata, query: new data.Query() });
 			var tab = new ui.Table( {
 				store: qdi,

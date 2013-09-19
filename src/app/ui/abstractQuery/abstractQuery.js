@@ -18,8 +18,7 @@
 						if (!obj) {
 							return;
 						}
-						$('.es-out').text(obj.error || 'Unknown error!')
-							.css('white-space', 'pre');
+						console.log( obj.error || "Unknown error");
 					}
 				}
 			}, params));

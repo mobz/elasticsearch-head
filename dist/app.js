@@ -3113,8 +3113,7 @@
 						if (!obj) {
 							return;
 						}
-						$('.es-out').text(obj.error || 'Unknown error!')
-							.css('white-space', 'pre');
+						console.log( obj.error || "Unknown error");
 					}
 				}
 			}, params));
@@ -3214,7 +3213,7 @@
 		},
 		
 		_tableResults_handler: function(results, metadata) {
-			// hack up a QueryDataSourceInterface so that StructuredQuery keeps working without using an es.Query object
+			// hack up a QueryDataSourceInterface so that StructuredQuery keeps working without using a Query object
 			var qdi = new data.QueryDataSourceInterface({ metadata: metadata, query: new data.Query() });
 			var tab = new ui.Table( {
 				store: qdi,
@@ -3330,32 +3329,32 @@
 			this.fire("staringSearch");
 			this.filtersEl.find(".uiFilterBrowser-row").each(function(i, row) {
 				row = $(row);
-				var bool = row.find(".es-bool").val();
-				var field = row.find(".es-field").val();
-				var op = row.find(".es-op").val();
+				var bool = row.find(".bool").val();
+				var field = row.find(".field").val();
+				var op = row.find(".op").val();
 				var value = {};
 				if(field === "match_all") {
 					op = "match_all";
 				} else if(op === "range") {
-					var lowqual = row.find(".es-lowqual").val(),
-						highqual = row.find(".es-highqual").val();
+					var lowqual = row.find(".lowqual").val(),
+						highqual = row.find(".highqual").val();
 					if(lowqual.length) {
-						value[row.find(".es-lowop").val()] = lowqual;
+						value[row.find(".lowop").val()] = lowqual;
 					}
 					if(highqual.length) {
-						value[row.find(".es-highop").val()] = highqual;
+						value[row.find(".highop").val()] = highqual;
 					}
 				} else if(op === "fuzzy") {
-					var qual = row.find(".es-qual").val(),
-						fuzzyqual = row.find(".es-fuzzyqual").val();
+					var qual = row.find(".qual").val(),
+						fuzzyqual = row.find(".fuzzyqual").val();
 					if(qual.length) {
 						value["value"] = qual;
 					}
 					if(fuzzyqual.length) {
-						value[row.find(".es-fuzzyop").val()] = fuzzyqual;
+						value[row.find(".fuzzyop").val()] = fuzzyqual;
 					}
 				} else {
-					value = row.find(".es-qual").val();
+					value = row.find(".qual").val();
 				}
 				search.addClause(value, field, op, bool);
 			});
@@ -3380,7 +3379,7 @@
 		_changeQueryField_handler: function(jEv) {
 			var select = $(jEv.target);
 			var spec = select.children(":selected").data("spec");
-			select.siblings().remove(".es-op,.es-qual,.es-range,.es-fuzzy");
+			select.siblings().remove(".op,.qual,.range,.fuzzy");
 			var ops = [];
 			if(spec.type === 'match_all') {
 			} else if(spec.type === '_all') {
@@ -3395,15 +3394,15 @@
 			} else if(spec.type === 'ip') {
 				ops = ["term", "range", "fuzzy", "query_string"];
 			}
-			select.after({ tag: "SELECT", cls: "es-op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
+			select.after({ tag: "SELECT", cls: "op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
 			select.next().change();
 		},
 		
 		_changeQueryOp_handler: function(jEv) {
 			var op = $(jEv.target), opv = op.val();
-			op.siblings().remove(".es-qual,.es-range,.es-fuzzy");
+			op.siblings().remove(".qual,.range,.fuzzy");
 			if(opv === 'term' || opv === 'wildcard' || opv === 'prefix' || opv === "query_string" || opv === 'text') {
-				op.after({ tag: "INPUT", cls: "es-qual", type: "text" });
+				op.after({ tag: "INPUT", cls: "qual", type: "text" });
 			} else if(opv === 'range') {
 				op.after(this._range_template());
 			} else if(opv === 'fuzzy') {
@@ -3424,8 +3423,8 @@
 		
 		_filter_template: function() {
 			return { tag: "DIV", cls: "uiFilterBrowser-row", children: [
-				{ tag: "SELECT", cls: "es-bool", children: ["must", "must_not", "should"].map(ut.option_template) },
-				{ tag: "SELECT", cls: "es-field", onchange: this._changeQueryField_handler, children: this.filters.map(function(f) {
+				{ tag: "SELECT", cls: "bool", children: ["must", "must_not", "should"].map(ut.option_template) },
+				{ tag: "SELECT", cls: "field", onchange: this._changeQueryField_handler, children: this.filters.map(function(f) {
 					return { tag: "OPTION", data: { spec: f }, value: f.path.join("."), text: f.path.join(".") };
 				})},
 				{ tag: "BUTTON", type: "button", text: "+", onclick: this._addFilterRow_handler },
@@ -3434,19 +3433,19 @@
 		},
 		
 		_range_template: function() {
-			return { tag: "SPAN", cls: "es-range", children: [
-				{ tag: "SELECT", cls: "es-lowop", children: ["from", "gt", "gte"].map(ut.option_template) },
-				{ tag: "INPUT", type: "text", cls: "es-lowqual" },
-				{ tag: "SELECT", cls: "es-highop", children: ["to", "lt", "lte"].map(ut.option_template) },
-				{ tag: "INPUT", type: "text", cls: "es-highqual" }
+			return { tag: "SPAN", cls: "range", children: [
+				{ tag: "SELECT", cls: "lowop", children: ["from", "gt", "gte"].map(ut.option_template) },
+				{ tag: "INPUT", type: "text", cls: "lowqual" },
+				{ tag: "SELECT", cls: "highop", children: ["to", "lt", "lte"].map(ut.option_template) },
+				{ tag: "INPUT", type: "text", cls: "highqual" }
 			]};
 		},
 
 		_fuzzy_template: function() {
-			return { tag: "SPAN", cls: "es-fuzzy", children: [
-				{ tag: "INPUT", cls: "es-qual", type: "text" },
-				{ tag: "SELECT", cls: "es-fuzzyop", children: ["max_expansions", "min_similarity"].map(ut.option_template) },
-				{ tag: "INPUT", cls: "es-fuzzyqual", type: "text" }
+			return { tag: "SPAN", cls: "fuzzy", children: [
+				{ tag: "INPUT", cls: "qual", type: "text" },
+				{ tag: "SELECT", cls: "fuzzyop", children: ["max_expansions", "min_similarity"].map(ut.option_template) },
+				{ tag: "INPUT", cls: "fuzzyqual", type: "text" }
 			]};
 		}
 	});
@@ -3560,11 +3559,9 @@
 
 })( this.jQuery, this.app, this.i18n );
 
-(function( app ) {
+(function( app, i18n ) {
 
 	var ui = app.ns("ui");
-	var es = window.es;
-	var acx = window.acx;
 
 	app.App = ui.AbstractWidget.extend({
 		defaults: {
@@ -3586,18 +3583,19 @@
 				});
 			}
 			this.cluster = new app.services.Cluster({ base_uri: this.base_uri });
+			this.$body = $( this._body_template() );
 			this.el = $(this._main_template());
 			this.attach( parent );
 			this.instances = {};
-			this.el.find(".es-header-menu-item:first").click();
+			this.el.find(".uiApp-headerMenuItem:first").click();
 		},
 		
 		show: function(type, config, jEv) {
 			if(! this.instances[type]) {
 				var page = this.instances[type] = new ui[type]( config );
-				this.el.find("#"+this.id("body")).append( page );
+				this.$body.append( page );
 			}
-			$(jEv.target).closest("DIV.es-header-menu-item").addClass("active").siblings().removeClass("active");
+			$(jEv.target).closest("DIV.uiApp-headerMenuItem").addClass("active").siblings().removeClass("active");
 			for(var p in this.instances) {
 				this.instances[p][ p === type ? "show" : "hide" ]();
 			}
@@ -3616,7 +3614,7 @@
 					// Found an available type name, so put it together and add it to the UI
 					type_name = type + type_index.toString();
 					page = this.instances[type_name] = new ui[type](config);
-					this.el.find("#"+this.id("body")).append( page );
+					this.$body.append( page );
 				}
 			}
 
@@ -3634,7 +3632,7 @@
 				},
 				close_click: function (jEv) {
 					$tab.remove();
-					$(page).remove();
+					page.remove();
 					delete that.instances[type_name];
 				}
 			});
@@ -3650,27 +3648,31 @@
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
 
+		_body_template: function() { return (
+			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }
+		); },
+
 		_main_template: function() {
-			return { tag: "DIV", cls: "es", children: [
-				{ tag: "DIV", id: this.id("header"), cls: "es-header", children: [
+			return { tag: "DIV", cls: "uiApp", children: [
+				{ tag: "DIV", id: this.id("header"), cls: "uiApp-header", children: [
 					new ui.Header({ cluster: this.cluster, base_uri: this.base_uri }),
-					{ tag: "DIV", cls: "es-header-menu", children: [
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
+					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
+						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
+						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
+						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}
 						] },
-						{ tag: "DIV", cls: "es-header-menu-item pull-left", text: i18n.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
+						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
 						] },
 					]}
 				]},
-				{ tag: "DIV", id: this.id("body"), cls: "es-body" }
+				this.$body
 			]};
 		},
 
 		newTab: function(text, events) {
-			var $el = $({tag: 'DIV', cls: 'es-header-menu-item pull-left', text: text, children: [
+			var $el = $({tag: 'DIV', cls: 'uiApp-headerMenuItem pull-left', text: text, children: [
 				{tag: 'A', text: ' [-]'}
 			]});
 
@@ -3683,10 +3685,10 @@
 				}
 			});
 
-			$('.es-header-menu').append($el);
+			$('.uiApp-headerMenu').append($el);
 			return $el;
 		}
 		
 	});
 
-})( this.app );
+})( this.app, this.i18n );
