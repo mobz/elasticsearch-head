@@ -4,7 +4,7 @@
 	var data = app.ns("data");
 	var ut = app.ns("ut");
 
-	ui.FilterBrowser = ui.AbstractQuery.extend({
+	ui.FilterBrowser = ui.AbstractWidget.extend({
 		defaults: {
 			cluster: null,  // (required) instanceof app.services.Cluster
 			index: "" // (required) name of the index to query
@@ -12,10 +12,11 @@
 
 		init: function(parent) {
 			this._super();
+			this._cluster = this.config.cluster;
 			this.el = $(this._main_template());
 			this.filtersEl = this.el.find(".uiFilterBrowser-filters");
 			this.attach( parent );
-			new data.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
+			new data.MetaDataFactory({ cluster: this._cluster, onReady: function(metadata, eventData) {
 				this.metadata = metadata;
 				this._createFilters_handler(eventData.originalData.metadata.indices);
 			}.bind(this) });
@@ -98,11 +99,7 @@
 			if(this.el.find(".uiFilterBrowser-showSrc").attr("checked")) {
 				this.fire("searchSource", search.search);
 			}
-			this._request_handler({
-				path: this.config.index + "/_search",
-				data: search.getData(),
-				success: this._results_handler
-			});
+			this._cluster.post( this.config.index + "/_search", search.getData(), this._results_handler );
 		},
 		
 		_results_handler: function(data) {

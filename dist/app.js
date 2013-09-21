@@ -1115,9 +1115,12 @@
 		defaults: {
 			base_uri: "http://localhost:9200/"
 		},
+		init: function() {
+			this.base_uri = this.config.base_uri;
+		},
 		request: function( params ) {
 			return $.ajax( $.extend({
-				url: this.config.base_uri + params.path,
+				url: this.base_uri + params.path,
 				dataType: "json",
 				error: function(xhr, type, message) {
 					if("console" in window) {
@@ -2540,7 +2543,7 @@
 	
 })( this.jQuery, this.app, this.i18n, this.Raphael );
 
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
@@ -2971,7 +2974,6 @@
 						})
 					],
 					right: [
-						this._compactToggle,
 						this._refreshButton
 					]
 				}),
@@ -2980,7 +2982,8 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
+
 (function( app, i18n, raphael ) {
 
 	var ui = app.ns("ui");
@@ -3087,55 +3090,28 @@
 	});
 
 })( this.app, this.i18n, this.Raphael );
-(function( $, app ) {
-
-	var ui = app.ns("ui");
-
-	ui.AbstractQuery = ui.AbstractWidget.extend({
-		defaults: {
-			base_uri: "http://localhost:9200/"   // the default ElasticSearch host
-		},
-
-		_request_handler: function(params) {
-			$.ajax($.extend({
-				url: this.config.base_uri + params.path,
-				type: "POST",
-				dataType: "json",
-				error: function(xhr, type, message) {
-					if(xhr.responseText != null) {
-						var obj = $.parseJSON(xhr.responseText);
-						if (!obj) {
-							return;
-						}
-						console.log( obj.error || "Unknown error");
-					}
-				}
-			}, params));
-		}
-	});
-	
-})( this.jQuery, this.app );
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
-	ui.ClusterConnect = ui.AbstractQuery.extend({
+	ui.ClusterConnect = ui.AbstractWidget.extend({
 		
 		init: function(parent) {
 			this._super();
+			this.cluster = this.config.cluster;
 			this.el = $(this._main_template());
 			this.attach( parent );
 			this.nameEl = this.el.find(".uiClusterConnect-name");
 			this.statEl = this.el.find(".uiClusterConnect-status");
 			this.statEl.text( i18n.text("Header.ClusterNotConnected") ).css("background", "grey");
-			this._request_handler({ type: "GET", path: "", success: this._node_handler });
-			this._request_handler({	type: "GET", path: "_cluster/health", success: this._health_handler });
+			this.cluster.get( "", this._node_handler );
+			this.cluster.get( "_cluster/health", this._health_handler );
 		},
 		
 		_node_handler: function(data) {
 			if(data) {
 				this.nameEl.text(data.name);
-				localStorage["base_uri"] = this.config.base_uri;
+				localStorage["base_uri"] = this.cluster.base_uri;
 			}
 		},
 		
@@ -3159,7 +3135,7 @@
 						jEv.preventDefault();
 						this._reconnect_handler();
 					}
-				}.bind(this), id: this.id("baseUri"), value: this.config.base_uri },
+				}.bind(this), id: this.id("baseUri"), value: this.cluster.base_uri },
 				{ tag: "BUTTON", type: "button", text: i18n.text("Header.Connect"), onclick: this._reconnect_handler },
 				{ tag: "SPAN", cls: "uiClusterConnect-name" },
 				{ tag: "SPAN", cls: "uiClusterConnect-status" }
@@ -3173,7 +3149,7 @@
 	var ui = app.ns("ui");
 	var data = app.ns("data");
 
-	var StructuredQuery = ui.AbstractQuery.extend({
+	var StructuredQuery = ui.AbstractWidget.extend({
 		defaults: {
 			cluster: null  // (required) instanceof app.services.Cluster
 		},
@@ -3181,7 +3157,7 @@
 			this._super();
 			this.selector = new ui.IndexSelector({
 				onIndexChanged: this._indexChanged_handler,
-				base_uri: this.config.base_uri
+				cluster: this.config.cluster
 			});
 			this.el = $(this._main_template());
 			this.out = this.el.find("DIV.uiStructuredQuery-out");
@@ -3192,7 +3168,6 @@
 			this.filter && this.filter.remove();
 			this.filter = new ui.FilterBrowser({
 				cluster: this.config.cluster,
-				base_uri: this.config.base_uri,
 				index: index,
 				onStaringSearch: function() { this.el.find("DIV.uiStructuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.uiStructuredQuery-src").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
@@ -3261,7 +3236,7 @@
 	var data = app.ns("data");
 	var ut = app.ns("ut");
 
-	ui.FilterBrowser = ui.AbstractQuery.extend({
+	ui.FilterBrowser = ui.AbstractWidget.extend({
 		defaults: {
 			cluster: null,  // (required) instanceof app.services.Cluster
 			index: "" // (required) name of the index to query
@@ -3269,10 +3244,11 @@
 
 		init: function(parent) {
 			this._super();
+			this._cluster = this.config.cluster;
 			this.el = $(this._main_template());
 			this.filtersEl = this.el.find(".uiFilterBrowser-filters");
 			this.attach( parent );
-			new data.MetaDataFactory({ cluster: this.config.cluster, onReady: function(metadata, eventData) {
+			new data.MetaDataFactory({ cluster: this._cluster, onReady: function(metadata, eventData) {
 				this.metadata = metadata;
 				this._createFilters_handler(eventData.originalData.metadata.indices);
 			}.bind(this) });
@@ -3355,11 +3331,7 @@
 			if(this.el.find(".uiFilterBrowser-showSrc").attr("checked")) {
 				this.fire("searchSource", search.search);
 			}
-			this._request_handler({
-				path: this.config.index + "/_search",
-				data: search.getData(),
-				success: this._results_handler
-			});
+			this._cluster.post( this.config.index + "/_search", search.getData(), this._results_handler );
 		},
 		
 		_results_handler: function(data) {
@@ -3449,19 +3421,16 @@
 
 	var ui = app.ns("ui");
 
-	ui.IndexSelector = app.ui.AbstractQuery.extend({
+	ui.IndexSelector = ui.AbstractWidget.extend({
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
 			this.attach( parent );
+			this.cluster = this.config.cluster;
 			this.update();
 		},
 		update: function() {
-			this._request_handler({
-				type: "GET",
-				path: "_status",
-				success: this._update_handler
-			});
+			this.cluster.get( "_status", this._update_handler );
 		},
 		
 		_update_handler: function(data) {
@@ -3490,20 +3459,18 @@
 
 })( this.jQuery, this.app, this.i18n );
 
-
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
 	ui.Header = ui.AbstractWidget.extend({
 		defaults: {
-			cluster: null,
-			base_uri: null
+			cluster: null
 		},
 		_baseCls: "uiHeader",
 		init: function() {
 			this._clusterConnect = new ui.ClusterConnect({
-				base_uri: this.config.base_uri
+				cluster: this.config.cluster
 			});
 			var quicks = [
 				{ text: i18n.text("Nav.Info"), path: "" },
@@ -3637,8 +3604,8 @@
 
 		_openAnyRequest_handler: function(jEv) { this.show("AnyRequest", { cluster: this.cluster }, jEv); },
 		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, i18n.text("Nav.AnyRequest")); return false; },
-		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv); },
-		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
+		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster }, jEv); },
+		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
 
@@ -3649,7 +3616,7 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiApp", children: [
 				{ tag: "DIV", id: this.id("header"), cls: "uiApp-header", children: [
-					new ui.Header({ cluster: this.cluster, base_uri: this.base_uri }),
+					new ui.Header({ cluster: this.cluster }),
 					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },

@@ -82,8 +82,8 @@
 
 		_openAnyRequest_handler: function(jEv) { this.show("AnyRequest", { cluster: this.cluster }, jEv); },
 		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, i18n.text("Nav.AnyRequest")); return false; },
-		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv); },
-		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster, base_uri: this.base_uri }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
+		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster }, jEv); },
+		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
 
@@ -94,7 +94,7 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiApp", children: [
 				{ tag: "DIV", id: this.id("header"), cls: "uiApp-header", children: [
-					new ui.Header({ cluster: this.cluster, base_uri: this.base_uri }),
+					new ui.Header({ cluster: this.cluster }),
 					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },

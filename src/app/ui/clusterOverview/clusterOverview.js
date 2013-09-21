@@ -1,4 +1,4 @@
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 
@@ -429,7 +429,6 @@
 						})
 					],
 					right: [
-						this._compactToggle,
 						this._refreshButton
 					]
 				}),
@@ -438,4 +437,4 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );

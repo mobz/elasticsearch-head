@@ -2,19 +2,16 @@
 
 	var ui = app.ns("ui");
 
-	ui.IndexSelector = app.ui.AbstractQuery.extend({
+	ui.IndexSelector = ui.AbstractWidget.extend({
 		init: function(parent) {
 			this._super();
 			this.el = $(this._main_template());
 			this.attach( parent );
+			this.cluster = this.config.cluster;
 			this.update();
 		},
 		update: function() {
-			this._request_handler({
-				type: "GET",
-				path: "_status",
-				success: this._update_handler
-			});
+			this.cluster.get( "_status", this._update_handler );
 		},
 		
 		_update_handler: function(data) {
@@ -42,4 +39,3 @@
 	});
 
 })( this.jQuery, this.app, this.i18n );
-

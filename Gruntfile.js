@@ -63,7 +63,6 @@ module.exports = function(grunt) {
 					'src/app/ui/anyRequest/anyRequest.js',
 					'src/app/ui/clusterOverview/clusterOverview.js',
 					'src/app/ui/dateHistogram/dateHistogram.js',
-					'src/app/ui/abstractQuery/abstractQuery.js',
 					'src/app/ui/clusterConnect/clusterConnect.js',
 					'src/app/ui/structuredQuery/structuredQuery.js',
 					'src/app/ui/filterBrowser/filterBrowser.js',

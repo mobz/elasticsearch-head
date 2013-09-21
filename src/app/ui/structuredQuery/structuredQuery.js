@@ -3,7 +3,7 @@
 	var ui = app.ns("ui");
 	var data = app.ns("data");
 
-	var StructuredQuery = ui.AbstractQuery.extend({
+	var StructuredQuery = ui.AbstractWidget.extend({
 		defaults: {
 			cluster: null  // (required) instanceof app.services.Cluster
 		},
@@ -11,7 +11,7 @@
 			this._super();
 			this.selector = new ui.IndexSelector({
 				onIndexChanged: this._indexChanged_handler,
-				base_uri: this.config.base_uri
+				cluster: this.config.cluster
 			});
 			this.el = $(this._main_template());
 			this.out = this.el.find("DIV.uiStructuredQuery-out");
@@ -22,7 +22,6 @@
 			this.filter && this.filter.remove();
 			this.filter = new ui.FilterBrowser({
 				cluster: this.config.cluster,
-				base_uri: this.config.base_uri,
 				index: index,
 				onStaringSearch: function() { this.el.find("DIV.uiStructuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.uiStructuredQuery-src").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
