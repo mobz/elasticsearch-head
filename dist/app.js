@@ -26,14 +26,8 @@
 	};
 
 	/**
-	 * extends the first argument with the properties of the second and subsequent arguments
-	 * @function
-	 */
-	acx.extend = $.extend;
-
-	/**
 	 * augments the first argument with the properties of the second and subsequent arguments
-	 * like {@link acx.extend} except that existing properties are not overwritten
+	 * like {@link $.extend} except that existing properties are not overwritten
 	 */
 	acx.augment = function() {
 		var args = Array.prototype.slice.call(arguments),
@@ -436,7 +430,7 @@
 		},
 		
 		pickup : function(jEv, opts) {
-			acx.extend(this.config, opts);
+			$.extend(this.config, opts);
 			this.fire('dragStart', jEv);
 			this.dragObj = this.dragObj || this.config.dragObj;
 			this.dragObjOffset = this.config.dragObjOffset || acx.vector(this.dragObj.offset()).sub(jEv.pageX, jEv.pageY);
@@ -659,7 +653,7 @@
 			function createField( mapping, index, type, path, name ) {
 				var dpath = [ index, type ].concat( path ).join( "." );
 				var field_name = mapping.index_name || name;
-				var field = paths[ dpath ] = fields[ field_name ] || acx.extend({
+				var field = paths[ dpath ] = fields[ field_name ] || $.extend({
 					field_name : field_name,
 					core_type : coretype_map[ mapping.type ],
 					dpaths : []
@@ -781,10 +775,10 @@
 			return q;
 		},
 		getState: function() {
-			return acx.extend(true, {}, { search: this.search, indices: this.indices, types: this.types });
+			return $.extend(true, {}, { search: this.search, indices: this.indices, types: this.types });
 		},
 		restoreState: function(state) {
-			state = acx.extend(true, {}, state || this.history[this.history.length - 1]);
+			state = $.extend(true, {}, state || this.history[this.history.length - 1]);
 			this.indices = state.indices;
 			this.types = state.types;
 			this.search = state.search;
@@ -1122,7 +1116,7 @@
 			base_uri: "http://localhost:9200/"
 		},
 		request: function( params ) {
-			return $.ajax( acx.extend({
+			return $.ajax( $.extend({
 				url: this.config.base_uri + params.path,
 				dataType: "json",
 				error: function(xhr, type, message) {
@@ -1590,7 +1584,7 @@
 		},
 		_menuItem_template: function(item) {
 			var dx = item.disabled ? { onclick: function() {} } : {};
-			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: acx.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
+			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: $.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
 		},
 		_getPosition: function(jEv) {
 			var right = !! $(jEv.target).parents(".pull-right").length;
@@ -2515,7 +2509,7 @@
 								{ value: 1000 * 60, text: "minute" },
 								{ value: 1000 * 60 * 10, text: "10 minutes" },
 								{ value: 1000 * 60 * 60, text: "hour" }
-							].map(function(op) { return acx.extend({ tag: "OPTION"}, op); }) }
+							].map(function(op) { return $.extend({ tag: "OPTION"}, op); }) }
 						] }
 					}),
 					new app.ui.SidebarSection({
@@ -3103,7 +3097,7 @@
 		},
 
 		_request_handler: function(params) {
-			$.ajax(acx.extend({
+			$.ajax($.extend({
 				url: this.config.base_uri + params.path,
 				type: "POST",
 				dataType: "json",

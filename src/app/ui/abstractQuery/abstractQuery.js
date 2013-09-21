@@ -8,7 +8,7 @@
 		},
 
 		_request_handler: function(params) {
-			$.ajax(acx.extend({
+			$.ajax($.extend({
 				url: this.config.base_uri + params.path,
 				type: "POST",
 				dataType: "json",

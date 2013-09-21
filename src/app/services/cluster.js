@@ -8,7 +8,7 @@
 			base_uri: "http://localhost:9200/"
 		},
 		request: function( params ) {
-			return $.ajax( acx.extend({
+			return $.ajax( $.extend({
 				url: this.config.base_uri + params.path,
 				dataType: "json",
 				error: function(xhr, type, message) {

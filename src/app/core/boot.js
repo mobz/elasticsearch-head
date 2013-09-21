@@ -26,14 +26,8 @@
 	};
 
 	/**
-	 * extends the first argument with the properties of the second and subsequent arguments
-	 * @function
-	 */
-	acx.extend = $.extend;
-
-	/**
 	 * augments the first argument with the properties of the second and subsequent arguments
-	 * like {@link acx.extend} except that existing properties are not overwritten
+	 * like {@link $.extend} except that existing properties are not overwritten
 	 */
 	acx.augment = function() {
 		var args = Array.prototype.slice.call(arguments),

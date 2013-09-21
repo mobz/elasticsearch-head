@@ -36,10 +36,10 @@
 			return q;
 		},
 		getState: function() {
-			return acx.extend(true, {}, { search: this.search, indices: this.indices, types: this.types });
+			return $.extend(true, {}, { search: this.search, indices: this.indices, types: this.types });
 		},
 		restoreState: function(state) {
-			state = acx.extend(true, {}, state || this.history[this.history.length - 1]);
+			state = $.extend(true, {}, state || this.history[this.history.length - 1]);
 			this.indices = state.indices;
 			this.types = state.types;
 			this.search = state.search;

@@ -94,7 +94,7 @@
 		},
 		
 		pickup : function(jEv, opts) {
-			acx.extend(this.config, opts);
+			$.extend(this.config, opts);
 			this.fire('dragStart', jEv);
 			this.dragObj = this.dragObj || this.config.dragObj;
 			this.dragObjOffset = this.config.dragObjOffset || acx.vector(this.dragObj.offset()).sub(jEv.pageX, jEv.pageY);

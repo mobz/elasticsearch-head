@@ -25,7 +25,7 @@
 		},
 		_menuItem_template: function(item) {
 			var dx = item.disabled ? { onclick: function() {} } : {};
-			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: acx.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
+			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: $.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
 		},
 		_getPosition: function(jEv) {
 			var right = !! $(jEv.target).parents(".pull-right").length;

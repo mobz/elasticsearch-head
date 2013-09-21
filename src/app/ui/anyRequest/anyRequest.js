@@ -204,7 +204,7 @@
 								{ value: 1000 * 60, text: "minute" },
 								{ value: 1000 * 60 * 10, text: "10 minutes" },
 								{ value: 1000 * 60 * 60, text: "hour" }
-							].map(function(op) { return acx.extend({ tag: "OPTION"}, op); }) }
+							].map(function(op) { return $.extend({ tag: "OPTION"}, op); }) }
 						] }
 					}),
 					new app.ui.SidebarSection({
