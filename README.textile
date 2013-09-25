@@ -8,6 +8,16 @@ h2. Installing and Running
 
 There are two ways of running and installing elasticsearch-head
 
+h4. Running via Docker
+If you use [docker](http://docker.io) then this is the easiest way of all to run this plugin. Just run
+
+```
+sudo docker run jamescarr/elasticsearch-head
+
+```
+
+Or if you don't trust jamescarr, you can also build the Dockerfile yourself and run the resulting image. 
+
 h4. Running as a plugin of ElasticSearch (this is the preferred method)
 
 If you've installed the .deb package, then the plugin exectuable will be available at /usr/share/elasticsearch/bin/plugin.
