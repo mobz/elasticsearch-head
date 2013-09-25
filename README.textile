@@ -11,12 +11,17 @@ There are two ways of running and installing elasticsearch-head
 h4. Running via Docker
 If you use [docker](http://docker.io) then this is the easiest way of all to run this plugin. Just run
 
-```
-sudo docker run jamescarr/elasticsearch-head
 
-```
+* @sudo docker run -p 9200:9200 jamescarr/elasticsearch-head@
+* @open http://localhost:9200/_plugin/head/@
+
 
 Or if you don't trust jamescarr, you can also build the Dockerfile yourself and run the resulting image. 
+
+
+* @sudo docker build .@
+* @sudo docker run -p 9200:9200 <IMAGE ID FROM PREVIOUS COMMAND>@
+* @open http://localhost:9200/_plugin/head/@
 
 h4. Running as a plugin of ElasticSearch (this is the preferred method)
 
