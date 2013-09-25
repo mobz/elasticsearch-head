@@ -9,7 +9,8 @@ h2. Installing and Running
 There are two ways of running and installing elasticsearch-head
 
 h4. Running via Docker
-If you use [docker](http://docker.io) then this is the easiest way of all to run this plugin. Just run
+
+If you use "docker":http://docker.io then this is the easiest way of all to run this plugin. Just run
 
 
 * @sudo docker run -p 9200:9200 jamescarr/elasticsearch-head@
