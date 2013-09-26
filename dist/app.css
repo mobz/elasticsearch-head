@@ -541,6 +541,7 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 .uiClusterOverview-cluster TD {
 	vertical-align: top;
 	padding: 2px 20px;
+	border: 1px dashed grey;
 }
 
 .uiClusterOverview TH {
