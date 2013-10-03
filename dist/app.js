@@ -3257,13 +3257,20 @@
 		_createFilters_handler: function(data) {
 			var filters = [];
 			function scan_properties(path, obj) {
-				if(obj.properties) {
-					for(var prop in obj.properties) {
-						scan_properties(path.concat(prop), obj.properties[prop]);
-					}
-				} else {
-					filters.push( { path: path, type: obj.type, meta: obj } );
-				}
+			    if (obj.properties) {
+			        for (var prop in obj.properties) {
+			            scan_properties(path.concat(prop), obj.properties[prop]);
+			        }
+			    } else {
+			        // handle multi_field 
+			        if (obj.fields) {
+			            for (var subField in obj.fields) {
+			                filters.push({ path: (path[path.length - 1] != subField) ? path.concat(subField) : path, type: obj.fields[subField].type, meta: obj.fields[subField] });
+			            }
+			        } else {
+			            filters.push({ path: path, type: obj.type, meta: obj });
+			        }
+			    }
 			}
 			for(var type in data[this.config.index].mappings) {
 				scan_properties([type], data[this.config.index].mappings[type]);
