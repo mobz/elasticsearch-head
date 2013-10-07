@@ -546,6 +546,10 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 .uiClusterOverview TH {
 	font-weight: normal;
 	text-align: left;
+	white-space: nowrap;
+}
+.uiClusterOverview span {
+	display: block;
 }
 
 .uiClusterOverview TH.close,
@@ -560,7 +564,6 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 
 .uiClusterOverview-title {
 	font-weight: bold;
-	font-size: 140%;
 }
 .uiClusterOverview-routing {
 	position: relative;
@@ -569,18 +572,19 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 .uiClusterOverview-replica {
 	cursor: pointer;
 	float: left;
-	height: 40px;
-	width: 31px;
-	margin: 4px;
-	border: 2px solid #444;
-	font-size: 32px;
+	height: 16px;
+	width: 16px;
+	margin: 1px;
+	border: 1px solid #888;
+	font-size: 10px;
 	text-align: center;
-	letter-spacing: -5px;
-	text-indent: -7px;
+	border-radius: 2px;
 }
 .uiClusterOverview-replica.primary {
-	border-width: 4px;
-	margin: 2px;
+	border-width: 2px;
+	border-radius: 4px;
+	margin: 0px;
+	border-color: black;
 }
 
 .uiClusterOverview-nullReplica {
