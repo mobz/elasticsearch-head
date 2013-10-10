@@ -6,19 +6,16 @@ h3. "http://mobz.github.com/elasticsearch-head":http://mobz.github.com/elasticse
 
 h2. Installing and Running
 
-There are two ways of running and installing elasticsearch-head
+There are two main ways of running and installing elasticsearch-head
 
-h4. Running as a plugin of ElasticSearch (this is the preferred method)
-
-If you've installed the .deb package, then the plugin exectuable will be available at /usr/share/elasticsearch/bin/plugin.
+h4. Running as a plugin of ElasticSearch
 
 * @sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head@
 * @open http://localhost:9200/_plugin/head/@
 
 This will automatically download the latest version of elasticsearch-head from github and run it as a plugin within the elasticsearch cluster. In this mode;
-* elasticsearch provides a simple webserver to run head
 * elasticsearch-head automatically connects to the node that is running it
-* is available at "http://localhost:9200/_plugin/head/":http://localhost:9200/_plugin/head/ (or whatever the address of your cluster is)
+* If you've installed the .deb package, then the plugin exectuable will be available at /usr/share/elasticsearch/bin/plugin.
 * Will not work with elasticsearch prior to version 0.17
 
 h4. Running with built in server
@@ -27,31 +24,23 @@ h4. Running with built in server
 * @cd elasticsearch-head@
 * @npm install@
 * @grunt server@
-* @open "http://localhost:9100/":http://localhost:9100/@
+* @open@ "http://localhost:9100/":http://localhost:9100/
 
 This will start a local webserver running on port 9100 serving elasticsearch-head
 * Best option if you are likely to connect to serveral different clusters
 
-h4. Running from the filesystem
-
-* @git clone git://github.com/mobz/elasticsearch-head.git@
-* @cd elasticsearch-head@
-* @open index.html@
-
-This will manually download the latest version of elasticsearch-head from github and run it standalone. In this mode;
-* elasticsearch-head is running from the file system and some features will not work
-* may have trouble connecting to the node if the node is protected by some security measures
-
 h4. Alternatives
+
+h5. Running from the filesystem
 
 elastisearch-head is a standalone webapp written in good-ol' html5. This means, you can put it up on any webserver, run it directly from the filesystem, use it on an ipad, or put it on a floppy disk and carry it with you.
 
-h5. URL Parameters
+h4. URL Parameters
 
 Parameters may be appended to the url set some initial state eg. @head/index.html?base_uri=http://node-01.example.com:9200@
 
 * @base_uri@ force elasticsearch-head to connect to a particular node.
-* @auth_user@ adds basic auth credentials to http requests ( requires "elasticsearch-http-basic":https://github.com/karussell/elasticsearch-http-basic plugin)
+* @auth_user@ adds basic auth credentials to http requests ( requires "elasticsearch-http-basic":https://github.com/karussell/elasticsearch-http-basic plugin or a reverse proxy )
 * @auth_password@ basic auth password as above (note: without "additional security layers":http://security.stackexchange.com/questions/988/is-basic-auth-secure-if-done-over-https, passwords are sent over the network *in the clear* )
 
 h4. Contributing
@@ -70,6 +59,7 @@ Then
 # @npm install@ # downloads node dev dependencies
 # @grunt default watch@ # builds the distribution files, then watches the src directory for changes
 
-Changes to both dist and src directories changes should be committed, to allow people to run head without running dev tools
+Changes to both dist and src directories *must* be committed, to allow people to run head without running dev tools
+and folllow existing dev patterns, such as indenting with tabs
 
 !http://mobz.github.com/elasticsearch-head/screenshots/clusterOverview.png(ClusterOverview Screenshot)!
