@@ -27,7 +27,7 @@ h4. Running with built in server
 * @cd elasticsearch-head@
 * @npm install@
 * @grunt server@
-* @open "http://localhost:9100/":http://localhost:9100/
+* @open "http://localhost:9100/":http://localhost:9100/@
 
 This will start a local webserver running on port 9100 serving elasticsearch-head
 * Best option if you are likely to connect to serveral different clusters
