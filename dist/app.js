@@ -394,7 +394,7 @@
 
 		drag : function(jEv) {
 			jEv.preventDefault();
-			var mloc = acx.vector(jEv.pageX, jEv.pageY);
+			var mloc = acx.vector( this.lockX || jEv.pageX, this.lockY || jEv.pageY );
 			this.dragObj.css(mloc.add(this.dragObjOffset).asOffset());
 			if(this.targets.length === 0) {
 				return;
@@ -434,6 +434,8 @@
 			this.fire('dragStart', jEv);
 			this.dragObj = this.dragObj || this.config.dragObj;
 			this.dragObjOffset = this.config.dragObjOffset || acx.vector(this.dragObj.offset()).sub(jEv.pageX, jEv.pageY);
+			this.lockX = this.config.lockX ? jEv.pageX : 0;
+			this.lockY = this.config.lockY ? jEv.pageY : 0;
 			this.dragObj.addClass(this.config.draggingClass);
 			if(!this.dragObj.get(0).parentNode || this.dragObj.get(0).parentNode.nodeType === 11) { // 11 = document fragment
 				$(document.body).append(this.dragObj);
