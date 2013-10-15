@@ -1,0 +1,92 @@
+.uiNodesView {
+	border-collapse: collapse;
+}
+.uiNodesView TH,
+.uiNodesView TD {
+	vertical-align: top;
+	padding: 2px 20px;
+}
+
+.uiNodesView TH {
+	font-weight: normal;
+	text-align: left;
+}
+
+.uiNodesView TH.close,
+.uiNodesView TD.close {
+	color: #888;
+	background: #f2f2f2;
+}
+
+.uiNodesView .uiMenuButton .uiButton-content {
+	padding-right: 3px;
+	border-radius: 8px;
+	height: 14px;
+}
+
+.uiNodesView .uiMenuButton.active .uiButton-content,
+.uiNodesView .uiMenuButton:active .uiButton-content {
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+.uiNodesView .uiMenuButton .uiButton-label {
+	padding: 0px 17px 0px 7px;
+}
+
+.uiNodesView-title {
+	font-weight: bold;
+	font-size: 140%;
+}
+
+.uiNodesView-hasAlias {
+	text-align: center;
+}
+.uiNodesView-hasAlias.max {
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+.uiNodesView-hasAlias.min {
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+.uiNodesView-hasAlias-remove {
+	float: right;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.uiNodesView-node.master {
+	background: #fff8dd;
+}
+
+.uiNodesView-routing {
+	position: relative;
+}
+
+.uiNodesView-nullReplica,
+.uiNodesView-replica {
+	cursor: pointer;
+	float: left;
+	height: 40px;
+	width: 31px;
+	margin: 4px;
+	border: 2px solid #444;
+	font-size: 32px;
+	text-align: center;
+	letter-spacing: -5px;
+	text-indent: -7px;
+}
+.uiNodesView-replica.primary {
+	border-width: 4px;
+	margin: 2px;
+}
+
+.uiNodesView-nullReplica {
+	border-color: transparent;
+}
+
+.uiNodesView-replica.state-UNASSIGNED { background: #eeeeee; color: #999; border-color: #666; float: none; display: inline-block; }
+.uiNodesView-replica.state-INITIALIZING { background: #dddc88; }
+.uiNodesView-replica.state-STARTED { background: #99dd88; }
+.uiNodesView-replica.state-RELOCATING { background: #dc88dd; }
