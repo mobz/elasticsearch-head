@@ -11,24 +11,35 @@
 		<script src="../dist/app.js"></script>
 		<script>
 			$( function() {
+				var widget;
+				var container = document.getElementById("demo");
+				function build() {
+					widget = window.builder();
+					widget.attach( demo );
+				}
+				function remove() {
+					widget.remove();
+					widget = null;
+				}
 				var args = location.search.substring(1).split("&").reduce(function(r, p) {
 					r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
 				}, {});
 				var script0 = document.getElementsByTagName('script')[0];
 				var s = document.createElement("script");
 				s.src = '../src/' + args['demo'];
-				s.onload = function() {
-					$("body").append(
-						{ tag: "DIV", children: [
-							window.builder()
-						] }
-					);
-				}
 				script0.parentNode.insertBefore(s, script0);
 				document.title = args['demo'].match(/([^\/]+)(\.js)$/)[1]
+				document.getElementsByName("build")[0].addEventListener("click", build );
+				document.getElementsByName("remove")[0].addEventListener("click", remove );
 			} );
 		</script>
 		<link rel="icon" href="../dist/app/favicon.png" type="image/png">
 	</head>
-	<body></body>
+	<body>
+		<div class="header">
+			<button type="button" name="build">Build</button>
+			<button type="button" name="remove">Remove</button>
+		</div>
+		<div id="demo"></div>
+	</body>
 </html>
