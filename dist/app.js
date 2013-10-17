@@ -2616,6 +2616,19 @@
 				}.bind(this));
 			}
 		},
+		_deleteAliasAction_handler: function( index, alias ) {
+			if( confirm( i18n.text("Command.DeleteAliasMessage" ) ) ) {
+				var command = {
+					"actions" : [
+						{ "remove" : { "index" : index.name, "alias" : alias.name } }
+					]
+				};
+				this.config.cluster.post('_aliases', JSON.stringify(command), function(d) {
+					alert(JSON.stringify(d));
+					this.fire("redraw");
+				}.bind(this) );
+			}
+		},
 
 		_replica_template: function(replica) {
 			var r = replica.replica;
@@ -2690,17 +2703,7 @@
 							{	tag: 'SPAN',
 								text: i18n.text("General.CloseGlyph"),
 								cls: 'uiNodesView-hasAlias-remove',
-								onclick: function() {
-									var command = {
-										"actions" : [
-											{ "remove" : { "index" : index.name, "alias" : alias.name } }
-										]
-									};
-									this.config.cluster.post('_aliases', JSON.stringify(command), function(d) {
-										alert(JSON.stringify(d));
-										this.fire("redraw");
-									}.bind(this) );
-								}.bind(this)
+								onclick: this._deleteAliasAction_handler.bind( this, index, alias )
 							}
 						]: null
 					};

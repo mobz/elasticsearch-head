@@ -9,6 +9,7 @@ $( function() {
 
 	window.builder = function() {
 		return new ui.NodesView({
+			interactive: true,
 			data: data
 		});
 	};

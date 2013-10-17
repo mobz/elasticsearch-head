@@ -31,6 +31,7 @@ i18n.setKeys({
 	"Browser.ResultSourcePanelTitle": "Result Source",
 	"Command.DELETE": "DELETE",
 	"Command.SHUTDOWN": "SHUTDOWN",
+	"Command.DeleteAliasMessage": "Delete Alias?",
 	"ClusterOverView.IndexName": "Index Name",
 	"ClusterOverview.NumShards": "Number of Shards",
 	"ClusterOverview.NumReplicas": "Number of Replicas",
