@@ -35,6 +35,7 @@
 			this.el.remove();
 			this.fire("removed", this );
 			this.removeAllObservers();
+			this.el = null;
 			return this;
 		}
 	});
