@@ -28,9 +28,17 @@
 				var s = document.createElement("script");
 				s.src = '../src/' + args['demo'];
 				script0.parentNode.insertBefore(s, script0);
-				document.title = args['demo'].match(/([^\/]+)(\.js)$/)[1]
+				document.title = args['demo'].match(/([^\/]+)(\.js)$/)[1];
 				document.getElementsByName("build")[0].addEventListener("click", build );
 				document.getElementsByName("remove")[0].addEventListener("click", remove );
+				document.getElementsByName("repeat")[0].addEventListener("click", function() {
+					console.time("build x 1000 in");
+					for( var i = 0; i < 1000; i++ ) {
+						build();
+						remove();
+					}
+					console.timeEnd("build x 1000 in");
+				});
 			} );
 		</script>
 		<link rel="icon" href="../dist/app/favicon.png" type="image/png">
@@ -39,6 +47,7 @@
 		<div class="header">
 			<button type="button" name="build">Build</button>
 			<button type="button" name="remove">Remove</button>
+			<button type="button" name="repeat">Build and Remove x 1000</button>
 		</div>
 		<div id="demo"></div>
 	</body>
