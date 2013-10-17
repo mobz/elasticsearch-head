@@ -2799,9 +2799,8 @@
 					this._redrawValue = event.value;
 					if( event.value < 0 ) {
 						window.clearTimeout( this._resetTimer );
-					} else {
-						this.redraw( "reset" );
 					}
+					this.redraw( "reset" );
 				}.bind( this ),
 				onclick: function( btn, event ) {
 					this.redraw("reset");
@@ -2950,6 +2949,7 @@
 				onRedraw: function() {
 					this.redraw("reset");
 				}.bind(this),
+				interactive: ( this._redrawValue === -1 ),
 				cluster: this.cluster,
 				data: {
 					cluster: cluster,
