@@ -4,11 +4,13 @@
 
 	ui.NodesView = ui.AbstractWidget.extend({
 		default: {
+			interactive: true,
 			cluster: null,
 			data: null
 		},
 		init: function() {
 			this._super();
+			this.interactive = this.config.interactive;
 			this.cluster = this.config.cluster;
 			this.el = $( this._main_template( this.config.data.cluster, this.config.data.indices ) );
 		},
@@ -92,6 +94,27 @@
 			}
 			return cell;
 		},
+		_nodeControls_template: function( node ) { return (
+			{ tag: "DIV", cls: "uiNodesView-controls", children: [
+				new ui.MenuButton({
+					label: i18n.text("NodeInfoMenu.Title"),
+					menu: new ui.MenuPanel({
+						items: [
+							{ text: i18n.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new ui.JsonPanel({ json: node.cluster, title: node.name });} },
+							{ text: i18n.text("NodeInfoMenu.NodeStats"), onclick: function() { new ui.JsonPanel({ json: node.stats, title: node.name });} }
+						]
+					})
+				}),
+				new ui.MenuButton({
+					label: i18n.text("NodeActionsMenu.Title"),
+					menu: new ui.MenuPanel({
+						items: [
+							{ text: i18n.text("NodeActionsMenu.Shutdown"), onclick: function() { this._shutdownNode_handler(node); }.bind(this) }
+						]
+					})
+				})
+			] }
+		); },
 		_node_template: function(node) {
 			return { tag: "TR", cls: "uiNodesView-node" + (node.master_node ? " master": ""), children: [
 				{ tag: "TH", children: node.name === "Unassigned" ? [
@@ -103,25 +126,7 @@
 						{ tag: "SPAN", text: node.name }
 					]},
 					{ tag: "DIV", text: node.cluster.http_address },
-					{ tag: "DIV", cls: "uiNodesView-controls", children: [
-						new ui.MenuButton({
-							label: i18n.text("NodeInfoMenu.Title"),
-							menu: new ui.MenuPanel({
-								items: [
-									{ text: i18n.text("NodeInfoMenu.ClusterNodeInfo"), onclick: function() { new ui.JsonPanel({ json: node.cluster, title: node.name });} },
-									{ text: i18n.text("NodeInfoMenu.NodeStats"), onclick: function() { new ui.JsonPanel({ json: node.stats, title: node.name });} }
-								]
-							})
-						}),
-						new ui.MenuButton({
-							label: i18n.text("NodeActionsMenu.Title"),
-							menu: new ui.MenuPanel({
-								items: [
-									{ text: i18n.text("NodeActionsMenu.Shutdown"), onclick: function() { this._shutdownNode_handler(node); }.bind(this) }
-								]
-							})
-						})
-					] }
+					this.interactive ? this._nodeControls_template( node ) : null
 				] }
 			].concat(node.routings.map(this._routing_template, this))};
 		},
@@ -133,7 +138,7 @@
 						css: { background: "#" + "9ce9c7fc9".substr((row+6)%7,3) },
 						cls: "uiNodesView-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
 						text: alias.name,
-						children: [
+						children: this.interactive ? [
 							{	tag: 'SPAN',
 								text: i18n.text("General.CloseGlyph"),
 								cls: 'uiNodesView-hasAlias-remove',
@@ -149,7 +154,7 @@
 									}.bind(this) );
 								}.bind(this)
 							}
-						]
+						]: null
 					};
 				}
 				else {
@@ -158,6 +163,33 @@
 			},
 			this)) };
 		},
+		_indexHeaderControls_template: function( index ) { return (
+			{ tag: "DIV", cls: "uiNodesView-controls", children: [
+				new ui.MenuButton({
+					label: i18n.text("IndexInfoMenu.Title"),
+					menu: new ui.MenuPanel({
+						items: [
+							{ text: i18n.text("IndexInfoMenu.Status"), onclick: function() { new ui.JsonPanel({ json: index.status, title: index.name }); } },
+							{ text: i18n.text("IndexInfoMenu.Metadata"), onclick: function() { new ui.JsonPanel({ json: index.metadata, title: index.name }); } }
+						]
+					})
+				}),
+				new ui.MenuButton({
+					label: i18n.text("IndexActionsMenu.Title"),
+					menu: new ui.MenuPanel({
+						items: [
+							{ text: i18n.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
+							{ text: i18n.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
+							{ text: i18n.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
+							{ text: i18n.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
+							{ text: i18n.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
+							{ text: closed ? i18n.text("IndexActionsMenu.Open") : i18n.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler(closed ? "_open" : "_close", index, true); }.bind(this) },
+							{ text: i18n.text("IndexActionsMenu.Delete"), onclick: function() { this._deleteIndexAction_handler(index); }.bind(this) }
+						]
+					})
+				})
+			] }
+		); },
 		_indexHeader_template: function( index ) {
 			var closed = index.state === "close";
 			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? index.status.index.primary_size + " (" + index.status.index.size + ")" : "unknown" ) ); 
@@ -166,32 +198,8 @@
 				{ tag: "DIV", cls: "uiNodesView-title", text: index.name },
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
-				{ tag: "DIV", cls: "uiNodesView-controls", children: [
-					new ui.MenuButton({
-						label: i18n.text("IndexInfoMenu.Title"),
-						menu: new ui.MenuPanel({
-							items: [
-								{ text: i18n.text("IndexInfoMenu.Status"), onclick: function() { new ui.JsonPanel({ json: index.status, title: index.name }); } },
-								{ text: i18n.text("IndexInfoMenu.Metadata"), onclick: function() { new ui.JsonPanel({ json: index.metadata, title: index.name }); } }
-							]
-						})
-					}),
-					new ui.MenuButton({
-						label: i18n.text("IndexActionsMenu.Title"),
-						menu: new ui.MenuPanel({
-							items: [
-								{ text: i18n.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
-								{ text: i18n.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
-								{ text: i18n.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
-								{ text: i18n.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
-								{ text: i18n.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
-								{ text: closed ? i18n.text("IndexActionsMenu.Open") : i18n.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler(closed ? "_open" : "_close", index, true); }.bind(this) },
-								{ text: i18n.text("IndexActionsMenu.Delete"), onclick: function() { this._deleteIndexAction_handler(index); }.bind(this) }
-							]
-						})
-					})
-				] }
-			]} : { tag: "TH" };
+				this.interactive ? this._indexHeaderControls_template( index ) : null
+			] } : { tag: "TH" };
 		},
 		_main_template: function(cluster, indices) {
 			function nodeNameCmp(first, second) {
