@@ -27,6 +27,13 @@
 			this.attach( parent );
 			this.instances = {};
 			this.el.find(".uiApp-headerMenuItem:first").click();
+			if( this.config.dashboard ) {
+				if( this.config.dashboard === "cluster" ) {
+					var page = this.instances["ClusterOverview"];
+					page._redrawValue = 5000;
+					page.redraw("reset");
+				}
+			}
 		},
 		
 		show: function(type, config, jEv) {

@@ -40,6 +40,7 @@ h4. URL Parameters
 Parameters may be appended to the url set some initial state eg. @head/index.html?base_uri=http://node-01.example.com:9200@
 
 * @base_uri@ force elasticsearch-head to connect to a particular node.
+* @dashboard@ experimental feature to open elasticsearch-head in a mode suitable for dashoboard / radiator. Accepts one parameter @dashboard=cluster@ 
 * @auth_user@ adds basic auth credentials to http requests ( requires "elasticsearch-http-basic":https://github.com/karussell/elasticsearch-http-basic plugin or a reverse proxy )
 * @auth_password@ basic auth password as above (note: without "additional security layers":http://security.stackexchange.com/questions/988/is-basic-auth-secure-if-done-over-https, passwords are sent over the network *in the clear* )
 
