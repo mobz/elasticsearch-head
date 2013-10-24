@@ -75,6 +75,7 @@ i18n.setKeys({
 	"Overview.PageTitle" : "Cluster Overview",
 	"Output.JSON": "JSON",
 	"Output.Table": "Table",
+	"Output.CSV": "CSV",
 	"Output.ShowSource": "Show query source",
 	"TableResults.Summary": "Searched {0} of {1} shards. {2} hits. {3} seconds",
 	"QueryFilter.AllIndices": "All Indices",

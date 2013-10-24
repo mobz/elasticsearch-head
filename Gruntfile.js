@@ -51,6 +51,7 @@ module.exports = function(grunt) {
 					'src/app/ui/dialogPanel/dialogPanel.js',
 					'src/app/ui/menuPanel/menuPanel.js',
 					'src/app/ui/table/table.js',
+					'src/app/ui/csvTable/csvTable.js',
 					'src/app/ui/jsonPretty/jsonPretty.js',
 					'src/app/ui/panelForm/panelForm.js',
 					'src/app/ui/helpPanel/helpPanel.js',

@@ -1709,6 +1709,76 @@
 
 })( this.jQuery, this.app );
 
+( function( $, app ) {
+
+	var ui = app.ns("ui");
+
+	var CELL_SEPARATOR = "\t";
+	var CELL_QUOTE = "";
+	var LINE_SEPARATOR = "\r\n";
+
+	ui.CSVTable = ui.AbstractWidget.extend({
+		defaults: {
+			results: null
+		},
+		_baseCls: "uiCSVTable",
+		init: function( parent ) {
+			this._super();
+			var results = this.config.results.hits.hits;
+			var columns = this._parseResults( results );
+			console.log( columns );
+			this.el = $( this._main_template( columns, results ) );
+			this.attach( parent );
+		},
+		_parseResults: function( results ) {
+			var path,
+				columnPaths = {};
+			(function parse( path, obj ) {
+				if( obj instanceof Array ) {
+					for( var i = 0; i < obj.length; i++ ) {
+						parse( path, obj[i] );
+					}
+				} else if( typeof obj === "object" ) {
+					for( var prop in obj ) {
+						parse( path + "." + prop, obj[ prop ] );
+					}
+				} else {
+					columnPaths[ path ] = 1;
+				}
+			})( "root", results );
+			var columns = [];
+			for( var column in columnPaths ) {
+				columns.push( column.split(".").slice(1) );
+			}
+			return columns;
+		},
+		_main_template: function( columns, results ) {
+			return { tag: "PRE", cls: this._baseCls, id: this.id(),
+				text: this._header_template( columns ) + LINE_SEPARATOR + this._results_template( columns, results )
+			};
+		},
+		_header_template: function( columns ) {
+			return columns.map( function( column ) {
+				return column.join(".");
+			}).join( CELL_SEPARATOR );
+		},
+		_results_template: function( columns, results ) {
+			return results.map( function( result ) {
+				return columns.map( function( column ) {
+					var l = 0,
+						ptr = result;
+					while( l !== column.length && ptr != null ) {
+						ptr = ptr[ column[ l++ ] ];
+					}
+					return ( ptr == null ) ? "" : ( CELL_QUOTE + ptr.toString() + CELL_QUOTE );
+				}).join( CELL_SEPARATOR );
+			}).join( LINE_SEPARATOR );
+		}
+
+	});
+
+})( this.jQuery, this.app );
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -3213,24 +3283,33 @@
 			this.attach( parent );
 		},
 		
-		_indexChanged_handler: function(index) {
+		_indexChanged_handler: function( index ) {
 			this.filter && this.filter.remove();
 			this.filter = new ui.FilterBrowser({
 				cluster: this.config.cluster,
 				index: index,
-				onStaringSearch: function() { this.el.find("DIV.uiStructuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.uiStructuredQuery-src").hide(); }.bind(this),
+				onStartingSearch: function() { this.el.find("DIV.uiStructuredQuery-out").text( i18n.text("General.Searching") ); this.el.find("DIV.uiStructuredQuery-src").hide(); }.bind(this),
 				onSearchSource: this._searchSource_handler,
-				onJsonResults: this._jsonResults_handler,
-				onTableResults: this._tableResults_handler
+				onResults: this._results_handler
 			});
 			this.el.find(".uiStructuredQuery-body").append(this.filter);
 		},
 		
-		_jsonResults_handler: function(results) {
+		_results_handler: function( filter, event ) {
+			var typeMap = {
+				"json": this._jsonResults_handler,
+				"table": this._tableResults_handler,
+				"csv": this._csvResults_handler
+			};
+			typeMap[ event.type ].call( this, event.data, event.metadata );
+		},
+		_jsonResults_handler: function( results ) {
 			this.el.find("DIV.uiStructuredQuery-out").empty().append( new ui.JsonPretty({ obj: results }));
 		},
-		
-		_tableResults_handler: function(results, metadata) {
+		_csvResults_handler: function( results ) {
+			this.el.find("DIV.uiStructuredQuery-out").empty().append( new ui.CSVTable({ results: results }));
+		},
+		_tableResults_handler: function( results, metadata ) {
 			// hack up a QueryDataSourceInterface so that StructuredQuery keeps working without using a Query object
 			var qdi = new data.QueryDataSourceInterface({ metadata: metadata, query: new data.Query() });
 			var tab = new ui.Table( {
@@ -3279,7 +3358,7 @@
 
 })( this.jQuery, this.app, this.i18n );
 
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
@@ -3306,20 +3385,20 @@
 		_createFilters_handler: function(data) {
 			var filters = [];
 			function scan_properties(path, obj) {
-			    if (obj.properties) {
-			        for (var prop in obj.properties) {
-			            scan_properties(path.concat(prop), obj.properties[prop]);
-			        }
-			    } else {
-			        // handle multi_field 
-			        if (obj.fields) {
-			            for (var subField in obj.fields) {
-			                filters.push({ path: (path[path.length - 1] != subField) ? path.concat(subField) : path, type: obj.fields[subField].type, meta: obj.fields[subField] });
-			            }
-			        } else {
-			            filters.push({ path: path, type: obj.type, meta: obj });
-			        }
-			    }
+				if (obj.properties) {
+					for (var prop in obj.properties) {
+						scan_properties(path.concat(prop), obj.properties[prop]);
+					}
+				} else {
+					// handle multi_field 
+					if (obj.fields) {
+						for (var subField in obj.fields) {
+							filters.push({ path: (path[path.length - 1] !== subField) ? path.concat(subField) : path, type: obj.fields[subField].type, meta: obj.fields[subField] });
+						}
+					} else {
+						filters.push({ path: path, type: obj.type, meta: obj });
+					}
+				}
 			}
 			for(var type in data[this.config.index].mappings) {
 				scan_properties([type], data[this.config.index].mappings[type]);
@@ -3352,7 +3431,7 @@
 		
 		_search_handler: function() {
 			var search = new data.BoolQuery();
-			this.fire("staringSearch");
+			this.fire("startingSearch");
 			this.filtersEl.find(".uiFilterBrowser-row").each(function(i, row) {
 				row = $(row);
 				var bool = row.find(".bool").val();
@@ -3390,12 +3469,9 @@
 			this._cluster.post( this.config.index + "/_search", search.getData(), this._results_handler );
 		},
 		
-		_results_handler: function(data) {
-			if(this.el.find(".uiFilterBrowser-outputFormat").val() === "Table") {
-				this.fire("tableResults", data, this.metadata);
-			} else {
-				this.fire("jsonResults", data);
-			}
+		_results_handler: function( data ) {
+			var type = this.el.find(".uiFilterBrowser-outputFormat").val();
+			this.fire("results", this, { type: type, data: data, metadata: this.metadata });
 		},
 		
 		_changeQueryField_handler: function(jEv) {
@@ -3437,7 +3513,11 @@
 				{ tag: "DIV", cls: "uiFilterBrowser-filters" },
 				{ tag: "BUTTON", type: "button", text: i18n.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "uiFilterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
+					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "uiFilterBrowser-outputFormat", children: [
+						{ text: i18n.text("Output.Table"), value: "table" },
+						{ text: i18n.text("Output.JSON"), value: "json" },
+						{ text: i18n.text("Output.CSV"), value: "csv" }
+					].map(function( o ) { return $.extend({ tag: "OPTION" }, o ); } ) } )
 				},
 				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "uiFilterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
@@ -3472,7 +3552,8 @@
 		}
 	});
 	
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
+
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");

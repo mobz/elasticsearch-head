@@ -1,4 +1,4 @@
-(function( $, app ) {
+(function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
 	var data = app.ns("data");
@@ -25,20 +25,20 @@
 		_createFilters_handler: function(data) {
 			var filters = [];
 			function scan_properties(path, obj) {
-			    if (obj.properties) {
-			        for (var prop in obj.properties) {
-			            scan_properties(path.concat(prop), obj.properties[prop]);
-			        }
-			    } else {
-			        // handle multi_field 
-			        if (obj.fields) {
-			            for (var subField in obj.fields) {
-			                filters.push({ path: (path[path.length - 1] != subField) ? path.concat(subField) : path, type: obj.fields[subField].type, meta: obj.fields[subField] });
-			            }
-			        } else {
-			            filters.push({ path: path, type: obj.type, meta: obj });
-			        }
-			    }
+				if (obj.properties) {
+					for (var prop in obj.properties) {
+						scan_properties(path.concat(prop), obj.properties[prop]);
+					}
+				} else {
+					// handle multi_field 
+					if (obj.fields) {
+						for (var subField in obj.fields) {
+							filters.push({ path: (path[path.length - 1] !== subField) ? path.concat(subField) : path, type: obj.fields[subField].type, meta: obj.fields[subField] });
+						}
+					} else {
+						filters.push({ path: path, type: obj.type, meta: obj });
+					}
+				}
 			}
 			for(var type in data[this.config.index].mappings) {
 				scan_properties([type], data[this.config.index].mappings[type]);
@@ -71,7 +71,7 @@
 		
 		_search_handler: function() {
 			var search = new data.BoolQuery();
-			this.fire("staringSearch");
+			this.fire("startingSearch");
 			this.filtersEl.find(".uiFilterBrowser-row").each(function(i, row) {
 				row = $(row);
 				var bool = row.find(".bool").val();
@@ -109,12 +109,9 @@
 			this._cluster.post( this.config.index + "/_search", search.getData(), this._results_handler );
 		},
 		
-		_results_handler: function(data) {
-			if(this.el.find(".uiFilterBrowser-outputFormat").val() === "Table") {
-				this.fire("tableResults", data, this.metadata);
-			} else {
-				this.fire("jsonResults", data);
-			}
+		_results_handler: function( data ) {
+			var type = this.el.find(".uiFilterBrowser-outputFormat").val();
+			this.fire("results", this, { type: type, data: data, metadata: this.metadata });
 		},
 		
 		_changeQueryField_handler: function(jEv) {
@@ -156,7 +153,11 @@
 				{ tag: "DIV", cls: "uiFilterBrowser-filters" },
 				{ tag: "BUTTON", type: "button", text: i18n.text("General.Search"), onclick: this._search_handler },
 				{ tag: "LABEL", children:
-					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "uiFilterBrowser-outputFormat", children: [ i18n.text("Output.Table"), i18n.text("Output.JSON")].map(ut.option_template) } )
+					i18n.complex("FilterBrowser.OutputType", { tag: "SELECT", cls: "uiFilterBrowser-outputFormat", children: [
+						{ text: i18n.text("Output.Table"), value: "table" },
+						{ text: i18n.text("Output.JSON"), value: "json" },
+						{ text: i18n.text("Output.CSV"), value: "csv" }
+					].map(function( o ) { return $.extend({ tag: "OPTION" }, o ); } ) } )
 				},
 				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "uiFilterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
@@ -191,4 +192,4 @@
 		}
 	});
 	
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.i18n );
