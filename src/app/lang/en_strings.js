@@ -53,6 +53,7 @@ i18n.setKeys({
 	"IndexSelector.NameWithDocs": "{0} ({1} docs)",
 	"IndexSelector.SearchIndexForDocs": "Search {0} for documents where:",
 	"FilterBrowser.OutputType": "Output Results: {0}",
+	"FilterBrowser.OutputSize": "Number of Results: {0}",
 	"Header.ClusterHealth": "cluster health: {0} ({1}, {2})",
 	"Header.ClusterNotConnected": "cluster health: not connected",
 	"Header.Connect": "Connect",

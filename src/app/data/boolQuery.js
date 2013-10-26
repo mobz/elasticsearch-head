@@ -20,6 +20,9 @@
 			};
 			this.defaultClause = this.addClause();
 		},
+		setSize: function(size) {
+			this.search.size = parseInt( size, 10 );
+		},
 		setPage: function(page) {
 			this.search.from = this.config.size * (page - 1) + 1;
 		},

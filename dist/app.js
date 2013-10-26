@@ -1048,6 +1048,9 @@
 			};
 			this.defaultClause = this.addClause();
 		},
+		setSize: function(size) {
+			this.search.size = parseInt( size, 10 );
+		},
 		setPage: function(page) {
 			this.search.from = this.config.size * (page - 1) + 1;
 		},
@@ -3431,6 +3434,7 @@
 		
 		_search_handler: function() {
 			var search = new data.BoolQuery();
+			search.setSize( this.el.find(".uiFilterBrowser-outputSize").val() )
 			this.fire("startingSearch");
 			this.filtersEl.find(".uiFilterBrowser-row").each(function(i, row) {
 				row = $(row);
@@ -3518,6 +3522,11 @@
 						{ text: i18n.text("Output.JSON"), value: "json" },
 						{ text: i18n.text("Output.CSV"), value: "csv" }
 					].map(function( o ) { return $.extend({ tag: "OPTION" }, o ); } ) } )
+				},
+				{ tag: "LABEL", children:
+					i18n.complex("FilterBrowser.OutputSize", { tag: "SELECT", cls: "uiFilterBrowser-outputSize",
+						children: [ "10", "50", "250", "1000", "5000", "25000" ].map( ut.option_template )
+					} )
 				},
 				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "uiFilterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
