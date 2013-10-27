@@ -622,6 +622,10 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 	width: 280px;
 }
 
+.uiStructuredQuery {
+	padding: 10px;
+}
+
 .uiStructuredQuery-out {
 	min-height: 30px;
 }

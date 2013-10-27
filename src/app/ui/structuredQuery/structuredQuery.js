@@ -7,6 +7,7 @@
 		defaults: {
 			cluster: null  // (required) instanceof app.services.Cluster
 		},
+		_baseCls: "uiStructuredQuery",
 		init: function(parent) {
 			this._super();
 			this.selector = new ui.IndexSelector({
@@ -75,7 +76,7 @@
 		},
 		
 		_main_template: function() {
-			return { tag: "DIV", children: [
+			return { tag: "DIV", cls: this._baseCls, children: [
 				this.selector,
 				{ tag: "DIV", cls: "uiStructuredQuery-body" },
 				{ tag: "DIV", cls: "uiStructuredQuery-src", css: { display: "none" } },
