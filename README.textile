@@ -63,4 +63,18 @@ Then
 Changes to both dist and src directories *must* be committed, to allow people to run head without running dev tools
 and folllow existing dev patterns, such as indenting with tabs
 
+h5. Contributing an Internationalisation
+
+# English (primary) by "Ben Birch":https://twitter.com/mobz
+# French by "David Pilato":https://twitter.com/dadoonet
+
+To contribute an internationalisation
+
+# Follow "Contributing" instructions above
+# Find your 2-character "ISO 639-1 language code":http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes 
+# edit index.html to add your 2 letter language code to the data-langs attribute of this line @<script src="dist/i18n.js" data-baseDir="dist/lang" data-langs="en,fr,your_lang_here"></script>@
+# make a copy of @src/app/langs/en_strings.js@ prefixed with your langugae code
+# convert english strings and fragments to your language. "Formatting Rules":http://docs.oracle.com/javase/tutorial/i18n/format/messageintro.html
+# Submit a pull request
+
 !http://mobz.github.com/elasticsearch-head/screenshots/clusterOverview.png(ClusterOverview Screenshot)!
