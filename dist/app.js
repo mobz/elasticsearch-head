@@ -1716,8 +1716,8 @@
 
 	var ui = app.ns("ui");
 
-	var CELL_SEPARATOR = "\t";
-	var CELL_QUOTE = "";
+	var CELL_SEPARATOR = ",";
+	var CELL_QUOTE = '"';
 	var LINE_SEPARATOR = "\r\n";
 
 	ui.CSVTable = ui.AbstractWidget.extend({
@@ -1729,13 +1729,22 @@
 			this._super();
 			var results = this.config.results.hits.hits;
 			var columns = this._parseResults( results );
-			console.log( columns );
-			this.el = $( this._main_template( columns, results ) );
+			this._downloadButton = new ui.Button({
+				label: "Generate Download Link",
+				onclick: this._downloadLinkGenerator_handler
+			});
+			this._downloadLink = $( { tag: "A", text: "download", });
+			this._downloadLink.hide();
+			this._csvText = this._csv_template( columns, results );
+			this.el = $( this._main_template() );
 			this.attach( parent );
 		},
+		_downloadLinkGenerator_handler: function() {
+			this._downloadLink.attr("href", "data:text/csv;chatset=utf-8," + window.encodeURIComponent( this._csvText ) );
+			this._downloadLink.show();
+		},
 		_parseResults: function( results ) {
-			var path,
-				columnPaths = {};
+			var columnPaths = {};
 			(function parse( path, obj ) {
 				if( obj instanceof Array ) {
 					for( var i = 0; i < obj.length; i++ ) {
@@ -1746,7 +1755,7 @@
 						parse( path + "." + prop, obj[ prop ] );
 					}
 				} else {
-					columnPaths[ path ] = 1;
+					columnPaths[ path ] = true;
 				}
 			})( "root", results );
 			var columns = [];
@@ -1755,10 +1764,15 @@
 			}
 			return columns;
 		},
-		_main_template: function( columns, results ) {
-			return { tag: "PRE", cls: this._baseCls, id: this.id(),
-				text: this._header_template( columns ) + LINE_SEPARATOR + this._results_template( columns, results )
-			};
+		_main_template: function() { return (
+			{ tag: "DIV", cls: this._baseCls, id: this.id(), children: [
+				this._downloadButton,
+				this._downloadLink,
+				{ tag: "PRE", text: this._csvText }
+			] }
+		); },
+		_csv_template: function( columns, results ) {
+			return this._header_template( columns ) + LINE_SEPARATOR + this._results_template( columns, results );
 		},
 		_header_template: function( columns ) {
 			return columns.map( function( column ) {
@@ -1773,11 +1787,10 @@
 					while( l !== column.length && ptr != null ) {
 						ptr = ptr[ column[ l++ ] ];
 					}
-					return ( ptr == null ) ? "" : ( CELL_QUOTE + ptr.toString() + CELL_QUOTE );
+					return ( ptr == null ) ? "" : ( CELL_QUOTE + ptr.toString().replace(/"/g, '""') + CELL_QUOTE );
 				}).join( CELL_SEPARATOR );
 			}).join( LINE_SEPARATOR );
 		}
-
 	});
 
 })( this.jQuery, this.app );
