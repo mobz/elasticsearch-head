@@ -183,7 +183,7 @@
 					node.stats = nodeStats.nodes[node.name];
 					var cluster = clusterNodes.nodes[node.name];
 					node.cluster = cluster;
-					node.data_node = !( cluster.attributes && cluster.attributes.data === "false" );
+					node.data_node = !( cluster && cluster.attributes && cluster.attributes.data === "false" );
 					for(var i = 0; i < indices.length; i++) {
 						node.routings[i] = node.routings[i] || { name: indices[i].name, replicas: [] };
 						node.routings[i].max_number_of_shards = indices[i].metadata.settings["index.number_of_shards"];
