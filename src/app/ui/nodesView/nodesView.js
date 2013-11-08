@@ -205,24 +205,10 @@
 			] } : { tag: "TH" };
 		},
 		_main_template: function(cluster, indices) {
-			function nodeNameCmp(first, second) {
-				if (!(first.cluster && second.cluster)) {
-					return 0;
-				}
-				var a = first.cluster.name;
-				var b = second.cluster.name;
-				if (a.toString() < b.toString()) {
-					return -1;
-				}
-				if (a.toString() > b.toString()) {
-					return 1;
-				}
-				return 0;
-			}
 			return { tag: "TABLE", cls: "uiNodesView", children: [
 				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
 				cluster.aliases.length && { tag: "TBODY", children: cluster.aliases.map(this._alias_template, this) },
-				{ tag: "TBODY", children: cluster.nodes.sort(nodeNameCmp).map(this._node_template, this) }
+				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
 			] };
 		}
 

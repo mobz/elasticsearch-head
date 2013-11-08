@@ -2,6 +2,48 @@
 
 	var ui = app.ns("ui");
 
+	// ( master ) master = true, data = true 
+	// ( coordinator ) master = true, data = false
+	// ( worker ) master = false, data = true;
+	// ( client ) master = false, data = false;
+	// http enabled ?
+
+	function nodeSort_name(a, b) {
+		if (!(a.cluster && b.cluster)) {
+			return 0;
+		}
+		return a.cluster.name.toString().localeCompare( b.cluster.name.toString() );
+	}
+
+	function nodeSort_addr( a, b ) {
+		if (!(a.cluster && b.cluster)) {
+			return 0;
+		}
+		return a.cluster.transport_address.toString().localeCompare( b.cluster.transport_address.toString() );
+	}
+
+	function nodeSort_type( a, b ) {
+		if (!(a.cluster && b.cluster)) {
+			return 0;
+		}
+		if( a.master_node || ( a.data_node && !b.data_node ) ) {
+			return -1;
+		} else if( b.master_node || ( b.data_node && !a.data_node) ) {
+			return 1;
+		} else {
+			return a.cluster.name.toString().localeCompare( b.cluster.name.toString() );
+		}
+	}
+
+	function nodeFilter_none( a ) {
+		return true;
+	}
+
+	function nodeFilter_clients( a ) {
+		return (a.master_node || a.data_node );
+	}
+
+
 	ui.ClusterOverview = ui.Page.extend({
 		defaults: {
 			cluster: null // (reqired) an instanceof app.services.Cluster
@@ -61,7 +103,7 @@
 				var clusterNodes = this.clusterNodes;
 				var nodes = [];
 				var indices = [];
-				var cluster = { nodes: nodes };
+				var cluster = {};
 				var nodeIndices = {};
 				var indexIndices = {}, indexIndicesIndex = 0;
 				function newNode(n) {
@@ -137,9 +179,11 @@
 						});
 					}
 				});
-				cluster.nodes.forEach(function(node) {
+				nodes.forEach(function(node) {
 					node.stats = nodeStats.nodes[node.name];
-					node.cluster = clusterNodes.nodes[node.name];
+					var cluster = clusterNodes.nodes[node.name];
+					node.cluster = cluster;
+					node.data_node = !( cluster.attributes && cluster.attributes.data === "false" );
 					for(var i = 0; i < indices.length; i++) {
 						node.routings[i] = node.routings[i] || { name: indices[i].name, replicas: [] };
 						node.routings[i].max_number_of_shards = indices[i].metadata.settings["index.number_of_shards"];
@@ -160,6 +204,9 @@
 					});
 				});
 				cluster.aliases = aliases;
+				cluster.nodes = nodes
+					.filter( nodeFilter_none )
+					.sort( nodeSort_name );
 				indices.unshift({ name: null });
 				this._drawNodesView( cluster, indices );
 				this._refreshButton.enable();
