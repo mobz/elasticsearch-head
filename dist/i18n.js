@@ -58,11 +58,9 @@
 		complex: function() {
 			var args = Array.prototype.slice.call(arguments),
 				key = keys[args.shift()],
-				ret = [];
-			do {} while(key && key !== (key = key.replace(/([^{]+)|\{(\d+)\}/, function(x, pt, sub) {
-				ret.push(pt || args[+sub]);
-				return "";
-			})));
+				ret = [],
+				replacer = function(x, pt, sub) { ret.push(pt || args[+sub]); return ""; };
+			do {} while(key && key !== (key = key.replace(/([^{]+)|\{(\d+)\}/, replacer )));
 			return ret;
 		}
 
@@ -74,6 +72,9 @@
 	var userLang = window.navigator.language || window.navigator.userLanguage;
 	var scripts = document.getElementsByTagName('script');
 	var data = scripts[ scripts.length - 1].dataset;
+	if( ! data["langs"] ) {
+		return;
+	}
 	var langs = data["langs"].split(/\s*,\s*/);
 	var script0 = scripts[0];
 	function install( lang ) {
