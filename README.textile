@@ -51,6 +51,7 @@ To contribute to elasticsearch-head you will need the following developer tools
 # git and a "github":https://github.com/ account
 # "node ( including npm )":http://nodejs.org/download
 # "grunt-cli":http://gruntjs.com/getting-started
+# (to run jasmine tests) "phantomjs":http://phantomjs.org
 
 Then
 

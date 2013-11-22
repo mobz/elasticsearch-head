@@ -11,12 +11,7 @@ module.exports = function(grunt) {
 		},
 		concat: {
 			vendorjs: {
-				src: [
-					'src/vendor/jquery/jquery.js',
-					'src/vendor/nohtml/jquery-nohtml.js',
-					'src/vendor/graphael/g.raphael.standalone.js',
-					'src/vendor/dateRangeParser/date-range-parser.js'
-				],
+				src: fileSets.vendorJs,
 				dest: 'dist/vendor.js'
 			},
 			appjs: {
@@ -48,6 +43,14 @@ module.exports = function(grunt) {
 			}
 		},
 
+		jasmine: {
+			src: [ fileSets.vendorJs, 'src/vendor/i18n/i18n.js', 'src/app/lang/en_strings.js', fileSets.srcJs ],
+			options: {
+				specs: 'src/app/**/*Spec.js',
+				helpers: 'test/spec/*Helper.js'
+			}
+		},
+
 		watch: {
 			scripts: {
 				files: ['src/**/*' ],
@@ -75,9 +78,11 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-jasmine');
 
 	// Default task(s).
-	grunt.registerTask('default', ['clean', 'concat', 'copy']);
+	grunt.registerTask('default', ['clean', 'concat', 'copy', 'jasmine']);
 	grunt.registerTask('server', ['connect:server']);
+
 
 };

@@ -1,3 +1,10 @@
+exports.vendorJs = [
+	'src/vendor/jquery/jquery.js',
+	'src/vendor/nohtml/jquery-nohtml.js',
+	'src/vendor/graphael/g.raphael.standalone.js',
+	'src/vendor/dateRangeParser/date-range-parser.js'
+];
+
 exports.srcJs = [
 	'src/app/core/boot.js',
 
