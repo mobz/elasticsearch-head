@@ -285,9 +285,23 @@
 	var ut = app.ns("ut");
 
 	ut.option_template = function(v) { return { tag: "OPTION", value: v, text: v }; };
+
 	ut.require_template = function(f) { return f.require ? { tag: "SPAN", cls: "require", text: "*" } : null; };
 
+
+	var si_prefix = ['B','k','M', 'G', 'T', 'P', 'E', 'Y'];
+
+	ut.byteSize_template = function(n) {
+		var i = 0;
+		while( n >= 1000 ) {
+			i++;
+			n /= 1024;
+		}
+		return (i === 0 ? n.toString() : n.toFixed( 3 - parseInt(n,10).toString().length )) + ( si_prefix[ i ] || "..E" );
+	};
+
 })( this.app );
+
 (function( app ) {
 
 	var ux = app.ns("ux");
@@ -2635,6 +2649,7 @@
 (function( app, i18n ) {
 
 	var ui = app.ns("ui");
+	var ut = app.ns("ut");
 
 	ui.NodesView = ui.AbstractWidget.extend({
 		default: {
@@ -2829,7 +2844,8 @@
 		); },
 		_indexHeader_template: function( index ) {
 			var closed = index.state === "close";
-			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? index.status.index.primary_size + " (" + index.status.index.size + ")" : "unknown" ) ); 
+			console.log( index.status );
+			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? ut.byteSize_template( index.status.index.primary_size_in_bytes ) + " (" + ut.byteSize_template( index.status.index.size_in_bytes ) + ")" : "unknown" ) ); 
 			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.docs ? index.status.docs.num_docs.toLocaleString() + " (" + index.status.docs.max_doc.toLocaleString() + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
 				{ tag: "DIV", cls: "uiNodesView-title", text: index.name },

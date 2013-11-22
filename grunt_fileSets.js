@@ -9,7 +9,7 @@ exports.srcJs = [
 	'src/app/core/boot.js',
 
 	'src/app/ux/class.js',
-	'src/app/ux/templates.js',
+	'src/app/ux/templates/templates.js',
 	'src/app/ux/observable.js',
 	'src/app/ux/dragdrop.js',
 	'src/app/ux/fieldCollection.js',
