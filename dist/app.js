@@ -2894,9 +2894,13 @@
 		if (!(a.cluster && b.cluster)) {
 			return 0;
 		}
-		if( a.master_node || ( a.data_node && !b.data_node ) ) {
+		if( a.master_node ) {
 			return -1;
-		} else if( b.master_node || ( b.data_node && !a.data_node) ) {
+		} else if( b.master_node ) {
+			return 1;
+		} else if( a.data_node && !b.data_node ) {
+			return -1;
+		} else if( b.data_node && !a.data_node ) {
 			return 1;
 		} else {
 			return a.cluster.name.toString().localeCompare( b.cluster.name.toString() );
@@ -2920,6 +2924,7 @@
 			this._super();
 			this._resetTimer = null;
 			this._redrawValue = -1;
+			this._nodeSort = nodeSort_name;
 			this._refreshButton = new ui.SplitButton({
 				label: i18n.text("General.RefreshResults"),
 				items: [
@@ -2938,6 +2943,16 @@
 				onclick: function( btn, event ) {
 					this.redraw("reset");
 				}.bind(this)
+			});
+			this._nodeSortMenu = new ui.MenuButton({
+				label: "Sort Cluster",
+				menu: new ui.MenuPanel({
+					items: [
+						{ text: "By Name", onclick: this._nodeSort_handler.bind(this, nodeSort_name ) },
+						{ text: "By Address", onclick: this._nodeSort_handler.bind(this, nodeSort_addr ) },
+						{ text: "By Type", onclick: this._nodeSort_handler.bind(this, nodeSort_type ) }
+					]
+				})
 			});
 
 			this.el = $(this._main_template());
@@ -3074,7 +3089,7 @@
 				cluster.aliases = aliases;
 				cluster.nodes = nodes
 					.filter( nodeFilter_none )
-					.sort( nodeSort_name );
+					.sort( this._nodeSort );
 				indices.unshift({ name: null });
 				this._drawNodesView( cluster, indices );
 				this._refreshButton.enable();
@@ -3095,6 +3110,10 @@
 				}
 			});
 			this._nodesView.attach( this.tablEl );
+		},
+		_nodeSort_handler: function( sortFn ) {
+			this._nodeSort = sortFn;
+			this.redraw("reset");
 		},
 		_clusterState_handler: function(state) {
 			this.clusterState = state;
@@ -3155,7 +3174,8 @@
 						new ui.Button({
 							label: i18n.text("ClusterOverview.NewIndex"),
 							onclick: this._newIndex_handler
-						})
+						}),
+						this._nodeSortMenu
 					],
 					right: [
 						this._refreshButton
