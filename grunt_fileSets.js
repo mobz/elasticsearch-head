@@ -5,6 +5,10 @@ exports.vendorJs = [
 	'src/vendor/dateRangeParser/date-range-parser.js'
 ];
 
+exports.vendorCss = [
+	'src/vendor/font-awesome/css/font-awesome.css'
+];
+
 exports.srcJs = [
 	'src/app/core/boot.js',
 

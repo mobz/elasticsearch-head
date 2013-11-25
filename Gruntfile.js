@@ -14,6 +14,10 @@ module.exports = function(grunt) {
 				src: fileSets.vendorJs,
 				dest: 'dist/vendor.js'
 			},
+			vendorcss: {
+				src: fileSets.vendorCss,
+				dest: 'dist/vendor.css'
+			},
 			appjs: {
 				src: fileSets.srcJs,
 				dest: 'dist/app.js'
@@ -30,6 +34,12 @@ module.exports = function(grunt) {
 				cwd: 'src/app/base/',
 				src: '**',
 				dest: 'dist/base/'
+			},
+			iconFonts: {
+				expand: true,
+				cwd: 'src/vendor/font-awesome/fonts/',
+				src: '**',
+				dest: 'dist/fonts'
 			},
 			i18n: {
 				src: 'src/vendor/i18n/i18n.js',
