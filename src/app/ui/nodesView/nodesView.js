@@ -129,23 +129,30 @@
 				})
 			] }
 		); },
+		_nodeIcon_template: function( node ) {
+			var icon = "fa fa-2x fa-" + (node.master_node ? "star" : "circle") + (node.data_node ? "" : "-o" );
+			var alt = i18n.text( node.master_node ? ( node.data_node ? "NodeType.Master" : "NodeType.Coord" ) : ( node.data_node ? "NodeType.Worker" : "NodeType.Client" ) );
+			return { tag: "TD", title: alt, cls: "uiNodesView-icon", children: [
+				{ tag: "SPAN", cls: icon }
+			] };
+		},
 		_node_template: function(node) {
+			console.log( node.cluster );
 			return { tag: "TR", cls: "uiNodesView-node" + (node.master_node ? " master": ""), children: [
+				this._nodeIcon_template( node ),
 				{ tag: "TH", children: node.name === "Unassigned" ? [
 					{ tag: "DIV", cls: "uiNodesView-title", text: node.name }
 				] : [
 					{ tag: "DIV", children: [
-						{ tag: "SPAN", cls: "uiNodesView-title", text: node.cluster.name },
-						" ",
-						{ tag: "SPAN", text: node.name }
+						{ tag: "SPAN", cls: "uiNodesView-title", text: node.cluster.name }
 					]},
-					{ tag: "DIV", text: node.cluster.http_address },
+					{ tag: "DIV", text: node.cluster.hostname },
 					this.interactive ? this._nodeControls_template( node ) : null
 				] }
 			].concat(node.routings.map(this._routing_template, this))};
 		},
 		_alias_template: function(alias, row) {
-			return { tag: "TR", children: [ { tag: "TD" } ].concat(alias.indices.map(function(index, i) {
+			return { tag: "TR", children: [ { tag: "TD" },{ tag: "TD" } ].concat(alias.indices.map(function(index, i) {
 				if (index) {
 					return {
 						tag: "TD",
@@ -204,7 +211,7 @@
 				{ tag: "DIV", text: line1 },
 				{ tag: "DIV", text: line2 },
 				this.interactive ? this._indexHeaderControls_template( index ) : null
-			] } : { tag: "TH" };
+			] } : [ { tag: "TD" }, { tag: "TH" } ];
 		},
 		_main_template: function(cluster, indices) {
 			return { tag: "TABLE", cls: "uiNodesView", children: [

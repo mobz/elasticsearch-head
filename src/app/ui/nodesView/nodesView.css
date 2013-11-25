@@ -56,8 +56,12 @@
 	cursor: pointer;
 }
 
-.uiNodesView-node.master {
-	background: #fff8dd;
+.uiNodesView TD.uiNodesView-icon {
+	padding: 20px 0px 15px 20px;
+}
+
+.uiNodesView-node:nth-child(odd) {
+	background: #eee;
 }
 
 .uiNodesView-routing {
