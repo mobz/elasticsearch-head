@@ -44,6 +44,12 @@
 		_scroll_handler: function(jEv) {
 			this.el.find(".uiTable-headers").scrollLeft(this.body.scrollLeft());
 		},
+		_rightClick_handler: function(jEv) {
+			var row = $(jEv.target).closest("TR");
+			if(row.length) {
+				this.fire("rowRightClick", this, { row: row, event: jEv } );
+			}
+		},
 		_dataClick_handler: function(jEv) {
 			var row = $(jEv.target).closest("TR");
 			if(row.length) {
@@ -65,6 +71,7 @@
 				{ tag: "DIV", cls: "uiTable-body",
 					onClick: this._dataClick_handler,
 					onScroll: this._scroll_handler,
+					oncontextmenu: this._rightClick_handler,
 					css: { height: this.config.height + "px", width: this.config.width + "px" }
 				}
 			] };

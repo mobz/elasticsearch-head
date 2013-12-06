@@ -27,7 +27,8 @@
 					this.queryFilter.attach(this.el.find("> .uiBrowser-filter") );
 					this.resultTable = new ui.ResultTable( {
 						onHeaderClick: this._changeSort_handler,
-						store: this.store
+						store: this.store,
+						cluster: this.cluster
 					} );
 					this.resultTable.attach( this.el.find("> .uiBrowser-table") );
 					this.updateResults();

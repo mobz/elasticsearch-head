@@ -29,6 +29,7 @@ i18n.setKeys({
 	"AnyRequest.ValidateJSON": "Validar JSON",
 	"Browser.Title": "Navegador",
 	"Browser.ResultSourcePanelTitle": "Resultado",
+	"Browser.DeleteRecord" : "Excluir Registro",
 	"Command.DELETE": "DELETAR",
 	"Command.SHUTDOWN": "DESLIGAR",
 	"Command.DeleteAliasMessage": "Remover apelido?",

@@ -113,7 +113,8 @@
 					var store = new app.data.ResultDataSourceInterface();
 					this.outEl.append(new app.ui.ResultTable({
 						width: this.outEl.width() - 23,
-						store: store
+						store: store,
+						cluster: this.config.cluster
 					} ) );
 					store.results(data);
 				} catch(e) {
