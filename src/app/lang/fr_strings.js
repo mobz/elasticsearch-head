@@ -25,6 +25,7 @@ i18n.setKeys({
 	"AnyRequest.ValidateJSON": "Valider le JSON",
 	"Browser.Title": "Navigateur",
 	"Browser.ResultSourcePanelTitle": "Résultat au format JSON",
+	"Browser.DeleteRecord" : "Supprimer la Ligne",
 	"Command.DELETE": "SUPPRIMER",
 	"Command.SHUTDOWN": "ETEINDRE",
 	"ClusterOverView.IndexName": "Index",
