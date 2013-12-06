@@ -29,6 +29,7 @@ i18n.setKeys({
 	"AnyRequest.ValidateJSON": "Validate JSON",
 	"Browser.Title": "Browser",
 	"Browser.ResultSourcePanelTitle": "Result Source",
+	"Browser.DeleteRecord" : "Delete Record",
 	"Command.DELETE": "DELETE",
 	"Command.SHUTDOWN": "SHUTDOWN",
 	"Command.DeleteAliasMessage": "Delete Alias?",
