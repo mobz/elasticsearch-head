@@ -32,6 +32,7 @@ exports.srcJs = [
 	'src/app/ui/abstractWidget/abstractWidget.js',
 	'src/app/ui/abstractField/abstractField.js',
 	'src/app/ui/textField/textField.js',
+	'src/app/ui/checkField/checkField.js',
 	'src/app/ui/button/button.js',
 	'src/app/ui/menuButton/menuButton.js',
 	'src/app/ui/splitButton/splitButton.js',

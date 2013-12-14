@@ -1262,6 +1262,39 @@
 
 })( this.app );
 
+(function( app ) {
+
+	var ui = app.ns("ui");
+
+	ui.CheckField = ui.AbstractField.extend({
+		_main_template: function() {
+			return { tag: "DIV", id: this.id(), cls: "uiCheckField", children: [
+				{ 
+					tag: "INPUT",
+					type: "checkbox",
+					id: this.id(),
+					name: this.config.name,
+					checked: this.config.value,
+					value: this.config.value,
+					onclick: function(e) {
+						var field = $(e.target);
+						if (field.val() === "false") {
+							field.val("true");
+							field.attr("checked", "checked");
+						} else {
+							field.val("false");
+							field.removeAttr("checked");
+						}
+					}
+				}
+			]};
+		}
+	});
+
+})( this.app );
+
+
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -2696,6 +2729,33 @@
 				redraw && this.fire("redraw");
 			}.bind(this));
 		},
+		_optimizeIndex_handler: function(index) {
+			var fields = new app.ux.FieldCollection({
+				fields: [
+					new ui.TextField({ label: i18n.text("OptimizeForm.MaxSegments"), name: "segments", value: "1", require: true }),
+					new ui.CheckField({ label: i18n.text("OptimizeForm.ExpungeDeletes"), name: "expunge", value: false }),
+					new ui.CheckField({ label: i18n.text("OptimizeForm.FlushAfter"), name: "flush", value: true }),
+					new ui.CheckField({ label: i18n.text("OptimizeForm.WaitForMerge"), name: "wait", value: false })
+				]
+			});
+			var dialog = new ui.DialogPanel({
+				title: i18n.text("OptimizeForm.OptimizeIndex", index.name),
+				body: new ui.PanelForm({ fields: fields }),
+				onCommit: function(panel, args) {
+					if(fields.validate()) {
+						var data = fields.getData();
+						this.cluster.post(index.name + "/_optimize"
+							+ "?max_num_segments=" + data["segments"]
+							+ "&only_expunge_deletes=" + data["expunge"]
+							+ "&flush=" + data["flush"]
+							+ "&wait_for_merge=" + data["wait"], null, function(r) {
+								alert(JSON.stringify(r))
+							});
+						dialog.close();
+					}
+				}.bind(this)
+			}).open();
+		},
 		_testAnalyser_handler: function(index) {
 			this.cluster.get(index.name + "/_analyze?text=" + prompt( i18n.text("IndexCommand.TextToAnalyze") ), function(r) {
 				alert(JSON.stringify(r, true, "  "));
@@ -2840,6 +2900,7 @@
 							{ text: i18n.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
+							{ text: i18n.text("IndexActionsMenu.Optimize"), onclick: function () { this._optimizeIndex_handler(index); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
 							{ text: (index.state === "close") ? i18n.text("IndexActionsMenu.Open") : i18n.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler((index.state === "close") ? "_open" : "_close", index, true); }.bind(this) },
