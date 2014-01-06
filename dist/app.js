@@ -1267,27 +1267,20 @@
 	var ui = app.ns("ui");
 
 	ui.CheckField = ui.AbstractField.extend({
-		_main_template: function() {
-			return { tag: "DIV", id: this.id(), cls: "uiCheckField", children: [
-				{ 
-					tag: "INPUT",
-					type: "checkbox",
-					id: this.id(),
-					name: this.config.name,
-					checked: this.config.value,
-					value: this.config.value,
-					onclick: function(e) {
-						var field = $(e.target);
-						if (field.val() === "false") {
-							field.val("true");
-							field.attr("checked", "checked");
-						} else {
-							field.val("false");
-							field.removeAttr("checked");
-						}
-					}
-				}
-			]};
+		_main_template: function() { return (
+			{ tag: "DIV", id: this.id(), cls: "uiCheckField", children: [
+				{ tag: "INPUT", type: "checkbox", name: this.config.name, checked: !!this.config.value }
+			] }
+		); },
+		validate: function() {
+			return this.val() || ( ! this.require );
+		},
+		val: function( val ) {
+			if( val === undefined ) {
+				return !!this.field.attr( "checked" );
+			} else {
+				this.field.attr( "checked", !!val );
+			}
 		}
 	});
 
@@ -2732,25 +2725,20 @@
 		_optimizeIndex_handler: function(index) {
 			var fields = new app.ux.FieldCollection({
 				fields: [
-					new ui.TextField({ label: i18n.text("OptimizeForm.MaxSegments"), name: "segments", value: "1", require: true }),
-					new ui.CheckField({ label: i18n.text("OptimizeForm.ExpungeDeletes"), name: "expunge", value: false }),
+					new ui.TextField({ label: i18n.text("OptimizeForm.MaxSegments"), name: "max_num_segments", value: "1", require: true }),
+					new ui.CheckField({ label: i18n.text("OptimizeForm.ExpungeDeletes"), name: "only_expunge_deletes", value: false }),
 					new ui.CheckField({ label: i18n.text("OptimizeForm.FlushAfter"), name: "flush", value: true }),
-					new ui.CheckField({ label: i18n.text("OptimizeForm.WaitForMerge"), name: "wait", value: false })
+					new ui.CheckField({ label: i18n.text("OptimizeForm.WaitForMerge"), name: "wait_for_merge", value: false })
 				]
 			});
 			var dialog = new ui.DialogPanel({
 				title: i18n.text("OptimizeForm.OptimizeIndex", index.name),
 				body: new ui.PanelForm({ fields: fields }),
-				onCommit: function(panel, args) {
+				onCommit: function( panel, args ) {
 					if(fields.validate()) {
-						var data = fields.getData();
-						this.cluster.post(index.name + "/_optimize"
-							+ "?max_num_segments=" + data["segments"]
-							+ "&only_expunge_deletes=" + data["expunge"]
-							+ "&flush=" + data["flush"]
-							+ "&wait_for_merge=" + data["wait"], null, function(r) {
-								alert(JSON.stringify(r))
-							});
+						this.cluster.post(index.name + "/_optimize", fields.getData(), function(r) {
+							alert(JSON.stringify(r));
+						});
 						dialog.close();
 					}
 				}.bind(this)
@@ -2912,7 +2900,6 @@
 		); },
 		_indexHeader_template: function( index ) {
 			var closed = index.state === "close";
-			console.log( index.status );
 			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? ut.byteSize_template( index.status.index.primary_size_in_bytes ) + " (" + ut.byteSize_template( index.status.index.size_in_bytes ) + ")" : "unknown" ) ); 
 			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.docs ? index.status.docs.num_docs.toLocaleString() + " (" + index.status.docs.max_doc.toLocaleString() + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
