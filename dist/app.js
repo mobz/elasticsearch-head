@@ -3032,8 +3032,8 @@
 				this.clusterNodes = null;
 				this.cluster.get("_cluster/state", this._clusterState_handler);
 				this.cluster.get("_status", this._status_handler);
-				this.cluster.get("_cluster/nodes", this._clusterNodes_handler);
-				this.cluster.get("_cluster/nodes/stats?all=true", this._clusterNodeStats_handler);
+				this.cluster.get("_nodes", this._clusterNodes_handler);
+				this.cluster.get("_nodes/stats?all=true", this._clusterNodeStats_handler);
 			} else if(this.status && this.clusterState && this.nodeStats && this.clusterNodes) {
 				var clusterState = this.clusterState;
 				var status = this.status;
