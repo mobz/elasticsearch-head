@@ -1,6 +1,6 @@
 h1. elasticsearch-head
 
-h2. A web front end for an ElasticSearch cluster
+h2. A web front end for an Elasticsearch cluster
 
 h3. "http://mobz.github.com/elasticsearch-head":http://mobz.github.com/elasticsearch-head
 
@@ -8,7 +8,7 @@ h2. Installing and Running
 
 There are two main ways of running and installing elasticsearch-head
 
-h4. Running as a plugin of ElasticSearch
+h4. Running as a plugin of Elasticsearch
 
 * @sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head@
 * @open http://localhost:9200/_plugin/head/@
