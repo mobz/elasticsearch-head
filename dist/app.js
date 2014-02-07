@@ -499,6 +499,42 @@
 
 })( this.app );
 
+(function( $, app ) {
+
+	var data = app.ns("data");
+	var ux = app.ns("ux");
+
+	data.Model = ux.Observable.extend({
+		defaults: {
+			data: null
+		},
+		init: function() {
+			this.set( this.config.data );
+		},
+		set: function( key, value ) {
+			if( arguments.length === 1 ) {
+				this._data = $.extend( {}, key );
+			} else {
+				key.split(".").reduce(function( ptr, prop, i, props) {
+					if(i === (props.length - 1) ) {
+						ptr[prop] = value;
+					} else {
+						if( !(prop in ptr) ) {
+							ptr[ prop ] = {};
+						}
+						return ptr[prop];
+					}
+				}, this._data );
+			}
+		},
+		get: function( key ) {
+			return key.split(".").reduce( function( ptr, prop ) {
+				return ( ptr && ( prop in ptr ) ) ? ptr[ prop ] : undefined;
+			}, this._data );
+		},
+	});
+})( this.jQuery, this.app );
+
 (function( app ) {
 
 	var data = app.ns("data");
@@ -3354,12 +3390,13 @@
 	var ui = app.ns("ui");
 
 	ui.ClusterConnect = ui.AbstractWidget.extend({
-		
-		init: function(parent) {
+		defaults: {
+			rootData: null // required Model
+		},
+		init: function() {
 			this._super();
 			this.cluster = this.config.cluster;
 			this.el = $(this._main_template());
-			this.attach( parent );
 			this.nameEl = this.el.find(".uiClusterConnect-name");
 			this.statEl = this.el.find(".uiClusterConnect-status");
 			this.statEl.text( i18n.text("Header.ClusterNotConnected") ).css("background", "grey");
@@ -3369,6 +3406,7 @@
 		
 		_node_handler: function(data) {
 			if(data) {
+				this.config.rootData.set( data );
 				this.nameEl.text(data.name);
 				localStorage["base_uri"] = this.cluster.base_uri;
 			}
@@ -3403,6 +3441,7 @@
 	});
 
 })( this.jQuery, this.app, this.i18n );
+
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");

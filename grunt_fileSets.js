@@ -18,6 +18,7 @@ exports.srcJs = [
 	'src/app/ux/dragdrop.js',
 	'src/app/ux/fieldCollection.js',
 
+	'src/app/data/model/model.js',
 	'src/app/data/dataSourceInterface.js',
 	'src/app/data/resultDataSourceInterface.js',
 	'src/app/data/metaData.js',

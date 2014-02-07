@@ -3,12 +3,13 @@
 	var ui = app.ns("ui");
 
 	ui.ClusterConnect = ui.AbstractWidget.extend({
-		
-		init: function(parent) {
+		defaults: {
+			rootData: null // required Model
+		},
+		init: function() {
 			this._super();
 			this.cluster = this.config.cluster;
 			this.el = $(this._main_template());
-			this.attach( parent );
 			this.nameEl = this.el.find(".uiClusterConnect-name");
 			this.statEl = this.el.find(".uiClusterConnect-status");
 			this.statEl.text( i18n.text("Header.ClusterNotConnected") ).css("background", "grey");
@@ -18,6 +19,7 @@
 		
 		_node_handler: function(data) {
 			if(data) {
+				this.config.rootData.set( data );
 				this.nameEl.text(data.name);
 				localStorage["base_uri"] = this.cluster.base_uri;
 			}
