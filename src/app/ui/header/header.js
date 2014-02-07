@@ -50,7 +50,7 @@
 		_main_template: function() { return (
 			{ tag: "DIV", cls: this._baseCls, children: [
 				this._clusterConnect,
-				{ tag: "H1", text: i18n.text("General.ElasticSearch") },
+				{ tag: "H1", text: i18n.text("General.Elasticsearch") },
 				{ tag: "SPAN", cls: "pull-right", children: [
 					this._quickMenu
 				] }

@@ -3799,7 +3799,7 @@
 		_main_template: function() { return (
 			{ tag: "DIV", cls: this._baseCls, children: [
 				this._clusterConnect,
-				{ tag: "H1", text: i18n.text("General.ElasticSearch") },
+				{ tag: "H1", text: i18n.text("General.Elasticsearch") },
 				{ tag: "SPAN", cls: "pull-right", children: [
 					this._quickMenu
 				] }
@@ -3815,7 +3815,7 @@
 
 	app.App = ui.AbstractWidget.extend({
 		defaults: {
-			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default ElasticSearch host
+			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default Elasticsearch host
 		},
 		init: function(parent) {
 			this._super();

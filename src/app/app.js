@@ -4,7 +4,7 @@
 
 	app.App = ui.AbstractWidget.extend({
 		defaults: {
-			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default ElasticSearch host
+			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default Elasticsearch host
 		},
 		init: function(parent) {
 			this._super();
