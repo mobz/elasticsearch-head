@@ -725,8 +725,8 @@
 			}
 
 			this.aliasesList = Object.keys(aliases);
-			this.indicesList = Object.keys(indices);
-			this.typesList = Object.keys(types);
+			this.indicesList = Object.keys(indices).sort();
+			this.typesList = Object.keys(types).sort();
 			this.fieldsList = Object.keys(fields);
 		}
 	});
@@ -2300,7 +2300,7 @@
 		_indexSelector_template: function() {
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-indices", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Indices") },
-				{ tag: "DIV", onClick: this._selectIndex_handler, children: acx.eachMap(this.metadata.indices, function(name, data) {
+				{ tag: "DIV", onClick: this._selectIndex_handler, children: Object.keys(this.metadata.indices).sort().map(function(name, data) {
 					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-index", text: name };
 				})}
 			] };
@@ -2308,7 +2308,7 @@
 		_typesSelector_template: function() {
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-types", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Types") },
-				{ tag: "DIV", onClick: this._selectType_handler, children: acx.eachMap(this.metadata.types, function(name, data) {
+				{ tag: "DIV", onClick: this._selectType_handler, children: Object.keys(this.metadata.types).sort().map(function(name, data) {
 					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-type", text: name };
 				})}
 			] };

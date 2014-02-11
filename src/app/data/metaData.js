@@ -159,8 +159,8 @@
 			}
 
 			this.aliasesList = Object.keys(aliases);
-			this.indicesList = Object.keys(indices);
-			this.typesList = Object.keys(types);
+			this.indicesList = Object.keys(indices).sort();
+			this.typesList = Object.keys(types).sort();
 			this.fieldsList = Object.keys(fields);
 		}
 	});
