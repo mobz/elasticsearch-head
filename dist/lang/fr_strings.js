@@ -68,10 +68,10 @@ i18n.setKeys({
 	"NodeInfoMenu.NodeStats": "Statistiques du noeud",
 	"Overview.PageTitle" : "Aperçu du cluster",
 	"OptimizeForm.OptimizeIndex": "Optimiser {0}",
-	"OptimizeForm.MaxSegments": "Maximum # De Segments",
-	"OptimizeForm.ExpungeDeletes": "Seulement Purger Supprime",
-	"OptimizeForm.FlushAfter": "Chasse Après Optimiser",
-	"OptimizeForm.WaitForMerge": "Attendre Pour Fusion",
+	"OptimizeForm.MaxSegments": "Nombre maximum de segments",
+	"OptimizeForm.ExpungeDeletes": "Seulement purger les suppressions",
+	"OptimizeForm.FlushAfter": "Flusher après l'optimisation",
+	"OptimizeForm.WaitForMerge": "Attendre la fin de la fusion",
 //	"Output.JSON": "JSON",
 	"Output.Table": "Tableau",
 	"Output.ShowSource": "Voir la requête source",
@@ -145,3 +145,4 @@ i18n.setKeys({
 		</ul>\
 	"
 });
+
