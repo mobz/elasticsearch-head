@@ -152,14 +152,19 @@
 			] }
 		); },
 		_nodeIcon_template: function( node ) {
-			var icon = "fa fa-2x fa-" + (node.master_node ? "star" : "circle") + (node.data_node ? "" : "-o" );
-			var alt = i18n.text( node.master_node ? ( node.data_node ? "NodeType.Master" : "NodeType.Coord" ) : ( node.data_node ? "NodeType.Worker" : "NodeType.Client" ) );
+			var icon, alt;
+			if( node.name === "Unassigned" ) {
+				icon = "fa-exclamation-triangle";
+				alt = i18n.text( "NodeType.Unassigned" );
+			} else {
+				icon = "fa-" + (node.master_node ? "star" : "circle") + (node.data_node ? "" : "-o" );
+				alt = i18n.text( node.master_node ? ( node.data_node ? "NodeType.Master" : "NodeType.Coord" ) : ( node.data_node ? "NodeType.Worker" : "NodeType.Client" ) );
+			}
 			return { tag: "TD", title: alt, cls: "uiNodesView-icon", children: [
-				{ tag: "SPAN", cls: icon }
+				{ tag: "SPAN", cls: "fa fa-2x " + icon }
 			] };
 		},
 		_node_template: function(node) {
-			console.log( node.cluster );
 			return { tag: "TR", cls: "uiNodesView-node" + (node.master_node ? " master": ""), children: [
 				this._nodeIcon_template( node ),
 				{ tag: "TH", children: node.name === "Unassigned" ? [

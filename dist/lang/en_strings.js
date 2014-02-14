@@ -78,6 +78,7 @@ i18n.setKeys({
 	"NodeType.Coord": "Coordinator",
 	"NodeType.Worker": "Worker Node",
 	"NodeType.Client": "Client Node",
+	"NodeType.Unassigned": "Unassigned",
 	"OptimizeForm.OptimizeIndex": "Optimize {0}",
 	"OptimizeForm.MaxSegments": "Maximum # Of Segments",
 	"OptimizeForm.ExpungeDeletes": "Only Expunge Deletes",

@@ -54,3 +54,4 @@
 	});
 
 })( this.jQuery, this.app, this.i18n );
+
