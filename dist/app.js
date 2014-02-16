@@ -3395,9 +3395,6 @@
 	var ui = app.ns("ui");
 
 	ui.ClusterConnect = ui.AbstractWidget.extend({
-		defaults: {
-			rootData: null // required Model
-		},
 		init: function() {
 			this._super();
 			this.cluster = this.config.cluster;
@@ -3411,7 +3408,6 @@
 		
 		_node_handler: function(data) {
 			if(data) {
-				this.config.rootData.set( data );
 				this.nameEl.text(data.name);
 				localStorage["base_uri"] = this.cluster.base_uri;
 			}
