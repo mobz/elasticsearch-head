@@ -4004,6 +4004,38 @@
 
 })( this.jQuery, this.app, this.i18n );
 
+(function( $, app, i18n ) {
+	
+	var ui = app.ns("ui");
+
+	ui.IndexOverview = ui.Page.extend({
+		defaults: {
+			cluster: null
+		},
+		init: function() {
+			this._super();
+			this.cluster = this.config.cluster;
+			this.el = $(this._main_template());
+		},
+		_main_template: function() {
+			return { tag: "DIV", id: this.id(), cls: "uiIndexOverview", children: [
+				new ui.Toolbar({
+					label: i18n.text("IndexOverview.PageTitle"),
+					left: [
+						new ui.Button({
+							label: i18n.text("ClusterOverview.NewIndex"),
+							onclick: this._newIndex_handler
+						}),
+					]
+				}),
+				{ tag: "DIV", cls: "uiIndexOverview-table" }
+			] };
+		}
+
+	});
+
+})( this.jQuery, this.app, this.i18n );
+
 (function( app, i18n ) {
 
 	var ui = app.ns("ui");
@@ -4105,6 +4137,7 @@
 		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
 		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
+		_openIndexOverview_handler: function(jEv) { this.show("IndexOverview", { cluster: this.cluster }, jEv); },
 
 		_body_template: function() { return (
 			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }
@@ -4116,6 +4149,7 @@
 					this._header,
 					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
+						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Indicies"), onclick: this._openIndexOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}

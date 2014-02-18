@@ -65,6 +65,7 @@ exports.srcJs = [
 	'src/app/ui/filterBrowser/filterBrowser.js',
 	'src/app/ui/indexSelector/indexSelector.js',
 	'src/app/ui/header/header.js',
+	'src/app/ui/indexOverview/indexOverview.js',
 
 	'src/app/app.js'
 ];
