@@ -5,7 +5,9 @@
 		"exports",
 		"describe",
 		"expect",
-		"it"
+		"it",
+		"beforeEach",
+		"jasmine"
 	],
 
 	"jquery" : true,
