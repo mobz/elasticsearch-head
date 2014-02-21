@@ -14,10 +14,20 @@
 			return $.ajax( $.extend({
 				url: this.base_uri + params.path,
 				dataType: "json",
+				contentType: "application/json",
 				error: function(xhr, type, message) {
+					//we had an error, it could be that we're talking to an old version of elasticsearch that doesn't support cross origin requests with a contentType set, so try again without it.
 					if("console" in window) {
-						console.log({ "XHR Error": type, "message": message });
+						console.log({ "XHR Error": type, "message": message, "retrying": true });
 					}
+					var repeatRequestParams = this;
+					delete repeatRequestParams['contentType'];
+					repeatRequestParams['error'] = function(xhr, type, message) {
+						if("console" in window) {
+							console.log({ "XHR Error": type, "message": message, "retrying": false });
+						}
+					}
+					$.ajax(repeatRequestParams);
 				}
 			},  params) );
 		},
