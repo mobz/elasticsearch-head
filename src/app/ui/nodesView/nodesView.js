@@ -19,8 +19,6 @@
 				"list": this._aliasRender_template_list,
 				"full": this._aliasRender_template_full
 			}[ this.config.aliasRenderer ];
-			console.log(this.config.aliasRenderer);
-			console.log( this._aliasRenderFunction );
 			this.el = $( this._main_template( this.config.data.cluster, this.config.data.indices ) );
 		},
 

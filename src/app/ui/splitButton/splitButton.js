@@ -10,19 +10,6 @@
 		_baseCls: "uiSplitButton",
 		init: function( parent ) {
 			this._super( parent );
-			this.items = this.config.items.map( function( item ) {
-				return {
-					text: item.label,
-					selected: item.selected,
-					onclick: function( jEv ) {
-						var el = $( jEv.target ).closest("LI");
-						el.parent().children().removeClass("selected");
-						el.addClass("selected");
-						this.fire( "select", this, { value: item.value } );
-						this.value = item.value;
-					}.bind(this)
-				};
-			}, this );
 			this.value = null;
 			this.button = new ui.Button({
 				label: this.config.label,
@@ -32,10 +19,12 @@
 			});
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
-				menu: new (app.ui.MenuPanel.extend({
-					_baseCls: "uiSplitButton-panel uiMenuPanel"
-				}))({
-					items: this.items
+				menu: new ui.SelectMenuPanel({
+					value: this.config.value,
+					items: this.config.items,
+					onSelect: function( panel, event ) {
+						this.fire( "select", this, event );
+					}.bind(this)
 				})
 			});
 			this.el = $(this._main_template());

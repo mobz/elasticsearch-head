@@ -1,0 +1,11 @@
+.uiSelectMenuPanel .uiMenuPanel-label {
+	margin-left: 1em;
+	padding-left: 4px;
+}
+
+.uiSelectMenuPanel .uiMenuPanel-item.selected .uiMenuPanel-label:before {
+	content: "\2713";
+	width: 12px;
+	margin-left: -12px;
+	display: inline-block;
+}

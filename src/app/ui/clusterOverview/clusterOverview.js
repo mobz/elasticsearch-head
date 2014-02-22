@@ -62,16 +62,16 @@
 				cluster: this.cluster,
 				onData: this._refresh_handler
 			});
-			this._nodeSort = nodeSort_name;
 			this._refreshButton = new ui.SplitButton({
 				label: i18n.text("General.RefreshResults"),
+				value: this._redrawValue,
 				items: [
-					{ label: i18n.text("General.ManualRefresh"), value: -1, selected: true },
-					{ label: i18n.text("General.RefreshQuickly"), value: 100 },
-					{ label: i18n.text("General.Refresh5seconds"), value: 5000 },
-					{ label: i18n.text("General.Refresh1minute"), value: 60000 }
+					{ text: i18n.text("General.ManualRefresh"), value: -1 },
+					{ text: i18n.text("General.RefreshQuickly"), value: 100 },
+					{ text: i18n.text("General.Refresh5seconds"), value: 5000 },
+					{ text: i18n.text("General.Refresh1minute"), value: 60000 }
 				],
-				onselect: function( btn, event ) {
+				onSelect: function( btn, event ) {
 					this._redrawValue = event.value;
 					if( event.value < 0 ) {
 						window.clearTimeout( this._resetTimer );
@@ -82,24 +82,35 @@
 					this.refresh();
 				}.bind(this)
 			});
+			this._nodeSort = nodeSort_name;
 			this._nodeSortMenu = new ui.MenuButton({
 				label: "Sort Cluster",
-				menu: new ui.MenuPanel({
+				menu: new ui.SelectMenuPanel({
+					value: this._nodeSort,
 					items: [
-						{ text: "By Name", onclick: this._nodeSort_handler.bind(this, nodeSort_name ) },
-						{ text: "By Address", onclick: this._nodeSort_handler.bind(this, nodeSort_addr ) },
-						{ text: "By Type", onclick: this._nodeSort_handler.bind(this, nodeSort_type ) }
-					]
+						{ text: "By Name", value: nodeSort_name },
+						{ text: "By Address", value: nodeSort_addr },
+						{ text: "By Type", value: nodeSort_type }
+					],
+					onSelect: function( panel, event ) {
+						this._nodeSort = event.value;
+						this.refresh();
+					}.bind(this)
 				})
 			});
+			this._aliasRenderer = "full";
 			this._aliasMenu = new ui.MenuButton({
 				label: "View Aliases",
-				menu: new ui.MenuPanel({
+				menu: new ui.SelectMenuPanel({
+					value: this._aliasRenderer,
 					items: [
-						{ text: "Grouped", onclick: this._showAlias_handler.bind( this, "full" ) },
-						{ text: "List", onclick: this._showAlias_handler.bind( this, "list" ) },
-						{ text: "None", onclick: this._showAlias_handler.bind( this, "none" ) },
-					]
+						{ value: "full", text: "Grouped" },
+						{ value: "list", text: "List" },
+						{ value: "none", text: "None" } ],
+					onSelect: function( panel, event ) {
+						this._aliasRenderer = event.value;
+						this.refresh();
+					}.bind(this)
 				})
 			});
 			this.el = $(this._main_template());
@@ -249,14 +260,6 @@
 				}
 			});
 			this._nodesView.attach( this.tablEl );
-		},
-		_nodeSort_handler: function( sortFn ) {
-			this._nodeSort = sortFn;
-			this.refresh();
-		},
-		_showAlias_handler: function( aliasRender ) {
-			this._aliasRenderer = aliasRender;
-			this.refresh();
 		},
 		_newIndex_handler: function() {
 			var fields = new app.ux.FieldCollection({

@@ -16,12 +16,15 @@
 			this._super(jEv);
 			var cx = this; setTimeout(function() { $(document).bind("click", cx._close_handler); }, 50);
 		},
+		_getItems: function() {
+			return this.config.items;
+		},
 		_close_handler: function(jEv) {
 			this._super(jEv);
 			$(document).unbind("click", this._close_handler);
 		},
 		_main_template: function() {
-			return { tag: "DIV", cls: this._baseCls, children: this.config.items.map(this._menuItem_template, this) };
+			return { tag: "DIV", cls: this._baseCls, children: this._getItems().map(this._menuItem_template, this) };
 		},
 		_menuItem_template: function(item) {
 			var dx = item.disabled ? { onclick: function() {} } : {};
