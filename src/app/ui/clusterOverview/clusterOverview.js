@@ -60,7 +60,7 @@
 			this.cluster = this.config.cluster;
 			this._clusterState = new data.ClusterState({
 				cluster: this.cluster,
-				onData: this._redraw_handler
+				onData: this._refresh_handler
 			});
 			this._nodeSort = nodeSort_name;
 			this._refreshButton = new ui.SplitButton({
@@ -92,7 +92,16 @@
 					]
 				})
 			});
-
+			this._aliasMenu = new ui.MenuButton({
+				label: "View Aliases",
+				menu: new ui.MenuPanel({
+					items: [
+						{ text: "Grouped", onclick: this._showAlias_handler.bind( this, "full" ) },
+						{ text: "List", onclick: this._showAlias_handler.bind( this, "list" ) },
+						{ text: "None", onclick: this._showAlias_handler.bind( this, "none" ) },
+					]
+				})
+			});
 			this.el = $(this._main_template());
 			this.tablEl = this.el.find(".uiClusterOverview-table");
 			this.refresh();
@@ -109,7 +118,7 @@
 			this._refreshButton.disable();
 			this._clusterState.refresh();
 		},
-		_redraw_handler: function( data ) {
+		_refresh_handler: function( data ) {
 			var clusterState = data.clusterState;
 			var status = data.status;
 			var nodeStats = data.nodeStats;
@@ -232,6 +241,7 @@
 					this.refresh();
 				}.bind(this),
 				interactive: ( this._redrawValue === -1 ),
+				aliasRenderer: this._aliasRenderer,
 				cluster: this.cluster,
 				data: {
 					cluster: cluster,
@@ -242,6 +252,10 @@
 		},
 		_nodeSort_handler: function( sortFn ) {
 			this._nodeSort = sortFn;
+			this.refresh();
+		},
+		_showAlias_handler: function( aliasRender ) {
+			this._aliasRenderer = aliasRender;
 			this.refresh();
 		},
 		_newIndex_handler: function() {
@@ -288,7 +302,8 @@
 							label: i18n.text("ClusterOverview.NewIndex"),
 							onclick: this._newIndex_handler
 						}),
-						this._nodeSortMenu
+						this._nodeSortMenu,
+						this._aliasMenu
 					],
 					right: [
 						this._refreshButton
