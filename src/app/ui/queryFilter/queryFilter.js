@@ -46,6 +46,20 @@
 			});
 			this.requestUpdate(jEv);
 		},
+        _filterAlias_handler: function(jEv) {
+            //var indices = [];// : this.metadata.getIndices($(jEv.target).val());
+            var fullText = jEv.target.value;
+            var substrings = fullText.split(" ");
+            $(".uiQueryFilter-index").each(function(i, el) {
+                var jEl = $(el);
+                if (substrings.every(function(v) { return jEl.text().indexOf(v) >= 0; })) {
+                    jEl.show();
+                } else {
+                    jEl.hide();
+                }
+            });
+            this.requestUpdate(jEv);
+        },
 		_selectIndex_handler: function(jEv) {
 			var jEl = $(jEv.target).closest(".uiQueryFilter-index");
 			jEl.toggleClass("selected");
@@ -204,6 +218,7 @@
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "uiQueryFilter", children: [
 				this._aliasSelector_template(),
+                this._aliasFilter_template(),
 				this._indexSelector_template(),
 				this._typesSelector_template(),
 				this._filters_template()
@@ -216,6 +231,11 @@
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
+        _aliasFilter_template: function() {
+            return { tag: "DIV", cls: "uiQueryFilter-alias-filter", child:
+            { tag: "INPUT", onChange: this._filterAlias_handler }
+            };
+        },
 		_indexSelector_template: function() {
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-indices", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Indices") },
