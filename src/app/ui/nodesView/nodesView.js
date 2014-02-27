@@ -173,29 +173,29 @@
 				] }
 			].concat(node.routings.map(this._routing_template, this))};
 		},
-		_alias_template: function(alias, row) {
-			return { tag: "TR", children: [ { tag: "TD" },{ tag: "TD" } ].concat(alias.indices.map(function(index, i) {
-				if (index) {
-					return {
-						tag: "TD",
-						css: { background: "#" + "9ce9c7fc9".substr((row+6)%7,3) },
-						cls: "uiNodesView-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
-						text: alias.name,
-						children: this.interactive ? [
-							{	tag: 'SPAN',
-								text: i18n.text("General.CloseGlyph"),
-								cls: 'uiNodesView-hasAlias-remove',
-								onclick: this._deleteAliasAction_handler.bind( this, index, alias )
-							}
-						]: null
-					};
-				}
-				else {
-					return { tag: "TD" };
-				}
-			},
-			this)) };
-		},
+        _alias_template: function(row, rownum) {
+            return { tag: "TR", children: [ { tag: "TD" },{ tag: "TD" } ].concat(row.aliases.map(function(alias) {
+                    if (alias) {
+                        return {
+                            tag: "TD",
+                            css: { background: "#" + "9ce9c7fc9".substr((rownum+1)%7,3) },
+                            //cls: "uiNodesView-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
+                            text: alias.name,
+                            children: this.interactive ? [
+                                {	tag: 'SPAN',
+                                    text: i18n.text("General.CloseGlyph"),
+                                    cls: 'uiNodesView-hasAlias-remove',
+                                    onclick: this._deleteAliasAction_handler.bind( this, alias.index, alias )
+                                }
+                            ]: null
+                        };
+                    }
+                    else {
+                        return { tag: "TD" };
+                    }
+                },
+                this)) };
+        },
 		_indexHeaderControls_template: function( index ) { return (
 			{ tag: "DIV", cls: "uiNodesView-controls", children: [
 				new ui.MenuButton({
@@ -238,7 +238,7 @@
 		_main_template: function(cluster, indices) {
 			return { tag: "TABLE", cls: "uiNodesView", children: [
 				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
-				cluster.aliases.length && { tag: "TBODY", children: cluster.aliases.map(this._alias_template, this) },
+                cluster.rowCount && { tag: "TBODY", children: cluster.aliases.map(this._alias_template, this) },
 				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
 			] };
 		}

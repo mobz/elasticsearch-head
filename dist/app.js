@@ -2867,29 +2867,29 @@
 				] }
 			].concat(node.routings.map(this._routing_template, this))};
 		},
-		_alias_template: function(alias, row) {
-			return { tag: "TR", children: [ { tag: "TD" },{ tag: "TD" } ].concat(alias.indices.map(function(index, i) {
-				if (index) {
-					return {
-						tag: "TD",
-						css: { background: "#" + "9ce9c7fc9".substr((row+6)%7,3) },
-						cls: "uiNodesView-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
-						text: alias.name,
-						children: this.interactive ? [
-							{	tag: 'SPAN',
-								text: i18n.text("General.CloseGlyph"),
-								cls: 'uiNodesView-hasAlias-remove',
-								onclick: this._deleteAliasAction_handler.bind( this, index, alias )
-							}
-						]: null
-					};
-				}
-				else {
-					return { tag: "TD" };
-				}
-			},
-			this)) };
-		},
+        _alias_template: function(row, rownum) {
+            return { tag: "TR", children: [ { tag: "TD" },{ tag: "TD" } ].concat(row.aliases.map(function(alias) {
+                    if (alias) {
+                        return {
+                            tag: "TD",
+                            css: { background: "#" + "9ce9c7fc9".substr((rownum+1)%7,3) },
+                            //cls: "uiNodesView-hasAlias" + ( alias.min === i ? " min" : "" ) + ( alias.max === i ? " max" : "" ),
+                            text: alias.name,
+                            children: this.interactive ? [
+                                {	tag: 'SPAN',
+                                    text: i18n.text("General.CloseGlyph"),
+                                    cls: 'uiNodesView-hasAlias-remove',
+                                    onclick: this._deleteAliasAction_handler.bind( this, alias.index, alias )
+                                }
+                            ]: null
+                        };
+                    }
+                    else {
+                        return { tag: "TD" };
+                    }
+                },
+                this)) };
+        },
 		_indexHeaderControls_template: function( index ) { return (
 			{ tag: "DIV", cls: "uiNodesView-controls", children: [
 				new ui.MenuButton({
@@ -2932,7 +2932,7 @@
 		_main_template: function(cluster, indices) {
 			return { tag: "TABLE", cls: "uiNodesView", children: [
 				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
-				cluster.aliases.length && { tag: "TBODY", children: cluster.aliases.map(this._alias_template, this) },
+                cluster.rowCount && { tag: "TBODY", children: cluster.aliases.map(this._alias_template, this) },
 				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
 			] };
 		}
@@ -3148,20 +3148,23 @@
 						node.routings[i].open = indices[i].state === "open";
 					}
 				});
-				var aliasesIndex = {};
-				var aliases = [];
-				var indexClone = indices.map(function() { return false; });
-				$.each(clusterState.metadata.indices, function(name, index) {
-					index.aliases.forEach(function(alias) {
-						var aliasIndex = aliasesIndex[alias] = (alias in aliasesIndex) ? aliasesIndex[alias] : aliases.push( { name: alias, max: -1, min: 999, indices: [].concat(indexClone) }) - 1;
-						var indexIndex = indexIndices[name];
-						var aliasRow = aliases[aliasIndex];
-						aliasRow.min = Math.min(aliasRow.min, indexIndex);
-						aliasRow.max = Math.max(aliasRow.max, indexIndex);
-						aliasRow.indices[indexIndex] = indices[indexIndex];
-					});
-				});
-				cluster.aliases = aliases;
+                var rows = [];
+                var rowCount = 0;
+                var indicesNames = Object.keys(clusterState.metadata.indices).sort();
+                indicesNames.forEach(function(name) {
+                    var index = clusterState.metadata.indices[name];
+                    rowCount = (index.aliases.length > rowCount) ? index.aliases.length : rowCount;
+                });
+                for (var i=0;i<rowCount;i++)
+                {
+                    rows.push( { aliases: [] });
+                    indicesNames.forEach(function(name) {
+                        var index = clusterState.metadata.indices[name];
+                        rows[i].aliases.push( { index: index, name: index.aliases[i] });
+                    });
+                }
+                cluster.aliases = rows;
+                cluster.rowCount = rowCount;
 				cluster.nodes = nodes
 					.filter( nodeFilter_none )
 					.sort( this._nodeSort );

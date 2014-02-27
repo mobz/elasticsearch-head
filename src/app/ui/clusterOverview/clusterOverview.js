@@ -205,20 +205,23 @@
 						node.routings[i].open = indices[i].state === "open";
 					}
 				});
-				var aliasesIndex = {};
-				var aliases = [];
-				var indexClone = indices.map(function() { return false; });
-				$.each(clusterState.metadata.indices, function(name, index) {
-					index.aliases.forEach(function(alias) {
-						var aliasIndex = aliasesIndex[alias] = (alias in aliasesIndex) ? aliasesIndex[alias] : aliases.push( { name: alias, max: -1, min: 999, indices: [].concat(indexClone) }) - 1;
-						var indexIndex = indexIndices[name];
-						var aliasRow = aliases[aliasIndex];
-						aliasRow.min = Math.min(aliasRow.min, indexIndex);
-						aliasRow.max = Math.max(aliasRow.max, indexIndex);
-						aliasRow.indices[indexIndex] = indices[indexIndex];
-					});
-				});
-				cluster.aliases = aliases;
+                var rows = [];
+                var rowCount = 0;
+                var indicesNames = Object.keys(clusterState.metadata.indices).sort();
+                indicesNames.forEach(function(name) {
+                    var index = clusterState.metadata.indices[name];
+                    rowCount = (index.aliases.length > rowCount) ? index.aliases.length : rowCount;
+                });
+                for (var i=0;i<rowCount;i++)
+                {
+                    rows.push( { aliases: [] });
+                    indicesNames.forEach(function(name) {
+                        var index = clusterState.metadata.indices[name];
+                        rows[i].aliases.push( { index: index, name: index.aliases[i] });
+                    });
+                }
+                cluster.aliases = rows;
+                cluster.rowCount = rowCount;
 				cluster.nodes = nodes
 					.filter( nodeFilter_none )
 					.sort( this._nodeSort );
