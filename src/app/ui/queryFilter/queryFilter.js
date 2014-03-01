@@ -210,35 +210,38 @@
 			] };
 		},
 		_aliasSelector_template: function() {
-			var aliases = acx.eachMap(this.metadata.aliases, function(alias) { return alias; } );
+			var aliases = Object.keys(this.metadata.aliases).sort();
 			aliases.unshift( i18n.text("QueryFilter.AllIndices") );
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-aliases", child:
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
 			};
 		},
 		_indexSelector_template: function() {
+			var indices = Object.keys( this.metadata.indices ).sort();
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-indices", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Indices") },
-				{ tag: "DIV", onClick: this._selectIndex_handler, children: acx.eachMap(this.metadata.indices, function(name, data) {
+				{ tag: "DIV", onClick: this._selectIndex_handler, children: indices.map( function( name ) {
 					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-index", text: name };
 				})}
 			] };
 		},
 		_typesSelector_template: function() {
+			var types = Object.keys( this.metadata.types ).sort();
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-types", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Types") },
-				{ tag: "DIV", onClick: this._selectType_handler, children: acx.eachMap(this.metadata.types, function(name, data) {
+				{ tag: "DIV", onClick: this._selectType_handler, children: types.map( function( name ) {
 					return { tag: "DIV", cls: "uiQueryFilter-booble uiQueryFilter-type", text: name };
 				})}
 			] };
 		},
 		_filters_template: function() {
+			var fields = Object.keys( this.metadata.fields ).sort();
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-filters", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Fields") },
-				{ tag: "DIV", children: acx.eachMap(this.metadata.fields, function(name, data) {
+				{ tag: "DIV", children: fields.map( function(name ) {
 					return new app.ui.SidebarSection({
 						title: name,
-						help: this.helpTypeMap[data.type],
+						help: this.helpTypeMap[this.metadata.fields[ name ].type],
 						onShow: this._openFilter_handler
 					});
 				}, this ) }
