@@ -1,6 +1,6 @@
-describe("app.data.ClusterState", function() {
+describe("app.services.ClusterState", function() {
 
-	var ClusterState = window.app.data.ClusterState;
+	var ClusterState = window.app.services.ClusterState;
 	var test = window.test;
 
 	var c;

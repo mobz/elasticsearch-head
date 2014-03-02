@@ -1,7 +1,6 @@
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
-	var data = app.ns("data");
 
 	// ( master ) master = true, data = true 
 	// ( coordinator ) master = true, data = false
@@ -58,10 +57,8 @@
 			this._resetTimer = null;
 			this._redrawValue = -1;
 			this.cluster = this.config.cluster;
-			this._clusterState = new data.ClusterState({
-				cluster: this.cluster,
-				onData: this._refresh_handler
-			});
+			this._clusterState = this.config.clusterState;
+			this._clusterState.on("data", this._refresh_handler );
 			this._refreshButton = new ui.SplitButton({
 				label: i18n.text("General.RefreshResults"),
 				value: this._redrawValue,
@@ -123,6 +120,9 @@
 					}, self._redrawValue );
 				}
 			} );
+		},
+		remove: function() {
+			this._clusterState.removeObserver( "data", this._refresh_handler );
 		},
 		refresh: function() {
 			window.clearTimeout( this._resetTimer );

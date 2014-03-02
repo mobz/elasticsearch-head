@@ -1147,70 +1147,6 @@
 })( this.app );
 (function( app ) {
 
-	var data = app.ns("data");
-	var ux = app.ns("ux");
-
-	data.ClusterState = ux.Observable.extend({
-		defaults: {
-			cluster: null
-		},
-		init: function() {
-			this._super();
-			this.cluster = this.config.cluster;
-			this.clusterState = null;
-			this.status = null;
-			this.nodeStats = null;
-			this.clusterNodes = null;
-		},
-		refresh: function() {
-			var self = this, clusterState, status, nodeStats, clusterNodes; 
-			function updateModel() {
-				if( clusterState && status && nodeStats && clusterNodes ) {
-					this.clusterState = clusterState;
-					this.status = status;
-					this.nodeStats = nodeStats;
-					this.clusterNodes = clusterNodes;
-					this.fire( "data", this );
-				}
-			}
-			this.cluster.get("_cluster/state", function( data ) {
-				clusterState = data;
-				updateModel.call( self );
-			});
-			this.cluster.get("_status", function( data ) {
-				status = data;
-				updateModel.call( self );
-			});
-			this.cluster.get("_nodes/stats?all=true", function( data ) {
-				nodeStats = data;
-				updateModel.call( self );
-			});
-			this.cluster.get("_nodes", function( data ) {
-				clusterNodes = data;
-				updateModel.call( self );
-			});
-		},
-		_clusterState_handler: function(state) {
-			this.clusterState = state;
-			this.redraw("clusterState");
-		},
-		_status_handler: function(status) {
-			this.status = status;
-			this.redraw("status");
-		},
-		_clusterNodeStats_handler: function(stats) {
-			this.nodeStats = stats;
-			this.redraw("nodeStats");
-		},
-		_clusterNodes_handler: function(nodes) {
-			this.clusterNodes = nodes;
-			this.redraw("clusterNodes");
-		}
-	});
-
-})( this.app );
-(function( app ) {
-
 	var services = app.ns("services");
 
 	services.storage = (function() {
@@ -3078,7 +3014,6 @@
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
-	var data = app.ns("data");
 
 	// ( master ) master = true, data = true 
 	// ( coordinator ) master = true, data = false
@@ -3135,10 +3070,8 @@
 			this._resetTimer = null;
 			this._redrawValue = -1;
 			this.cluster = this.config.cluster;
-			this._clusterState = new data.ClusterState({
-				cluster: this.cluster,
-				onData: this._refresh_handler
-			});
+			this._clusterState = this.config.clusterState;
+			this._clusterState.on("data", this._refresh_handler );
 			this._refreshButton = new ui.SplitButton({
 				label: i18n.text("General.RefreshResults"),
 				value: this._redrawValue,
@@ -3200,6 +3133,9 @@
 					}, self._redrawValue );
 				}
 			} );
+		},
+		remove: function() {
+			this._clusterState.removeObserver( "data", this._refresh_handler );
 		},
 		refresh: function() {
 			window.clearTimeout( this._resetTimer );
@@ -3965,6 +3901,7 @@
 (function( app, i18n ) {
 
 	var ui = app.ns("ui");
+	var services = app.ns("services");
 
 	app.App = ui.AbstractWidget.extend({
 		defaults: {
@@ -3985,7 +3922,11 @@
 					}
 				});
 			}
-			this.cluster = new app.services.Cluster({ base_uri: this.base_uri });
+			this.cluster = new services.Cluster({ base_uri: this.base_uri });
+			this._clusterState = new services.ClusterState({
+				cluster: this.cluster
+			});
+
 			this.$body = $( this._body_template() );
 			this.el = $(this._main_template());
 			this.attach( parent );
@@ -4056,7 +3997,7 @@
 		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster }, jEv); },
 		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
+		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
 
 		_body_template: function() { return (
 			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }

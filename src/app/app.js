@@ -1,6 +1,7 @@
 (function( app, i18n ) {
 
 	var ui = app.ns("ui");
+	var services = app.ns("services");
 
 	app.App = ui.AbstractWidget.extend({
 		defaults: {
@@ -21,7 +22,11 @@
 					}
 				});
 			}
-			this.cluster = new app.services.Cluster({ base_uri: this.base_uri });
+			this.cluster = new services.Cluster({ base_uri: this.base_uri });
+			this._clusterState = new services.ClusterState({
+				cluster: this.cluster
+			});
+
 			this.$body = $( this._body_template() );
 			this.el = $(this._main_template());
 			this.attach( parent );
@@ -92,7 +97,7 @@
 		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster }, jEv); },
 		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster }, jEv); },
+		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
 
 		_body_template: function() { return (
 			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }

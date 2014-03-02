@@ -1,9 +1,9 @@
 (function( app ) {
 
-	var data = app.ns("data");
+	var services = app.ns("services");
 	var ux = app.ns("ux");
 
-	data.ClusterState = ux.Observable.extend({
+	services.ClusterState = ux.Observable.extend({
 		defaults: {
 			cluster: null
 		},

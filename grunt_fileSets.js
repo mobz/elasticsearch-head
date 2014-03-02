@@ -26,10 +26,10 @@ exports.srcJs = [
 	'src/app/data/query.js',
 	'src/app/data/queryDataSourceInterface.js',
 	'src/app/data/boolQuery.js',
-	'src/app/data/clusterState/clusterState.js',
 
 	'src/app/services/storage.js',
 	'src/app/services/cluster.js',
+	'src/app/services/clusterState/clusterState.js',
 
 	'src/app/ui/abstractWidget/abstractWidget.js',
 	'src/app/ui/abstractField/abstractField.js',
