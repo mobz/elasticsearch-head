@@ -585,6 +585,7 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 
 .uiNodesView-routing {
 	position: relative;
+	min-width: 90px;
 }
 
 .uiNodesView-nullReplica,
