@@ -3927,7 +3927,7 @@
 			var menuItems = quicks.map( function( item ) {
 				return { text: item.text, onclick: function() {
 					cluster.get( item.path, function( data ) {
-						quickPanels[ item.path ] && quickPanels[ item.path ].remove();
+						quickPanels[ item.path ] && quickPanels[ item.path ].el && quickPanels[ item.path ].remove();
 						quickPanels[ item.path ] = new ui.JsonPanel({
 							title: item.text,
 							json: data
@@ -3942,12 +3942,6 @@
 				})
 			});
 			this.el = $( this._main_template() );
-		},
-		quick: function(title, path) {
-			this.quicks[path] && this.quicks[path].remove();
-			this.cluster.get(path, function(data) {
-				this.quicks[path] = new ui.JsonPanel({ title: title, json: data });
-			}.bind(this));
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: this._baseCls, children: [
