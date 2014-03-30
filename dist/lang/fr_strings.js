@@ -49,7 +49,7 @@ i18n.setKeys({
 //	"IndexSelector.NameWithDocs": "{0} ({1} docs)",
 	"IndexSelector.SearchIndexForDocs": "Chercher dans {0} les documents correspondant à",
 	"FilterBrowser.OutputType": "Format d'affichage des résultats {0}",
-	"Header.ClusterHealth": "Santé du cluster: {0} ({1}, {2})",
+	"Header.ClusterHealth": "Santé du cluster: {0} ({1} {2})",
 	"Header.Connect": "Se connecter",
 	"Nav.AnyRequest": "Autres requêtes",
 	"Nav.StructuredQuery": "Requêtes structurées",

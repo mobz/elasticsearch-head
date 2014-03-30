@@ -1,9 +1,3 @@
-.uiClusterConnect-name, .uiClusterConnect-status {
-	font-size: 1.2em;
-	font-weight: bold;
-	padding: 0 10px;
-}
-
 .uiClusterConnect-uri {
 	width: 280px;
 }

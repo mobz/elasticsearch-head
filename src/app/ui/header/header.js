@@ -4,7 +4,8 @@
 
 	ui.Header = ui.AbstractWidget.extend({
 		defaults: {
-			cluster: null
+			cluster: null,
+			clusterState: null
 		},
 		_baseCls: "uiHeader",
 		init: function() {
@@ -40,10 +41,26 @@
 				})
 			});
 			this.el = $( this._main_template() );
+			this.nameEl = this.el.find(".uiHeader-name");
+			this.statEl = this.el.find(".uiHeader-status");
+			this._clusterState = this.config.clusterState;
+			this._clusterState.on("data", function( state ) {
+				var shards = state.status._shards;
+				var colour = shards.failed > 0 ? "red" : ( shards.total > shards.successful ? "yellow" : "green" );
+				var name = state.clusterState.nodes[ state.clusterState.master_node ].name;
+				this.nameEl.text( name );
+				this.statEl
+					.text( i18n.text("Header.ClusterHealth", colour, shards.successful, shards.total ) )
+					.css( "background", colour );
+			}.bind(this));
+			this.statEl.text( i18n.text("Header.ClusterNotConnected") ).css("background", "grey");
+			this._clusterState.refresh();
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: this._baseCls, children: [
 				this._clusterConnect,
+				{ tag: "SPAN", cls: "uiHeader-name" },
+				{ tag: "SPAN", cls: "uiHeader-status" },
 				{ tag: "H1", text: i18n.text("General.Elasticsearch") },
 				{ tag: "SPAN", cls: "pull-right", children: [
 					this._quickMenu

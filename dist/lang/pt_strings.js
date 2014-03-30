@@ -55,7 +55,7 @@ i18n.setKeys({
 	"IndexSelector.SearchIndexForDocs": "Busca {0} por documentos onde:",
 	"FilterBrowser.OutputType": "Resultados: {0}",
 	"FilterBrowser.OutputSize": "Número de Resultados: {0}",
-	"Header.ClusterHealth": "saúde do cluster: {0} ({1}, {2})",
+	"Header.ClusterHealth": "saúde do cluster: {0} ({1} {2})",
 	"Header.ClusterNotConnected": "saúde do cluster: não conectado",
 	"Header.Connect": "Conectar",
 	"Nav.AnyRequest": "Qualquer requisição",

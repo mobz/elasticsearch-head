@@ -3507,29 +3507,20 @@
 	var ui = app.ns("ui");
 
 	ui.ClusterConnect = ui.AbstractWidget.extend({
+		defaults: {
+			cluster: null
+		},
 		init: function() {
 			this._super();
 			this.cluster = this.config.cluster;
 			this.el = $(this._main_template());
-			this.nameEl = this.el.find(".uiClusterConnect-name");
-			this.statEl = this.el.find(".uiClusterConnect-status");
-			this.statEl.text( i18n.text("Header.ClusterNotConnected") ).css("background", "grey");
 			this.cluster.get( "", this._node_handler );
 			this.cluster.get( "_cluster/health", this._health_handler );
 		},
 		
 		_node_handler: function(data) {
 			if(data) {
-				this.nameEl.text(data.name);
 				localStorage["base_uri"] = this.cluster.base_uri;
-			}
-		},
-		
-		_health_handler: function(data) {
-			if(data) {
-				this.statEl
-					.text( i18n.text("Header.ClusterHealth", data.status, data.number_of_nodes, data.active_primary_shards ) )
-					.css( "background", data.status );
 			}
 		},
 		
@@ -3546,9 +3537,7 @@
 						this._reconnect_handler();
 					}
 				}.bind(this), id: this.id("baseUri"), value: this.cluster.base_uri },
-				{ tag: "BUTTON", type: "button", text: i18n.text("Header.Connect"), onclick: this._reconnect_handler },
-				{ tag: "SPAN", cls: "uiClusterConnect-name" },
-				{ tag: "SPAN", cls: "uiClusterConnect-status" }
+				{ tag: "BUTTON", type: "button", text: i18n.text("Header.Connect"), onclick: this._reconnect_handler }
 			]};
 		}
 	});
@@ -3906,7 +3895,8 @@
 
 	ui.Header = ui.AbstractWidget.extend({
 		defaults: {
-			cluster: null
+			cluster: null,
+			clusterState: null
 		},
 		_baseCls: "uiHeader",
 		init: function() {
@@ -3942,10 +3932,26 @@
 				})
 			});
 			this.el = $( this._main_template() );
+			this.nameEl = this.el.find(".uiHeader-name");
+			this.statEl = this.el.find(".uiHeader-status");
+			this._clusterState = this.config.clusterState;
+			this._clusterState.on("data", function( state ) {
+				var shards = state.status._shards;
+				var colour = shards.failed > 0 ? "red" : ( shards.total > shards.successful ? "yellow" : "green" );
+				var name = state.clusterState.nodes[ state.clusterState.master_node ].name;
+				this.nameEl.text( name );
+				this.statEl
+					.text( i18n.text("Header.ClusterHealth", colour, shards.successful, shards.total ) )
+					.css( "background", colour );
+			}.bind(this));
+			this.statEl.text( i18n.text("Header.ClusterNotConnected") ).css("background", "grey");
+			this._clusterState.refresh();
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: this._baseCls, children: [
 				this._clusterConnect,
+				{ tag: "SPAN", cls: "uiHeader-name" },
+				{ tag: "SPAN", cls: "uiHeader-status" },
 				{ tag: "H1", text: i18n.text("General.Elasticsearch") },
 				{ tag: "SPAN", cls: "pull-right", children: [
 					this._quickMenu
@@ -3985,6 +3991,7 @@
 				cluster: this.cluster
 			});
 
+			this._header = new ui.Header({ cluster: this.cluster, clusterState: this._clusterState });
 			this.$body = $( this._body_template() );
 			this.el = $(this._main_template());
 			this.attach( parent );
@@ -4064,7 +4071,7 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiApp", children: [
 				{ tag: "DIV", id: this.id("header"), cls: "uiApp-header", children: [
-					new ui.Header({ cluster: this.cluster }),
+					this._header,
 					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },

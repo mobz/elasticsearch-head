@@ -27,6 +27,7 @@
 				cluster: this.cluster
 			});
 
+			this._header = new ui.Header({ cluster: this.cluster, clusterState: this._clusterState });
 			this.$body = $( this._body_template() );
 			this.el = $(this._main_template());
 			this.attach( parent );
@@ -106,7 +107,7 @@
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiApp", children: [
 				{ tag: "DIV", id: this.id("header"), cls: "uiApp-header", children: [
-					new ui.Header({ cluster: this.cluster }),
+					this._header,
 					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },

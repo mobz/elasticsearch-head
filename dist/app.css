@@ -616,12 +616,6 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 .uiNodesView-replica.state-RELOCATING { background: #dc88dd; }
 
 
-.uiClusterConnect-name, .uiClusterConnect-status {
-	font-size: 1.2em;
-	font-weight: bold;
-	padding: 0 10px;
-}
-
 .uiClusterConnect-uri {
 	width: 280px;
 }
@@ -647,6 +641,13 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 .uiHeader {
 	padding: 3px 10px;
 }
+
+.uiHeader-name, .uiHeader-status {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 0 10px;
+}
+
 
 .uiApp-header {
 	background: #eee;
