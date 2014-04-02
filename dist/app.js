@@ -3938,7 +3938,7 @@
 			this._clusterState.on("data", function( state ) {
 				var shards = state.status._shards;
 				var colour = shards.failed > 0 ? "red" : ( shards.total > shards.successful ? "yellow" : "green" );
-				var name = state.clusterState.nodes[ state.clusterState.master_node ].name;
+				var name = state.clusterState.cluster_name;
 				this.nameEl.text( name );
 				this.statEl
 					.text( i18n.text("Header.ClusterHealth", colour, shards.successful, shards.total ) )
