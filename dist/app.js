@@ -2977,6 +2977,9 @@
 			if( node.name === "Unassigned" ) {
 				icon = "fa-exclamation-triangle";
 				alt = i18n.text( "NodeType.Unassigned" );
+			} else if( node.cluster.settings && "tribe" in node.cluster.settings) {
+				icon = "fa-sitemap";
+				alt = i18n.text("NodeType.Tribe" );
 			} else {
 				icon = "fa-" + (node.master_node ? "star" : "circle") + (node.data_node ? "" : "-o" );
 				alt = i18n.text( node.master_node ? ( node.data_node ? "NodeType.Master" : "NodeType.Coord" ) : ( node.data_node ? "NodeType.Worker" : "NodeType.Client" ) );
