@@ -54,6 +54,12 @@
 			} else if(op === "query_string") {
 				query["default_field"] = field;
 				query["query"] = value;
+			} else if(op === "missing") {
+				op = "constant_score"
+				var missing = {}, filter = {};
+				missing["field"] = field;
+				filter["missing"] = missing
+				query["filter"] = filter;
 			} else {
 				query[field] = value;
 			}
