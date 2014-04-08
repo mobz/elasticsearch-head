@@ -124,14 +124,16 @@
 			} else if(spec.type === '_all') {
 				ops = ["query_string"];
 			} else if(spec.type === 'string') {
-				ops = ["term", "wildcard", "prefix", "fuzzy", "range", "query_string", "text"];
+				ops = ["term", "wildcard", "prefix", "fuzzy", "range", "query_string", "text", "missing"];
 			} else if(spec.type === 'long' || spec.type === 'integer' || spec.type === 'float' ||
 					spec.type === 'byte' || spec.type === 'short' || spec.type === 'double') {
-				ops = ["term", "range", "fuzzy", "query_string"];
+				ops = ["term", "range", "fuzzy", "query_string", "missing"];
 			} else if(spec.type === 'date') {
-				ops = ["term", "range", "fuzzy", "query_string"];
+				ops = ["term", "range", "fuzzy", "query_string", "missing"];
+			} else if(spec.type === 'geo_point') {
+				ops = ["missing"];
 			} else if(spec.type === 'ip') {
-				ops = ["term", "range", "fuzzy", "query_string"];
+				ops = ["term", "range", "fuzzy", "query_string", "missing"];
 			}
 			select.after({ tag: "SELECT", cls: "op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
 			select.next().change();
