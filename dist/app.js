@@ -578,10 +578,9 @@
 					for(var prop in spec) {
 						if(acx.isObject(spec[prop])) {
 							arguments.callee(path.concat(prop), spec[prop], row);
-						} else if(acx.isArray(spec[prop])) {
-							if(spec[prop].length) {
-								arguments.callee(path.concat(prop), spec[prop][0], row)
-							}
+						} else if(acx.isArray(spec[prop]) && !spec[prop].length) {
+						} else if(acx.isArray(spec[prop]) && spec[prop].length && acx.isObject(spec[prop][0])) {
+							arguments.callee(path.concat(prop), spec[prop][0], row)
 						} else {
 							var dpath = path.concat(prop).join(".");
 							if(! columns.contains(dpath)) {
@@ -1020,30 +1019,35 @@
 		_load_parents: function(query, res) {
 			query.loadParents(res, this.config.metadata);
 		},
+		_formatCell: function(metadata, value) {
+			if (metadata.type === "date") {
+				return new Date(value).toUTCString();
+			}
+			return (value === null ? "null" : value ).toString();
+		},
 		_getData: function(res, metadata) {
 			var metaColumns = ["_index", "_type", "_id", "_score"];
 			var columns = this.columns = [].concat(metaColumns);
+			var format = this._formatCell;
 
 			this.data = res.hits.hits.map(function(hit) {
 				var row = (function(path, spec, row) {
 					for(var prop in spec) {
-						if(acx.isObject(spec[prop])) {
+						var dpath = path.concat(prop).join(".");
+						if(metadata.paths[dpath]) {
+							var field_name = metadata.paths[dpath].field_name;
+							if(! columns.contains(field_name)) {
+								columns.push(field_name);
+							}
+							row[field_name] = format(metadata.paths[dpath], spec[prop]);
+						} else if(acx.isObject(spec[prop])) {
 							arguments.callee(path.concat(prop), spec[prop], row);
 						} else if(acx.isArray(spec[prop])) {
 							if(spec[prop].length) {
 								arguments.callee(path.concat(prop), spec[prop][0], row)
 							}
 						} else {
-							var dpath = path.concat(prop).join(".");
-							if(metadata.paths[dpath]) {
-								var field_name = metadata.paths[dpath].field_name;
-								if(! columns.contains(field_name)) {
-									columns.push(field_name);
-								}
-								row[field_name] = (spec[prop] === null ? "null" : spec[prop] ).toString();
-							} else {
-								// TODO: field not in metadata index
-							}
+							// TODO: field not in metadata index
 						}
 					}
 					return row;
@@ -1053,24 +1057,22 @@
 				if (typeof hit._parent!= "undefined") {
 					(function(prefix, path, spec, row) {
 					for(var prop in spec) {
-						if(acx.isObject(spec[prop])) {
+						var dpath = path.concat(prop).join(".");
+						if(metadata.paths[dpath]) {
+							var field_name = metadata.paths[dpath].field_name;
+							var column_name = prefix+"."+field_name;
+							if(! columns.contains(column_name)) {
+								columns.push(column_name);
+							}
+							row[column_name] = format(metadata.paths[dpath], spec[prop]);
+						} else if(acx.isObject(spec[prop])) {
 							arguments.callee(prefix, path.concat(prop), spec[prop], row);
 						} else if(acx.isArray(spec[prop])) {
 							if(spec[prop].length) {
 								arguments.callee(prefix, path.concat(prop), spec[prop][0], row)
 							}
 						} else {
-							var dpath = path.concat(prop).join(".");
-							if(metadata.paths[dpath]) {
-								var field_name = metadata.paths[dpath].field_name;
-								var column_name = prefix+"."+field_name;
-								if(! columns.contains(column_name)) {
-									columns.push(column_name);
-								}
-								row[column_name] = (spec[prop] === null ? "null" : spec[prop] ).toString();
-							} else {
-								// TODO: field not in metadata index
-							}
+							// TODO: field not in metadata index
 						}
 					}
 					})(hit._parent._type,[hit._parent._index, hit._parent._type], hit._parent._source, row);
