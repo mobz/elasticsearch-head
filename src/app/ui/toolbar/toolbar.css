@@ -13,3 +13,12 @@
 	margin: 0;
 	padding: 5px 20px 5px 0;
 }
+
+.uiToolbar .uiTextField {
+	display: inline-block;
+}
+
+.uiToolbar .uiTextField INPUT {
+	padding-top: 2px;
+	padding-bottom: 5px;
+}

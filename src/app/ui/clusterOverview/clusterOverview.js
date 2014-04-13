@@ -110,6 +110,9 @@
 					}.bind(this)
 				})
 			});
+			this._indexFilter = new ui.TextField({
+				placeholder: "Index Filter"
+			});
 			this.el = $(this._main_template());
 			this.tablEl = this.el.find(".uiClusterOverview-table");
 			this.refresh();
@@ -130,6 +133,13 @@
 			this._clusterState.refresh();
 		},
 		_refresh_handler: function( data ) {
+			var indexFilter;
+			try {
+				var indexFilterRe = new RegExp( this._indexFilter.val() );
+				indexFilter = function(s) { return indexFilterRe.test(s); };
+			} catch(e) {
+				indexFilter = function() { return true; };
+			}
 			var clusterState = data.clusterState;
 			var status = data.status;
 			var nodeStats = data.nodeStats;
@@ -170,7 +180,7 @@
 			$.each(clusterState.routing_table.indices, function(name, index){
 				indexNames.push(name);
 			});
-			indexNames.sort().forEach(function(name) {
+			indexNames.sort().filter( indexFilter ).forEach(function(name) {
 				var index = clusterState.routing_table.indices[name];
 				$.each(index.shards, function(name, shard) {
 					shard.forEach(function(replica){
@@ -203,7 +213,7 @@
 				};
 			}, this);
 			$.each(clusterState.metadata.indices, function(name, index) {
-				if(index.state === "close") {
+				if(index.state === "close" && indexFilter( name )) {
 					indices.push({
 						name: name,
 						state: "close",
@@ -306,7 +316,8 @@
 							onclick: this._newIndex_handler
 						}),
 						this._nodeSortMenu,
-						this._aliasMenu
+						this._aliasMenu,
+						this._indexFilter
 					],
 					right: [
 						this._refreshButton
