@@ -10,7 +10,7 @@ exports.vendorCss = [
 ];
 
 exports.srcJs = [
-	'src/app/core/boot.js',
+	'src/app/base/boot.js',
 
 	'src/app/ux/class.js',
 	'src/app/ux/templates/templates.js',

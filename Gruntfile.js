@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 			base: {
 				expand: true,
 				cwd: 'src/app/base/',
-				src: '**',
+				src: [ '*.gif', '*.png', '*.css' ],
 				dest: 'dist/base/'
 			},
 			iconFonts: {
