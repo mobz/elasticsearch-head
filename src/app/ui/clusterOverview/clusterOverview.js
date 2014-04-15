@@ -111,7 +111,8 @@
 				})
 			});
 			this._indexFilter = new ui.TextField({
-				placeholder: "Index Filter"
+				placeholder: "Index Filter",
+				onchange: this._refresh_handler
 			});
 			this.el = $(this._main_template());
 			this.tablEl = this.el.find(".uiClusterOverview-table");
@@ -132,7 +133,8 @@
 			this._refreshButton.disable();
 			this._clusterState.refresh();
 		},
-		_refresh_handler: function( data ) {
+		_refresh_handler: function() {
+			var data = this._clusterState;
 			var indexFilter;
 			try {
 				var indexFilterRe = new RegExp( this._indexFilter.val() );
