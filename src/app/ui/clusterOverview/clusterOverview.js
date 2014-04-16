@@ -227,7 +227,7 @@
 			nodes.forEach(function(node) {
 				node.stats = nodeStats.nodes[node.name];
 				var cluster = clusterNodes.nodes[node.name];
-				node.cluster = cluster;
+				node.cluster = cluster || { name: "<unknown>" };
 				node.data_node = !( cluster && cluster.attributes && cluster.attributes.data === "false" );
 				for(var i = 0; i < indices.length; i++) {
 					node.routings[i] = node.routings[i] || { name: indices[i].name, replicas: [] };
