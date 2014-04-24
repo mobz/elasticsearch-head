@@ -273,50 +273,11 @@
 			});
 			this._nodesView.attach( this.tablEl );
 		},
-		_newIndex_handler: function() {
-			var fields = new app.ux.FieldCollection({
-				fields: [
-					new ui.TextField({ label: i18n.text("ClusterOverView.IndexName"), name: "_name", require: true }),
-					new ui.TextField({
-						label: i18n.text("ClusterOverview.NumShards"),
-						name: "number_of_shards",
-						value: "5",
-						require: function( val ) { return parseInt( val, 10 ) >= 1; }
-					}),
-					new ui.TextField({
-						label: i18n.text("ClusterOverview.NumReplicas"),
-						name: "number_of_replicas",
-						value: "1",
-						require: function( val ) { return parseInt( val, 10 ) >= 0; }
-					})
-				]
-			});
-			var dialog = new ui.DialogPanel({
-				title: i18n.text("ClusterOverview.NewIndex"),
-				body: new ui.PanelForm({ fields: fields }),
-				onCommit: function(panel, args) {
-					if(fields.validate()) {
-						var data = fields.getData();
-						var name = data["_name"];
-						delete data["_name"];
-						this.config.cluster.put( name, JSON.stringify({ settings: { index: data } }), function(d) {
-							dialog.close();
-							alert(JSON.stringify(d));
-							this.refresh();
-						}.bind(this) );
-					}
-				}.bind(this)
-			}).open();
-		},
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), cls: "uiClusterOverview", children: [
 				new ui.Toolbar({
 					label: i18n.text("Overview.PageTitle"),
 					left: [
-						new ui.Button({
-							label: i18n.text("ClusterOverview.NewIndex"),
-							onclick: this._newIndex_handler
-						}),
 						this._nodeSortMenu,
 						this._aliasMenu,
 						this._indexFilter
