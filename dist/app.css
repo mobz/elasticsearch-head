@@ -561,11 +561,6 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 	padding: 0px 17px 0px 7px;
 }
 
-.uiNodesView-title {
-	font-weight: bold;
-	font-size: 140%;
-}
-
 .uiNodesView-hasAlias {
 	text-align: center;
 }

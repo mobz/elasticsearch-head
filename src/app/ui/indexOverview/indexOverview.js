@@ -66,7 +66,9 @@
 
 		_index_template: function( name, index ) { return (
 			{ tag: "TR", children: [
-				{ tag: "TD", text: name }
+				{ tag: "TD", children: [
+					{ tag: "H3", text: name }
+				] }
 			] }
 		); },
 		_main_template: function() {

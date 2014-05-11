@@ -1,0 +1,13 @@
+TABLE.table {
+	border-collapse: collapse;
+}
+
+TABLE.table TBODY.striped TR:nth-child(odd) {
+	background: #eee;
+}
+
+TABLE.table H3 {
+	margin: 0;
+	font-weight: bold;
+	font-size: 140%;
+}
