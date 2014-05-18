@@ -70,6 +70,9 @@ module.exports = function(grunt) {
 				options: {
 					spawn: false
 				}
+			},
+			"grunt": {
+				files: [ 'Gruntfile.js' ]
 			}
 		},
 
