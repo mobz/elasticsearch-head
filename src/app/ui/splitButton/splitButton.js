@@ -13,27 +13,36 @@
 			this.value = null;
 			this.button = new ui.Button({
 				label: this.config.label,
-				onclick: function() {
-					this.fire("click", this, { value: this.value } );
-				}.bind(this)
+				onclick: this._click_handler
+			});
+			this.menu = new ui.SelectMenuPanel({
+				value: this.config.value,
+				items: this._getItems(),
+				onSelect: this._select_handler
 			});
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
-				menu: new ui.SelectMenuPanel({
-					value: this.config.value,
-					items: this.config.items,
-					onSelect: function( panel, event ) {
-						this.fire( "select", this, event );
-					}.bind(this)
-				})
+				menu: this.menu
 			});
 			this.el = $(this._main_template());
+		},
+		remove: function() {
+			this.menu.remove();
 		},
 		disable: function() {
 			this.button.disable();
 		},
 		enable: function() {
 			this.button.enable();
+		},
+		_click_handler: function() {
+			this.fire("click", this, { value: this.value } );
+		},
+		_select_handler: function( panel, event ) {
+			this.fire( "select", this, event );
+		},
+		_getItems: function() {
+			return this.config.items;
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: this._baseCls, children: [
