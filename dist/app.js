@@ -1503,27 +1503,36 @@
 			this.value = null;
 			this.button = new ui.Button({
 				label: this.config.label,
-				onclick: function() {
-					this.fire("click", this, { value: this.value } );
-				}.bind(this)
+				onclick: this._click_handler
+			});
+			this.menu = new ui.SelectMenuPanel({
+				value: this.config.value,
+				items: this._getItems(),
+				onSelect: this._select_handler
 			});
 			this.menuButton = new ui.MenuButton({
 				label: "\u00a0",
-				menu: new ui.SelectMenuPanel({
-					value: this.config.value,
-					items: this.config.items,
-					onSelect: function( panel, event ) {
-						this.fire( "select", this, event );
-					}.bind(this)
-				})
+				menu: this.menu
 			});
 			this.el = $(this._main_template());
+		},
+		remove: function() {
+			this.menu.remove();
 		},
 		disable: function() {
 			this.button.disable();
 		},
 		enable: function() {
 			this.button.enable();
+		},
+		_click_handler: function() {
+			this.fire("click", this, { value: this.value } );
+		},
+		_select_handler: function( panel, event ) {
+			this.fire( "select", this, event );
+		},
+		_getItems: function() {
+			return this.config.items;
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: this._baseCls, children: [
@@ -1533,6 +1542,47 @@
 	});
 
 })( this.jQuery, this.app );
+
+(function( $, app, i18n ) {
+
+	var ui = app.ns("ui");
+
+	ui.RefreshButton = ui.SplitButton.extend({
+		defaults: {
+			timer: -1
+		},
+		init: function( parent ) {
+			this.config.label = i18n.text("General.RefreshResults");
+			this._super( parent );
+			this._doTimer( this.config.timer );
+		},
+		_doTimer: function( value ) {
+			this.value = value;
+			window.clearInterval( this._timer );
+			if( this.value > 0 ) {
+				this._timer = window.setInterval( this._refresh_handler, this.value );
+			}
+		},
+		_click_handler: function() {
+			this._refresh_handler();
+		},
+		_select_handler: function( el, event ) {
+			this._doTimer( event.value );
+		},
+		_refresh_handler: function() {
+			this.fire("refresh", this );
+		},
+		_getItems: function() {
+			return [
+				{ text: i18n.text("General.ManualRefresh"), value: -1 },
+				{ text: i18n.text("General.RefreshQuickly"), value: 100 },
+				{ text: i18n.text("General.Refresh5seconds"), value: 5000 },
+				{ text: i18n.text("General.Refresh1minute"), value: 60000 }
+			];
+		}
+	});
+
+})( this.jQuery, this.app, this.i18n );
 
 (function( $, app ) {
 
@@ -3160,25 +3210,8 @@
 			this.cluster = this.config.cluster;
 			this._clusterState = this.config.clusterState;
 			this._clusterState.on("data", this._refresh_handler );
-			this._refreshButton = new ui.SplitButton({
-				label: i18n.text("General.RefreshResults"),
-				value: this._redrawValue,
-				items: [
-					{ text: i18n.text("General.ManualRefresh"), value: -1 },
-					{ text: i18n.text("General.RefreshQuickly"), value: 100 },
-					{ text: i18n.text("General.Refresh5seconds"), value: 5000 },
-					{ text: i18n.text("General.Refresh1minute"), value: 60000 }
-				],
-				onSelect: function( btn, event ) {
-					this._redrawValue = event.value;
-					if( event.value < 0 ) {
-						window.clearTimeout( this._resetTimer );
-					}
-					this.refresh();
-				}.bind( this ),
-				onclick: function( btn, event ) {
-					this.refresh();
-				}.bind(this)
+			this._refreshButton = new ui.RefreshButton({
+				onRefresh: this._refresh_handler
 			});
 			this._nodeSort = nodeSort_name;
 			this._nodeSortMenu = new ui.MenuButton({

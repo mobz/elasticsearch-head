@@ -59,25 +59,8 @@
 			this.cluster = this.config.cluster;
 			this._clusterState = this.config.clusterState;
 			this._clusterState.on("data", this._refresh_handler );
-			this._refreshButton = new ui.SplitButton({
-				label: i18n.text("General.RefreshResults"),
-				value: this._redrawValue,
-				items: [
-					{ text: i18n.text("General.ManualRefresh"), value: -1 },
-					{ text: i18n.text("General.RefreshQuickly"), value: 100 },
-					{ text: i18n.text("General.Refresh5seconds"), value: 5000 },
-					{ text: i18n.text("General.Refresh1minute"), value: 60000 }
-				],
-				onSelect: function( btn, event ) {
-					this._redrawValue = event.value;
-					if( event.value < 0 ) {
-						window.clearTimeout( this._resetTimer );
-					}
-					this.refresh();
-				}.bind( this ),
-				onclick: function( btn, event ) {
-					this.refresh();
-				}.bind(this)
+			this._refreshButton = new ui.RefreshButton({
+				onRefresh: this._refresh_handler
 			});
 			this._nodeSort = nodeSort_name;
 			this._nodeSortMenu = new ui.MenuButton({

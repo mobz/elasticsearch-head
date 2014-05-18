@@ -38,6 +38,7 @@ exports.srcJs = [
 	'src/app/ui/button/button.js',
 	'src/app/ui/menuButton/menuButton.js',
 	'src/app/ui/splitButton/splitButton.js',
+	'src/app/ui/refreshButton/refreshButton.js',
 	'src/app/ui/toolbar/toolbar.js',
 	'src/app/ui/abstractPanel/abstractPanel.js',
 	'src/app/ui/draggablePanel/draggablePanel.js',
