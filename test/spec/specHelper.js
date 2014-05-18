@@ -10,7 +10,7 @@ test.cb = (function( jasmine ) {
 			callbacks = [];
 		},
 		createSpy: function( name, arg, data, context ) {
-			return jasmine.createSpy( name ).andCallFake( function() {
+			return jasmine.createSpy( name ).and.callFake( function() {
 				callbacks.push( { cb: arguments[ arg || 0 ], data: data, context: context } );
 			});
 		},
