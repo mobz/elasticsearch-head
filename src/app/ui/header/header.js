@@ -19,7 +19,8 @@
 				{ text: i18n.text("Nav.ClusterNodes"), path: "_cluster/nodes" },
 				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugin" },
 				{ text: i18n.text("Nav.ClusterState"), path: "_cluster/state" },
-				{ text: i18n.text("Nav.ClusterHealth"), path: "_cluster/health" }
+				{ text: i18n.text("Nav.ClusterHealth"), path: "_cluster/health" },
+				{ text: i18n.text("Nav.Templates"), path: "_template" }
 			];
 			var cluster = this.config.cluster;
 			var quickPanels = {};

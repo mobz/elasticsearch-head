@@ -68,6 +68,7 @@ i18n.setKeys({
 	"Nav.Overview": "Overview",
 	"Nav.Plugins": "Plugins",
 	"Nav.Status": "Status",
+	"Nav.Templates": "Templates",
 	"Nav.StructuredQuery": "Structured Query",
 	"NodeActionsMenu.Title": "Actions",
 	"NodeActionsMenu.Shutdown": "Shutdown...",
