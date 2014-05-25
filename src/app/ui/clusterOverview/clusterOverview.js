@@ -246,7 +246,7 @@
 				onRedraw: function() {
 					this.refresh();
 				}.bind(this),
-				interactive: ( this._redrawValue === -1 ),
+				interactive: ( this._refreshButton.value === -1 ),
 				aliasRenderer: this._aliasRenderer,
 				cluster: this.cluster,
 				data: {
