@@ -4,8 +4,9 @@ $( function() {
 
 	window.builder = function() {
 		return new ui.RefreshButton({
-			onRefresh: function() { console.log("-> refresh", arguments ) }
+			onRefresh: function() { console.log("-> refresh", arguments ); },
+			onChange: function() { console.log("-> change", arguments ); }
 		});
-	}	;
+	};
 
 });

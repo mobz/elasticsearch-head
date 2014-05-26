@@ -1548,9 +1548,6 @@
 	var ui = app.ns("ui");
 
 	ui.RefreshButton = ui.SplitButton.extend({
-		defaults: {
-			timer: -1
-		},
 		init: function( parent ) {
 			this.config.label = i18n.text("General.RefreshResults");
 			this._super( parent );
@@ -1568,6 +1565,7 @@
 		},
 		_select_handler: function( el, event ) {
 			this._doTimer( event.value );
+			this.fire("change", this );
 		},
 		_refresh_handler: function() {
 			this.fire("refresh", this );

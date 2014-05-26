@@ -2,7 +2,7 @@ describe("app.ui.RefreshButton", function() {
 
 	var RefreshButton = window.app.ui.RefreshButton;
 
-	var r, refresh_handler;
+	var r, refresh_handler, change_handler;
 
 	function openMenuPanel( button, label ) {
 		button.el.find("BUTTON").eq(1).click();
@@ -14,8 +14,10 @@ describe("app.ui.RefreshButton", function() {
 	beforeEach( function() {
 		test.clock.steal();
 		refresh_handler = jasmine.createSpy("refresh_handler");
+		change_handler = jasmine.createSpy("change_handler");
 		r = new RefreshButton({
-			onRefresh: refresh_handler 
+			onRefresh: refresh_handler,
+			onChange: change_handler
 		});
 		r.attach( document.body );
 	});
@@ -39,7 +41,6 @@ describe("app.ui.RefreshButton", function() {
 		expect( refresh_handler.calls.count() ).toBe( 1 );
 		test.clock.tick();
 		expect( refresh_handler.calls.count() ).toBe( 2 );
-
 	});
 
 	it("should not fire refresh events when user selects Manual", function() {
@@ -56,7 +57,15 @@ describe("app.ui.RefreshButton", function() {
 		expect( refresh_handler.calls.count() ).toBe( 1 );
 		test.clock.tick();
 		expect( refresh_handler.calls.count() ).toBe( 1 );
+	});
 
+	it("should fire a change event when a new refresh rate is selected", function() {
+		openMenuPanel( r, "quickly" );
+		expect( change_handler.calls.count() ).toBe( 1 );
+		expect( r.value ).toBe( 100 );
+		openMenuPanel( r, "Manual" );
+		expect( change_handler.calls.count() ).toBe( 2 );
+		expect( r.value ).toBe( -1 );
 	});
 
 });
