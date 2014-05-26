@@ -54,13 +54,16 @@
 		},
 		init: function() {
 			this._super();
-			this._resetTimer = null;
-			this._redrawValue = -1;
 			this.cluster = this.config.cluster;
 			this._clusterState = this.config.clusterState;
-			this._clusterState.on("data", this._refresh_handler );
+			this._clusterState.on("data", this.draw_handler );
 			this._refreshButton = new ui.RefreshButton({
-				onRefresh: this._refresh_handler
+				onRefresh: this.refresh.bind(this),
+				onChange: function( btn ) {
+					if( btn.value === -1 ) {
+						this.draw_handler();
+					}
+				}.bind( this )
 			});
 			this._nodeSort = nodeSort_name;
 			this._nodeSortMenu = new ui.MenuButton({
@@ -74,7 +77,7 @@
 					],
 					onSelect: function( panel, event ) {
 						this._nodeSort = event.value;
-						this.refresh();
+						this.draw_handler();
 					}.bind(this)
 				})
 			});
@@ -89,34 +92,26 @@
 						{ value: "none", text: "None" } ],
 					onSelect: function( panel, event ) {
 						this._aliasRenderer = event.value;
-						this.refresh();
+						this.draw_handler();
 					}.bind(this)
 				})
 			});
 			this._indexFilter = new ui.TextField({
 				placeholder: "Index Filter",
-				onchange: this._refresh_handler
+				onchange: this.draw_handler
 			});
 			this.el = $(this._main_template());
 			this.tablEl = this.el.find(".uiClusterOverview-table");
 			this.refresh();
-			this.on( "drawn", function( self ) {
-				if( self._redrawValue >= 0 ) {
-					self._resetTimer = setTimeout( function() {
-						self.refresh();
-					}, self._redrawValue );
-				}
-			} );
 		},
 		remove: function() {
-			this._clusterState.removeObserver( "data", this._refresh_handler );
+			this._clusterState.removeObserver( "data", this.draw_handler );
 		},
 		refresh: function() {
-			window.clearTimeout( this._resetTimer );
 			this._refreshButton.disable();
 			this._clusterState.refresh();
 		},
-		_refresh_handler: function() {
+		draw_handler: function() {
 			var data = this._clusterState;
 			var indexFilter;
 			try {
@@ -238,7 +233,6 @@
 			indices.unshift({ name: null });
 			this._drawNodesView( cluster, indices );
 			this._refreshButton.enable();
-			this.fire("drawn", this );
 		},
 		_drawNodesView: function( cluster, indices ) {
 			this._nodesView && this._nodesView.remove();
