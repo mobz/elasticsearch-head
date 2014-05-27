@@ -27,6 +27,10 @@ describe("app.ui.RefreshButton", function() {
 		test.clock.restore();
 	});
 
+	it("should have an initial default value", function() {
+		expect( r.value ).toBe( -1 );
+	});
+
 	it("should fire a refresh event after clicking the refresh button ", function() {
 		r.el.find("BUTTON").eq(0).click();
 

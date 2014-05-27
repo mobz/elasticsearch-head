@@ -3,6 +3,9 @@
 	var ui = app.ns("ui");
 
 	ui.RefreshButton = ui.SplitButton.extend({
+		defaults: {
+			timer: -1
+		},
 		init: function( parent ) {
 			this.config.label = i18n.text("General.RefreshResults");
 			this._super( parent );
