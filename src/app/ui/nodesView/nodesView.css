@@ -1,15 +1,7 @@
-.uiNodesView {
-	border-collapse: collapse;
-}
 .uiNodesView TH,
 .uiNodesView TD {
 	vertical-align: top;
 	padding: 2px 20px;
-}
-
-.uiNodesView TH {
-	font-weight: normal;
-	text-align: left;
 }
 
 .uiNodesView TH.close,

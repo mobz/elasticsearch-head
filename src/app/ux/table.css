@@ -2,6 +2,13 @@ TABLE.table {
 	border-collapse: collapse;
 }
 
+
+TABLE.table TH {
+	font-weight: normal;
+	text-align: left;
+	vertical-align: middle;
+}
+
 TABLE.table TBODY.striped TR:nth-child(odd) {
 	background: #eee;
 }

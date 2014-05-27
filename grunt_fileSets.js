@@ -72,6 +72,7 @@ exports.srcJs = [
 ];
 
 exports.srcCss = [
+	'src/app/ux/table.css',
 	'src/app/ui/abstractField/abstractField.css',
 	'src/app/ui/button/button.css',
 	'src/app/ui/menuButton/menuButton.css',
@@ -81,7 +82,6 @@ exports.srcCss = [
 	'src/app/ui/infoPanel/infoPanel.css',
 	'src/app/ui/menuPanel/menuPanel.css',
 	'src/app/ui/selectMenuPanel/selectMenuPanel.css',
-	'src/app/ui/table/table.css',
 	'src/app/ui/jsonPretty/jsonPretty.css',
 	'src/app/ui/jsonPanel/jsonPanel.css',
 	'src/app/ui/panelForm/panelForm.css',

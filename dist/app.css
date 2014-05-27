@@ -1,3 +1,24 @@
+TABLE.table {
+	border-collapse: collapse;
+}
+
+
+TABLE.table TH {
+	font-weight: normal;
+	text-align: left;
+	vertical-align: middle;
+}
+
+TABLE.table TBODY.striped TR:nth-child(odd) {
+	background: #eee;
+}
+
+TABLE.table H3 {
+	margin: 0;
+	font-weight: bold;
+	font-size: 140%;
+}
+
 .require { color: #a00; }
 
 .uiButton {
@@ -247,99 +268,6 @@
 	display: inline-block;
 }
 
-.uiTable TABLE {
-	border-collapse: collapse;
-}
-
-.uiTable-body {
-	overflow-y: scroll;
-	overflow-x: auto;
-}
-
-.uiTable-headers {
-	overflow-x: hidden;
-}
-
-.uiTable-body TD {
-	white-space: nowrap;
-}
-
-.uiTable-body .uiTable-header-row TH,
-.uiTable-body .uiTable-header-row TH DIV {
-	padding-top: 0;
-	padding-bottom: 0;
-}
-
-.uiTable-body .uiTable-header-cell > DIV {
-	height: 0;
-	overflow: hidden;
-}
-
-.uiTable-headercell-menu {
-	float: right;
-}
-
-.uiTable-tools {
-	padding: 3px 4px;
-	height: 14px;
-}
-
-.uiTable-header-row {
-	background: #ddd;
-	background: -moz-linear-gradient(top, #eee, #ccc);
-	background: -webkit-linear-gradient(top, #eee, #ccc);
-}
-
-.uiTable-headercell-text {
-	margin-right: 20px;
-}
-
-.uiTable-headercell-menu {
-	display: none;
-}
-
-.uiTable-header-row TH {
-	border-right: 1px solid #bbb;
-	padding: 0;
-	text-align: left;
-}
-
-.uiTable-header-row TH > DIV {
-	padding: 3px 4px;
-	border-right: 1px solid #eee;
-}
-
-.uiTable-headerEndCap > DIV {
-	width: 19px;
-}
-
-.uiTable-header-row .uiTable-sort {
-	background: #ccc;
-	background: -moz-linear-gradient(top, #bebebe, #ccc);
-	background: -webkit-linear-gradient(top, #bebebe, #ccc);
-}
-.uiTable-header-row TH.uiTable-sort > DIV {
-	border-right: 1px solid #ccc;
-}
-
-.uiTable-sort .uiTable-headercell-menu {
-	display: block;
-}
-
-.uiTable TABLE TD {
-	border-right: 1px solid transparent;
-	padding: 3px 4px;
-}
-
-.uiTable-body TABLE TR:nth-child(even) {
-	background: #f3f3f3;
-}
-
-.uiTable-body TABLE TR.selected {
-	color: white;
-	background: #6060f1;
-}
-
 DIV.uiJsonPretty-object { font-size: 1.26em; font-family: monospace; }
 UL.uiJsonPretty-object,
 UL.uiJsonPretty-array { margin: 0; padding: 0 0 0 2em; list-style: none; }
@@ -525,18 +453,10 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 	overflow-y: auto;
 }
 
-.uiNodesView {
-	border-collapse: collapse;
-}
 .uiNodesView TH,
 .uiNodesView TD {
 	vertical-align: top;
 	padding: 2px 20px;
-}
-
-.uiNodesView TH {
-	font-weight: normal;
-	text-align: left;
 }
 
 .uiNodesView TH.close,
