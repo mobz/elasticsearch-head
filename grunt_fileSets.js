@@ -82,6 +82,7 @@ exports.srcCss = [
 	'src/app/ui/infoPanel/infoPanel.css',
 	'src/app/ui/menuPanel/menuPanel.css',
 	'src/app/ui/selectMenuPanel/selectMenuPanel.css',
+	'src/app/ui/table/table.css',
 	'src/app/ui/jsonPretty/jsonPretty.css',
 	'src/app/ui/jsonPanel/jsonPanel.css',
 	'src/app/ui/panelForm/panelForm.css',
