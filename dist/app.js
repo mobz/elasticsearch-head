@@ -2697,6 +2697,11 @@
 			this.transformEl.val(item.transform);
 		},
 		_request_handler: function(jEv) {
+			// Confirm that user really want to DELETE something
+			var isDeleteMethodSelected = (this.typeEl.val() === "DELETE");		
+			if( isDeleteMethodSelected && (prompt( i18n.text("AliasForm.DeleteAliasMessage", i18n.text("Command.DELETE") ) ) !== i18n.text("Command.DELETE")) ) {
+				return;
+			}
 			if(! this._validateJson_handler()) {
 				return;
 			}
