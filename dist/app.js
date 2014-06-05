@@ -1178,12 +1178,31 @@
 	var services = app.ns("services");
 	var ux = app.ns("ux");
 
+	function parse_version( v ) {
+		return v.match(/^(\d+)\.(\d+)\.(\d+)/).slice(1,4).map( function(d) { return parseInt(d || 0, 10); } );
+	}
+
 	services.Cluster = ux.Class.extend({
 		defaults: {
 			base_uri: "http://localhost:9200/"
 		},
 		init: function() {
 			this.base_uri = this.config.base_uri;
+		},
+		setVersion: function( v ) {
+			this.version = v;
+			this._version_parts = parse_version( v );
+		},
+		versionAtLeast: function( v ) {
+			var testVersion = parse_version( v );
+			for( var i = 0; i < 3; i++ ) {
+				if( testVersion[i] < this._version_parts[i] ) {
+					return true;
+				} else if( testVersion[i] > this._version_parts[i] ) {
+					return false;
+				}
+			}
+			return true;
 		},
 		request: function( params ) {
 			return $.ajax( $.extend({
@@ -1203,6 +1222,7 @@
 	});
 
 })( this.jQuery, this.app );
+
 (function( app ) {
 
 	var services = app.ns("services");
