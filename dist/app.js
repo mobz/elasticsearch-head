@@ -2375,7 +2375,7 @@
 						$(el).click();
 					}
 				});
-				// es throws a 500 if you specify types from different indicies with _all
+				// es throws a 500 if you specify types from different indices with _all
 				jEl.siblings(".uiQueryFilter-type.selected").forEach(function(el) {
 					if(this.metadata.types[$(el).text()].indices.intersection(indices).length === 0) {
 						$(el).click();
@@ -4216,7 +4216,7 @@
 					this._header,
 					{ tag: "DIV", cls: "uiApp-headerMenu", children: [
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Overview"), onclick: this._openClusterOverview_handler },
-						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Indicies"), onclick: this._openIndexOverview_handler },
+						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Indices"), onclick: this._openIndexOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
 							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}

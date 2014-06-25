@@ -74,7 +74,7 @@
 						$(el).click();
 					}
 				});
-				// es throws a 500 if you specify types from different indicies with _all
+				// es throws a 500 if you specify types from different indices with _all
 				jEl.siblings(".uiQueryFilter-type.selected").forEach(function(el) {
 					if(this.metadata.types[$(el).text()].indices.intersection(indices).length === 0) {
 						$(el).click();
