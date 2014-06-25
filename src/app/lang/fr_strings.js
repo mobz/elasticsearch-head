@@ -67,7 +67,7 @@ i18n.setKeys({
 //	"Nav.Info": "Info",
 	"Nav.NodeStats": "Statistiques sur les noeuds",
 	"Nav.Overview": "Aperçu",
-	"Nav.Indicies": "Index",
+	"Nav.Indices": "Index",
 	"Nav.Plugins": "Plugins",
 	"Nav.Status": "Etat",
 	"Nav.Templates": "Templates",
