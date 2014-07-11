@@ -1,5 +1,6 @@
 exports.vendorJs = [
 	'src/vendor/jquery/jquery.js',
+	'src/vendor/joey/joey.js',
 	'src/vendor/nohtml/jquery-nohtml.js',
 	'src/vendor/graphael/g.raphael.standalone.js',
 	'src/vendor/dateRangeParser/date-range-parser.js'
