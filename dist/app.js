@@ -1440,7 +1440,7 @@
 
 
 
-(function( $, app ) {
+(function( $, joey, app ) {
 
 	var ui = app.ns("ui");
 
@@ -1455,7 +1455,7 @@
 
 		init: function(parent) {
 			this._super();
-			this.el = $(this.button_template())
+			this.el = $(joey(this.button_template()))
 				.bind("click", this.click_handler);
 			this.config.disabled && this.disable();
 			this.attach( parent );
@@ -1485,14 +1485,14 @@
 
 		button_template: function() { return (
 			{ tag: 'BUTTON', type: 'button', id: this.id(), cls: this._baseCls, children: [
-				{ tag: 'DIV', cls: 'uiButton-content', child:
+				{ tag: 'DIV', cls: 'uiButton-content', children: [
 					{ tag: 'DIV', cls: 'uiButton-label', text: this.config.label }
-				}
+				] }
 			] }
 		); }
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.joey, this.app );
 
 (function( $, app ) {
 
@@ -4023,6 +4023,7 @@
 (function( $, app, i18n ) {
 	
 	var ui = app.ns("ui");
+	var ut = app.ns("ut");
 
 	ui.IndexOverview = ui.Page.extend({
 		defaults: {
@@ -4082,15 +4083,28 @@
 		},
 		_indexTable_template: function( clusterState ) { console.log( clusterState ); return (
 			{ tag: "TABLE", cls: "table", children: [
+				{ tag: "THEAD", children: [
+					{ tag: "TR", children: [
+						{ tag: "TH" },
+						{ tag: "TH", children: [
+							{ tag: "H3", text: "Size" }
+						] },
+						{ tag: "TH", children: [
+							{ tag: "H3", text: "Docs" }
+						] }
+					] }
+				] },
 				{ tag: "TBODY", cls: "striped", children: acx.eachMap( clusterState.status.indices, this._index_template, this ) }
 			] }
 		); },
 
-		_index_template: function( name, index ) { return (
+		_index_template: function( name, index ) { console.log( index ); return (
 			{ tag: "TR", children: [
 				{ tag: "TD", children: [
 					{ tag: "H3", text: name }
-				] }
+				] },
+				{ tag: "TD", text: ut.byteSize_template( index.index.primary_size_in_bytes ) + "/" + ut.byteSize_template( index.index.size_in_bytes ) },
+				{ tag: "TD", text: ut.count_template( index.docs.num_docs ) }
 			] }
 		); },
 		_main_template: function() {
