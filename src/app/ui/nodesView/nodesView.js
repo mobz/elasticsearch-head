@@ -263,7 +263,7 @@
 		},
 		_main_template: function(cluster, indices) {
 			return { tag: "TABLE", cls: "table uiNodesView", children: [
-				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
+				{ tag: "THEAD", children: [ { tag: "TR", children: indices.map(this._indexHeader_template, this) } ] },
 				this._aliasRenderFunction( cluster, indices ),
 				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
 			] };

@@ -70,8 +70,8 @@
 			] };
 		},
 		_header_template: function(columns) {
-			var ret = { tag: "TABLE", child: this._headerRow_template(columns) };
-			ret.child.children.push(this._headerEndCap_template());
+			var ret = { tag: "TABLE", children: [ this._headerRow_template(columns) ] };
+			ret.children[0].children.push(this._headerEndCap_template());
 			return ret;
 		},
 		_headerRow_template: function(columns) {
@@ -86,14 +86,14 @@
 			}, this)};
 		},
 		_headerEndCap_template: function() {
-			return { tag: "TH", cls: "uiTable-headerEndCap", child: { tag: "DIV" } };
+			return { tag: "TH", cls: "uiTable-headerEndCap", children: [ { tag: "DIV" } ] };
 		},
 		_body_template: function(data, columns) {
 			return { tag: "TABLE", children: []
 				.concat(this._headerRow_template(columns))
 				.concat(data.map(function(row) {
 					return { tag: "TR", data: { row: row }, cls: "uiTable-row", children: columns.map(function(column){
-						return { tag: "TD", cls: "uiTable-cell", child: { tag: "DIV", text: (row[column] || "").toString() } };
+						return { tag: "TD", cls: "uiTable-cell", children: [ { tag: "DIV", text: (row[column] || "").toString() } ] };
 					})};
 				}))
 			};

@@ -40,7 +40,7 @@
 			},
 			"array": function (value) {
 				var results = value.map(function(v) {
-					return { tag: "LI", cls: this.expando(v), child: this['parse'](v) };
+					return { tag: "LI", cls: this.expando(v), children: [ this['parse'](v) ] };
 				}, this);
 				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-array", children: results } : null), "]" ];
 			},

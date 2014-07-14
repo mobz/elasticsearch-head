@@ -26,7 +26,7 @@
 		setBody: function(body) {
 				this.body.empty().append(body);
 		},
-		_body_template: function() { return { tag: "DIV", cls: "uiPanel-body", css: { height: this.config.height + (this.config.height === 'auto' ? "" : "px" ) }, child: this.config.body }; },
+		_body_template: function() { return { tag: "DIV", cls: "uiPanel-body", css: { height: this.config.height + (this.config.height === 'auto' ? "" : "px" ) }, children: [ this.config.body ] }; },
 		_title_template: function() { return { tag: "SPAN", cls: "uiPanel-title", text: this.config.title }; },
 		_main_template: function() { return (
 			{ tag: "DIV", id: this.id(), cls: this._baseCls, children: [

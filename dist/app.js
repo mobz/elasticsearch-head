@@ -1307,7 +1307,7 @@
 	});
 
 })( this.app );
-(function( $, app ) {
+(function( $, joey, app ) {
 
 	var ui = app.ns("ui");
 	var ux = app.ns("ux");
@@ -1349,7 +1349,14 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+	joey.plugins.push( function( obj ) {
+		if( obj instanceof ui.AbstractWidget ) {
+			return obj.el[0];
+		}
+	});
+
+})( this.jQuery, this.joey, this.app );
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -1762,7 +1769,7 @@
 		setBody: function(body) {
 				this.body.empty().append(body);
 		},
-		_body_template: function() { return { tag: "DIV", cls: "uiPanel-body", css: { height: this.config.height + (this.config.height === 'auto' ? "" : "px" ) }, child: this.config.body }; },
+		_body_template: function() { return { tag: "DIV", cls: "uiPanel-body", css: { height: this.config.height + (this.config.height === 'auto' ? "" : "px" ) }, children: [ this.config.body ] }; },
 		_title_template: function() { return { tag: "SPAN", cls: "uiPanel-title", text: this.config.title }; },
 		_main_template: function() { return (
 			{ tag: "DIV", id: this.id(), cls: this._baseCls, children: [
@@ -1776,6 +1783,7 @@
 	});
 
 })( this.jQuery, this.app );
+
 (function( app ) {
 
 	var ui = app.ns("ui");
@@ -1839,7 +1847,7 @@
 		},
 		_menuItem_template: function(item) {
 			var dx = item.disabled ? { onclick: function() {} } : {};
-			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), child: $.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) };
+			return { tag: "LI", cls: "uiMenuPanel-item" + (item.disabled ? " disabled" : "") + (item.selected ? " selected" : ""), children: [ $.extend({ tag: "DIV", cls: "uiMenuPanel-label" }, item, dx ) ] };
 		},
 		_getPosition: function(jEv) {
 			var right = !! $(jEv.target).parents(".pull-right").length;
@@ -1959,8 +1967,8 @@
 			] };
 		},
 		_header_template: function(columns) {
-			var ret = { tag: "TABLE", child: this._headerRow_template(columns) };
-			ret.child.children.push(this._headerEndCap_template());
+			var ret = { tag: "TABLE", children: [ this._headerRow_template(columns) ] };
+			ret.children[0].children.push(this._headerEndCap_template());
 			return ret;
 		},
 		_headerRow_template: function(columns) {
@@ -1975,14 +1983,14 @@
 			}, this)};
 		},
 		_headerEndCap_template: function() {
-			return { tag: "TH", cls: "uiTable-headerEndCap", child: { tag: "DIV" } };
+			return { tag: "TH", cls: "uiTable-headerEndCap", children: [ { tag: "DIV" } ] };
 		},
 		_body_template: function(data, columns) {
 			return { tag: "TABLE", children: []
 				.concat(this._headerRow_template(columns))
 				.concat(data.map(function(row) {
 					return { tag: "TR", data: { row: row }, cls: "uiTable-row", children: columns.map(function(column){
-						return { tag: "TD", cls: "uiTable-cell", child: { tag: "DIV", text: (row[column] || "").toString() } };
+						return { tag: "TD", cls: "uiTable-cell", children: [ { tag: "DIV", text: (row[column] || "").toString() } ] };
 					})};
 				}))
 			};
@@ -2117,7 +2125,7 @@
 			},
 			"array": function (value) {
 				var results = value.map(function(v) {
-					return { tag: "LI", cls: this.expando(v), child: this['parse'](v) };
+					return { tag: "LI", cls: this.expando(v), children: [ this['parse'](v) ] };
 				}, this);
 				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-array", children: results } : null), "]" ];
 			},
@@ -2147,6 +2155,7 @@
 	});
 
 })( this.jQuery, this.app );
+
 (function( $, app ) {
 
 	var ui = app.ns("ui");
@@ -2214,7 +2223,7 @@
 
 		_body_template: function() {
 			var body = this._super();
-			body.child = new ui.JsonPretty({ obj: this.config.json });
+			body.children = [ new ui.JsonPretty({ obj: this.config.json }) ];
 			return body;
 		}
 	});
@@ -2256,7 +2265,7 @@
 					this.config.title,
 					( this.config.help && { tag: "SPAN", cls: "uiSidebarSection-help pull-right", onclick: this._showHelp_handler, text: i18n.text("General.HelpGlyph") } )
 				] }),
-				{ tag: "DIV", cls: "uiSidebarSection-body", child: this.config.body }
+				{ tag: "DIV", cls: "uiSidebarSection-body", children: [ this.config.body ] }
 			] }
 		); }
 	});
@@ -2533,9 +2542,9 @@
 		_aliasSelector_template: function() {
 			var aliases = Object.keys(this.metadata.aliases).sort();
 			aliases.unshift( i18n.text("QueryFilter.AllIndices") );
-			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-aliases", child:
+			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-aliases", children: [
 				{ tag: "SELECT", onChange: this._selectAlias_handler, children: aliases.map(ut.option_template) }
-			};
+			] };
 		},
 		_indexSelector_template: function() {
 			var indices = Object.keys( this.metadata.indices ).sort();
@@ -2854,7 +2863,7 @@
 							{ tag: "INPUT", type: "text", name: "path", value: this.config.path },
 							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "DELETE"].map(ut.option_template) },
 							{ tag: "TEXTAREA", name: "body", rows: 20, text: JSON.stringify(this.config.query) },
-							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", child: { tag: "B", text: i18n.text("AnyRequest.Request") }, onclick: this._request_handler },
+							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", children: [ { tag: "B", text: i18n.text("AnyRequest.Request") } ], onclick: this._request_handler },
 							{ tag: "BUTTON", type: "button", text: i18n.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
 							{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", name: "pretty" }, i18n.text("AnyRequest.Pretty") ] },
 							{ tag: "DIV", cls: "uiAnyRequest-jsonErr" }
@@ -3180,7 +3189,7 @@
 		},
 		_main_template: function(cluster, indices) {
 			return { tag: "TABLE", cls: "table uiNodesView", children: [
-				{ tag: "THEAD", child: { tag: "TR", children: indices.map(this._indexHeader_template, this) } },
+				{ tag: "THEAD", children: [ { tag: "TR", children: indices.map(this._indexHeader_template, this) } ] },
 				this._aliasRenderFunction( cluster, indices ),
 				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
 			] };

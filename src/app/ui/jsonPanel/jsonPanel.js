@@ -16,7 +16,7 @@
 
 		_body_template: function() {
 			var body = this._super();
-			body.child = new ui.JsonPretty({ obj: this.config.json });
+			body.children = [ new ui.JsonPretty({ obj: this.config.json }) ];
 			return body;
 		}
 	});

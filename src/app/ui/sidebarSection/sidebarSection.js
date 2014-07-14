@@ -33,7 +33,7 @@
 					this.config.title,
 					( this.config.help && { tag: "SPAN", cls: "uiSidebarSection-help pull-right", onclick: this._showHelp_handler, text: i18n.text("General.HelpGlyph") } )
 				] }),
-				{ tag: "DIV", cls: "uiSidebarSection-body", child: this.config.body }
+				{ tag: "DIV", cls: "uiSidebarSection-body", children: [ this.config.body ] }
 			] }
 		); }
 	});
