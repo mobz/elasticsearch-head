@@ -8936,11 +8936,31 @@ window.jQuery = window.$ = jQuery;
 })(window);
 (function() {
 
-	var global = this;
-	var shortcuts = {
+	var joey = this.joey = function joey(elementDef, parentNode) {
+		return createNode( elementDef, parentNode, parentNode ? parentNode.ownerDocument : this.document );
+	};
+
+	var shortcuts = joey.shortcuts = {
 		"text" : "textContent",
 		"cls" : "className"
 	};
+
+	var plugins = joey.plugins = [
+		function( obj, context ) {
+			if( typeof obj === 'string' ) {
+				return context.createTextNode( obj );
+			}
+		},
+		function( obj, context ) {
+			if( "tag" in obj ) {
+				var el = context.createElement( obj.tag );
+				for( var attr in obj ) {
+					addAttr( el, attr, obj[ attr ], context );
+				}
+				return el;
+			}
+		}
+	];
 
 	function addAttr( el, attr, value, context ) {
 		attr = shortcuts[attr] || attr;
@@ -8960,26 +8980,15 @@ window.jQuery = window.$ = jQuery;
 	}
 
 	function createNode( obj, parent, context ) {
-		var el, attr;
-		if( obj == null ) {
-			return;
-		} else if( typeof obj === 'string' ) {
-			el = context.createTextNode( obj );
-		} else {
-			el = context.createElement( obj.tag || obj.tagName || 'DIV' );
-			for( attr in obj ) {
-				addAttr( el, attr, obj[ attr ], context );
-			}
+		var el;
+		if( obj != null ) {
+			plugins.some( function( plug ) {
+				return ( el = plug( obj, context ) );
+			});
+			parent && parent.appendChild( el );
+			return el;
 		}
-		if( parent ) {
-			parent.appendChild( el );
-		}
-		return el;
 	}
-
-	global.joey = function joey(elementDef, parentNode) {
-		return createNode( elementDef, parentNode, parentNode ? parentNode.ownerDocument : global.document );
-	};
 
 }());
 

@@ -227,5 +227,15 @@
 
 	$.fn.forEach = Array.prototype.forEach;
 
+	// joey / jquery integration
+	$.joey = function( obj ) {
+		return $( window.joey( obj ) );
+	};
+
+	window.joey.plugins.push( function( obj ) {
+		if( obj instanceof jQuery ) {
+			return obj[0];
+		}
+	});
 
 })();

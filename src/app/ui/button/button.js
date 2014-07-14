@@ -13,7 +13,7 @@
 
 		init: function(parent) {
 			this._super();
-			this.el = $(joey(this.button_template()))
+			this.el = $.joey(this.button_template())
 				.bind("click", this.click_handler);
 			this.config.disabled && this.disable();
 			this.attach( parent );
