@@ -1,4 +1,4 @@
-(function( $, app ) {
+(function( $, joey, app ) {
 
 	var ui = app.ns("ui");
 	var ux = app.ns("ux");
@@ -40,4 +40,10 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+	joey.plugins.push( function( obj ) {
+		if( obj instanceof ui.AbstractWidget ) {
+			return obj.el[0];
+		}
+	});
+
+})( this.jQuery, this.joey, this.app );
