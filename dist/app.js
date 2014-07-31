@@ -4062,8 +4062,18 @@
 		},
 		_refresh_handler: function() {
 			var state = this._clusterState;
+			var view = {
+				indices: acx.eachMap( state.status.indices, function( name, index ) {
+					return {
+						name: name,
+						state: index
+					};
+				}).sort( function( a, b ) {
+					return a.name < b.name ? -1 : 1;
+				})
+			};
 			this._indexViewEl && this._indexViewEl.remove();
-			this._indexViewEl = $( this._indexTable_template( state ) );
+			this._indexViewEl = $( this._indexTable_template( view ) );
 			this.el.find(".uiIndexOverview-table").append( this._indexViewEl );
 		},
 		_newIndex_handler: function() {
@@ -4101,7 +4111,7 @@
 				}.bind(this)
 			}).open();
 		},
-		_indexTable_template: function( clusterState ) { console.log( clusterState ); return (
+		_indexTable_template: function( view ) { return (
 			{ tag: "TABLE", cls: "table", children: [
 				{ tag: "THEAD", children: [
 					{ tag: "TR", children: [
@@ -4114,17 +4124,17 @@
 						] }
 					] }
 				] },
-				{ tag: "TBODY", cls: "striped", children: acx.eachMap( clusterState.status.indices, this._index_template, this ) }
+				{ tag: "TBODY", cls: "striped", children: view.indices.map( this._index_template, this ) }
 			] }
 		); },
 
-		_index_template: function( name, index ) { console.log( index ); return (
+		_index_template: function( index ) { return (
 			{ tag: "TR", children: [
 				{ tag: "TD", children: [
-					{ tag: "H3", text: name }
+					{ tag: "H3", text: index.name }
 				] },
-				{ tag: "TD", text: ut.byteSize_template( index.index.primary_size_in_bytes ) + "/" + ut.byteSize_template( index.index.size_in_bytes ) },
-				{ tag: "TD", text: ut.count_template( index.docs.num_docs ) }
+				{ tag: "TD", text: ut.byteSize_template( index.state.index.primary_size_in_bytes ) + "/" + ut.byteSize_template( index.state.index.size_in_bytes ) },
+				{ tag: "TD", text: ut.count_template( index.state.docs.num_docs ) }
 			] }
 		); },
 		_main_template: function() {
