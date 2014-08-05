@@ -1,4 +1,4 @@
-(function( $, app ) {
+(function( $, app, joey ) {
 
 	var ui = app.ns("ui");
 
@@ -13,7 +13,7 @@
 
 		init: function(parent) {
 			this._super();
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 			this.field = this.el.find("[name="+this.config.name+"]");
 			this.label = this.config.label;
 			this.require = this.config.require;
@@ -46,4 +46,4 @@
 
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.joey );
