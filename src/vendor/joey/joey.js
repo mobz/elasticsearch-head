@@ -38,7 +38,7 @@
 			}
 		} else if( attr.indexOf("on") === 0 ) {
 			el.addEventListener( attr.substr(2), value, false );
-		} else {
+		} else if( value !== undefined ) {
 			el[ attr ] = value;
 		}
 	}
