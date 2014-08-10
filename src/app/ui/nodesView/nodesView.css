@@ -58,20 +58,24 @@
 
 .uiNodesView-nullReplica,
 .uiNodesView-replica {
+	box-sizing: border-box;
 	cursor: pointer;
 	float: left;
 	height: 40px;
-	width: 31px;
+	width: 35px;
 	margin: 4px;
 	border: 2px solid #444;
+	padding: 2px;
 	font-size: 32px;
+	line-height: 32px;
 	text-align: center;
 	letter-spacing: -5px;
 	text-indent: -7px;
 }
+
 .uiNodesView-replica.primary {
 	border-width: 4px;
-	margin: 2px;
+	line-height: 29px;
 }
 
 .uiNodesView-nullReplica {

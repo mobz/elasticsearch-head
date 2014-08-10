@@ -2924,7 +2924,7 @@
 	
 })( this.jQuery, this.app, this.i18n, this.Raphael );
 
-(function( app, i18n ) {
+(function( app, i18n, joey ) {
 
 	var ui = app.ns("ui");
 	var ut = app.ns("ut");
@@ -2933,6 +2933,7 @@
 		defaults: {
 			interactive: true,
 			aliasRenderer: "list",
+			scaleReplicas: 1,
 			cluster: null,
 			data: null
 		},
@@ -2945,6 +2946,7 @@
 				"list": this._aliasRender_template_list,
 				"full": this._aliasRender_template_full
 			}[ this.config.aliasRenderer ];
+			this._styleSheetEl = joey({ tag: "STYLE", text: ".uiNodesView-nullReplica, .uiNodesView-replica { zoom: " + this.config.scaleReplicas + " }" });
 			this.el = $( this._main_template( this.config.data.cluster, this.config.data.indices ) );
 		},
 
@@ -3189,6 +3191,7 @@
 		},
 		_main_template: function(cluster, indices) {
 			return { tag: "TABLE", cls: "table uiNodesView", children: [
+				this._styleSheetEl,
 				{ tag: "THEAD", children: [ { tag: "TR", children: indices.map(this._indexHeader_template, this) } ] },
 				this._aliasRenderFunction( cluster, indices ),
 				{ tag: "TBODY", children: cluster.nodes.map(this._node_template, this) }
@@ -3197,7 +3200,7 @@
 
 	});
 
-})( this.app, this.i18n );
+})( this.app, this.i18n, this.joey );
 
 (function( $, app, i18n ) {
 
