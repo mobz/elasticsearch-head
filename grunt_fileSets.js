@@ -16,6 +16,7 @@ exports.srcJs = [
 	'src/app/ux/class.js',
 	'src/app/ux/templates/templates.js',
 	'src/app/ux/observable.js',
+	'src/app/ux/singleton.js',
 	'src/app/ux/dragdrop.js',
 	'src/app/ux/fieldCollection.js',
 
