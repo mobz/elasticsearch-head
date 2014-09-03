@@ -17,10 +17,12 @@ var Singleton = window.app.ux.Singleton;
 
 		it("should have properties like a normal class", function() {
 			var a = X.instance();
+
+			expect( a instanceof X ).toBe( true );
 			expect( a.foo() ).toBe( "bar" );
 		});
 
-		it("should return the original instance when instance() is called", function() {
+		it("should return single instance each time instance() is called", function() {
 			var a = X.instance();
 			var b = X.instance();
 

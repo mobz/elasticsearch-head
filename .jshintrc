@@ -9,7 +9,8 @@
 		"beforeEach",
 		"afterEach",
 		"jasmine",
-		"test"
+		"test",
+		"spyOn"
 	],
 
 	"jquery" : true,
