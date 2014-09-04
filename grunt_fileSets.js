@@ -30,7 +30,6 @@ exports.srcJs = [
 	'src/app/data/boolQuery.js',
 
 	'src/app/services/preferences/preferences.js',
-	'src/app/services/storage.js',
 	'src/app/services/cluster/cluster.js',
 	'src/app/services/clusterState/clusterState.js',
 

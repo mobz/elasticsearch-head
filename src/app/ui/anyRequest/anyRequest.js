@@ -2,6 +2,7 @@
 
 	var ui = app.ns("ui");
 	var ut = app.ns("ut");
+	var services = app.ns("services");
 
 	ui.AnyRequest = ui.Page.extend({
 		defaults: {
@@ -12,7 +13,8 @@
 		},
 		init: function(parent) {
 			this._super();
-			this.history = app.services.storage.get("anyRequestHistory") || [ { type: "POST", path: this.config.path, query : JSON.stringify(this.config.query), transform: this.config.transform } ];
+			this.prefs = services.Preferences.instance();
+			this.history = this.prefs.get("anyRequest-history") || [ { type: "POST", path: this.config.path, query : JSON.stringify(this.config.query), transform: this.config.transform } ];
 			this.el = $(this._main_template());
 			this.base_uriEl = this.el.find("INPUT[name=base_uri]");
 			this.pathEl = this.el.find("INPUT[name=path]");
@@ -70,7 +72,7 @@
 					transform: transform
 				});
 				this.history.slice(250); // make sure history does not get too large
-				app.services.storage.set("anyRequestHistory", this.history);
+				this.prefs.set( "anyRequest-history", this.history );
 				this.el.find("UL.uiAnyRequest-history")
 					.empty()
 					.append($( { tag: "UL", children: this.history.map(this._historyItem_template, this) }).children())
