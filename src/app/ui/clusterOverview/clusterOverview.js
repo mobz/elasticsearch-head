@@ -1,6 +1,7 @@
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
+	var services = app.ns("services");
 
 	// ( master ) master = true, data = true 
 	// ( coordinator ) master = true, data = false
@@ -39,6 +40,12 @@
 		}
 	}
 
+	var NODE_SORT_TYPES = {
+		"By Name": nodeSort_name,
+		"By Address": nodeSort_addr,
+		"By Type": nodeSort_type
+	};
+
 	function nodeFilter_none( a ) {
 		return true;
 	}
@@ -55,6 +62,7 @@
 		init: function() {
 			this._super();
 			this.cluster = this.config.cluster;
+			this.prefs = services.Preferences.instance();
 			this._clusterState = this.config.clusterState;
 			this._clusterState.on("data", this.draw_handler );
 			this._refreshButton = new ui.RefreshButton({
@@ -65,18 +73,18 @@
 					}
 				}.bind( this )
 			});
-			this._nodeSort = nodeSort_name;
+			var nodeSortPref = this.prefs.get("clusterOverview-nodeSort") || "By Name";
+			this._nodeSort = NODE_SORT_TYPES[ nodeSortPref ];
 			this._nodeSortMenu = new ui.MenuButton({
 				label: "Sort Cluster",
 				menu: new ui.SelectMenuPanel({
 					value: this._nodeSort,
-					items: [
-						{ text: "By Name", value: nodeSort_name },
-						{ text: "By Address", value: nodeSort_addr },
-						{ text: "By Type", value: nodeSort_type }
-					],
+					items: Object.keys( NODE_SORT_TYPES ).map( function( k ) {
+						return { text: k, value: k };
+					}),
 					onSelect: function( panel, event ) {
-						this._nodeSort = event.value;
+						this._nodeSort = NODE_SORT_TYPES[ event.value ];
+						this.prefs.set("clusterOverview-nodeSort", event.value );
 						this.draw_handler();
 					}.bind(this)
 				})
