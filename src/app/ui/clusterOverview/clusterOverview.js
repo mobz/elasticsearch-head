@@ -41,9 +41,9 @@
 	}
 
 	var NODE_SORT_TYPES = {
-		"By Name": nodeSort_name,
-		"By Address": nodeSort_addr,
-		"By Type": nodeSort_type
+		"Sort.ByName": nodeSort_name,
+		"Sort.ByAddress": nodeSort_addr,
+		"Sort.ByType": nodeSort_type
 	};
 
 	function nodeFilter_none( a ) {
@@ -73,14 +73,14 @@
 					}
 				}.bind( this )
 			});
-			var nodeSortPref = this.prefs.get("clusterOverview-nodeSort") || "By Name";
+			var nodeSortPref = this.prefs.get("clusterOverview-nodeSort") || Object.keys(NODE_SORT_TYPES)[0];
 			this._nodeSort = NODE_SORT_TYPES[ nodeSortPref ];
 			this._nodeSortMenu = new ui.MenuButton({
-				label: "Sort Cluster",
+				label: i18n.text( "Preference.SortCluster" ),
 				menu: new ui.SelectMenuPanel({
-					value: this._nodeSort,
+					value: nodeSortPref,
 					items: Object.keys( NODE_SORT_TYPES ).map( function( k ) {
-						return { text: k, value: k };
+						return { text: i18n.text( k ), value: k };
 					}),
 					onSelect: function( panel, event ) {
 						this._nodeSort = NODE_SORT_TYPES[ event.value ];
