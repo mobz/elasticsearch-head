@@ -106,8 +106,12 @@
 				})
 			});
 			this._indexFilter = new ui.TextField({
+				value: this.prefs.get("clusterOverview-indexFilter"),
 				placeholder: "Index Filter",
-				onchange: this.draw_handler
+				onchange: function( indexFilter ) {
+					this.prefs.set("clusterOverview-indexFilter", indexFilter.val() );
+					this.draw_handler();
+				}.bind(this)
 			});
 			this.el = $(this._main_template());
 			this.tablEl = this.el.find(".uiClusterOverview-table");
