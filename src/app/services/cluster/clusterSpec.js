@@ -6,7 +6,7 @@ describe("app.services.Cluster", function() {
 	var cluster;
 
 	beforeEach( function() {
-		cluster = new Cluster();
+		cluster = new Cluster({ base_uri: "http://localhost:9200/" });
 	});
 
 	describe( "when it is initialised", function() {

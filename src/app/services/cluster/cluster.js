@@ -9,7 +9,7 @@
 
 	services.Cluster = ux.Class.extend({
 		defaults: {
-			base_uri: "http://localhost:9200/"
+			base_uri: null
 		},
 		init: function() {
 			this.base_uri = this.config.base_uri;

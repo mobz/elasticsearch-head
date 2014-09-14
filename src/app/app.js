@@ -5,11 +5,12 @@
 
 	app.App = ui.AbstractWidget.extend({
 		defaults: {
-			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default Elasticsearch host
+			base_uri: null
 		},
 		init: function(parent) {
 			this._super();
-			this.base_uri = this.config.base_uri;
+			this.prefs = services.Preferences.instance();
+			this.base_uri = this.config.base_uri || this.prefs.get("app-base_uri") || "http://localhost:9200";
 			if( this.base_uri.charAt( this.base_uri.length - 1 ) !== "/" ) {
 				// XHR request fails if the URL is not ending with a "/"
 				this.base_uri += "/";

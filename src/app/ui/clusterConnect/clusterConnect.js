@@ -1,6 +1,7 @@
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
+	var services = app.ns("services");
 
 	ui.ClusterConnect = ui.AbstractWidget.extend({
 		defaults: {
@@ -8,15 +9,15 @@
 		},
 		init: function() {
 			this._super();
+			this.prefs = services.Preferences.instance();
 			this.cluster = this.config.cluster;
 			this.el = $(this._main_template());
 			this.cluster.get( "", this._node_handler );
-			this.cluster.get( "_cluster/health", this._health_handler );
 		},
 		
 		_node_handler: function(data) {
 			if(data) {
-				localStorage["base_uri"] = this.cluster.base_uri;
+				this.prefs.set("app-base_uri", this.cluster.base_uri);
 			}
 		},
 		

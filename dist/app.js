@@ -1248,7 +1248,7 @@
 
 	services.Cluster = ux.Class.extend({
 		defaults: {
-			base_uri: "http://localhost:9200/"
+			base_uri: null
 		},
 		init: function() {
 			this.base_uri = this.config.base_uri;
@@ -3640,6 +3640,7 @@
 (function( $, app, i18n ) {
 
 	var ui = app.ns("ui");
+	var services = app.ns("services");
 
 	ui.ClusterConnect = ui.AbstractWidget.extend({
 		defaults: {
@@ -3647,15 +3648,15 @@
 		},
 		init: function() {
 			this._super();
+			this.prefs = services.Preferences.instance();
 			this.cluster = this.config.cluster;
 			this.el = $(this._main_template());
 			this.cluster.get( "", this._node_handler );
-			this.cluster.get( "_cluster/health", this._health_handler );
 		},
 		
 		_node_handler: function(data) {
 			if(data) {
-				localStorage["base_uri"] = this.cluster.base_uri;
+				this.prefs.set("app-base_uri", this.cluster.base_uri);
 			}
 		},
 		
@@ -4223,11 +4224,12 @@
 
 	app.App = ui.AbstractWidget.extend({
 		defaults: {
-			base_uri: localStorage["base_uri"] || "http://localhost:9200/"   // the default Elasticsearch host
+			base_uri: null
 		},
 		init: function(parent) {
 			this._super();
-			this.base_uri = this.config.base_uri;
+			this.prefs = services.Preferences.instance();
+			this.base_uri = this.config.base_uri || this.prefs.get("app-base_uri") || "http://localhost:9200";
 			if( this.base_uri.charAt( this.base_uri.length - 1 ) !== "/" ) {
 				// XHR request fails if the URL is not ending with a "/"
 				this.base_uri += "/";
