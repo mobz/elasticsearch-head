@@ -1,4 +1,4 @@
-( function( $, app ) {
+( function( $, app, joey ) {
 
 	var ui = app.ns("ui");
 
@@ -19,10 +19,10 @@
 				label: "Generate Download Link",
 				onclick: this._downloadLinkGenerator_handler
 			});
-			this._downloadLink = $( { tag: "A", text: "download", });
+			this._downloadLink = $.joey( { tag: "A", text: "download", });
 			this._downloadLink.hide();
 			this._csvText = this._csv_template( columns, results );
-			this.el = $( this._main_template() );
+			this.el = $.joey( this._main_template() );
 			this.attach( parent );
 		},
 		_downloadLinkGenerator_handler: function() {
@@ -79,4 +79,4 @@
 		}
 	});
 
-})( this.jQuery, this.app );
+})( this.jQuery, this.app, this.joey );
