@@ -10,7 +10,7 @@
 		},
 		init: function(parent) {
 			this._super();
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiToolbar", children: [
