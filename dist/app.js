@@ -1960,7 +1960,7 @@
 			}
 		},
 		initElements: function(parent) {
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 			this.body = this.el.find(".uiTable-body");
 			this.headers = this.el.find(".uiTable-headers");
 			this.tools = this.el.find(".uiTable-tools");
@@ -1980,17 +1980,17 @@
 			}
 			this._scroll_handler();
 		},
-		_scroll_handler: function(jEv) {
+		_scroll_handler: function(ev) {
 			this.el.find(".uiTable-headers").scrollLeft(this.body.scrollLeft());
 		},
-		_dataClick_handler: function(jEv) {
-			var row = $(jEv.target).closest("TR");
+		_dataClick_handler: function(ev) {
+			var row = $(ev.target).closest("TR");
 			if(row.length) {
 				this.fire("rowClick", this, { row: row } );
 			}
 		},
-		_headerClick_handler: function(jEv) {
-			var header = $(jEv.target).closest("TH.uiTable-header-cell");
+		_headerClick_handler: function(ev) {
+			var header = $(ev.target).closest("TH.uiTable-header-cell");
 			if(header.length) {
 				this.fire("headerClick", this, { header: header, column: header.data("column"), dir: header.data("dir") });
 			}
@@ -1998,12 +1998,10 @@
 		_main_template: function() {
 			return { tag: "DIV", id: this.id(), css: { width: this.config.width + "px" }, cls: this._baseCls, children: [
 				{ tag: "DIV", cls: "uiTable-tools" },
-				{ tag: "DIV", cls: "uiTable-headers",
-					onClick: this._headerClick_handler
-				},
+				{ tag: "DIV", cls: "uiTable-headers", onclick: this._headerClick_handler },
 				{ tag: "DIV", cls: "uiTable-body",
-					onClick: this._dataClick_handler,
-					onScroll: this._scroll_handler,
+					onclick: this._dataClick_handler,
+					onscroll: this._scroll_handler,
 					css: { height: this.config.height + "px", width: this.config.width + "px" }
 				}
 			] };
