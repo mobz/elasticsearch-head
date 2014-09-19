@@ -42,15 +42,19 @@
 				}
 			}
 		},
-		
-		show: function(type, config, jEv) {
+
+		create_page: function( type, config, jEv ) {
 			if(! this.instances[type]) {
 				var page = this.instances[type] = new ui[type]( config );
 				this.$body.append( page );
 			}
+			this.show( type, jEv );
+		},
+
+		show: function( id, jEv ) {
 			$(jEv.target).closest("DIV.uiApp-headerMenuItem").addClass("active").siblings().removeClass("active");
 			for(var p in this.instances) {
-				this.instances[p][ p === type ? "show" : "hide" ]();
+				this.instances[p][ p === id ? "show" : "hide" ]();
 			}
 		},
 
@@ -81,7 +85,7 @@
 			// Add the tab and its click handlers
 			$tab = this.newTab(tab_text, {
 				click: function (jEv) {
-					that.show(type_name, config, jEv);
+					that.show(type_name, jEv);
 				},
 				close_click: function (jEv) {
 					$tab.remove();
@@ -94,13 +98,13 @@
 			$tab.trigger('click');
 		},
 
-		_openAnyRequest_handler: function(jEv) { this.show("AnyRequest", { cluster: this.cluster }, jEv); },
+		_openAnyRequest_handler: function(jEv) { this.create_page("AnyRequest", { cluster: this.cluster }, jEv); },
 		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, i18n.text("Nav.AnyRequest")); return false; },
-		_openStructuredQuery_handler: function(jEv) { this.show("StructuredQuery", { cluster: this.cluster }, jEv); },
+		_openStructuredQuery_handler: function(jEv) { this.create_page("StructuredQuery", { cluster: this.cluster }, jEv); },
 		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
-		_openBrowser_handler: function(jEv) { this.show("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterOverview_handler: function(jEv) { this.show("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
-		_openIndexOverview_handler: function(jEv) { this.show("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
+		_openBrowser_handler: function(jEv) { this.create_page("Browser", { cluster: this.cluster }, jEv);  },
+		_openClusterOverview_handler: function(jEv) { this.create_page("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
+		_openIndexOverview_handler: function(jEv) { this.create_page("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
 
 		_body_template: function() { return (
 			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }
