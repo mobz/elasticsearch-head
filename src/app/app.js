@@ -37,8 +37,7 @@
 			if( this.config.dashboard ) {
 				if( this.config.dashboard === "cluster" ) {
 					var page = this.instances["ClusterOverview"];
-					page._redrawValue = 5000;
-					page.redraw("reset");
+					page._refreshButton.set( 5000 );
 				}
 			}
 		},

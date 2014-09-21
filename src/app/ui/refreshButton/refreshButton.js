@@ -9,9 +9,9 @@
 		init: function( parent ) {
 			this.config.label = i18n.text("General.RefreshResults");
 			this._super( parent );
-			this._doTimer( this.config.timer );
+			this.set( this.config.timer );
 		},
-		_doTimer: function( value ) {
+		set: function( value ) {
 			this.value = value;
 			window.clearInterval( this._timer );
 			if( this.value > 0 ) {
@@ -22,7 +22,7 @@
 			this._refresh_handler();
 		},
 		_select_handler: function( el, event ) {
-			this._doTimer( event.value );
+			this.set( event.value );
 			this.fire("change", this );
 		},
 		_refresh_handler: function() {

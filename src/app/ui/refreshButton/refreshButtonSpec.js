@@ -37,6 +37,23 @@ describe("app.ui.RefreshButton", function() {
 		expect( refresh_handler ).toHaveBeenCalled();
 	});
 
+	it("should change the refresh rate when set it called", function() {
+		r.set( 100 );
+		expect( r.value ).toBe( 100 );
+	});
+
+	it("should set an interval when rate is set to a positive value", function() {
+		r.set( 100 );
+		test.clock.tick();
+		expect( refresh_handler.calls.count() ).toBe( 1 );
+	});
+
+	it("should not set an interval when rate is set to a non positive value", function() {
+		r.set( -1 );
+		test.clock.tick();
+		expect( refresh_handler.calls.count() ).toBe( 0 );
+	});
+
 	it("should fire a refresh event on intervals if refresh menu item is set to quickly", function() {
 		openMenuPanel( r, "quickly" );
 
