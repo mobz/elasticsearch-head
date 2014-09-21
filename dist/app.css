@@ -705,3 +705,6 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 	padding: 51px 0px 0px 0px;
 }
 
+.uiApp-headerNewMenuItem {
+	color: blue;
+}

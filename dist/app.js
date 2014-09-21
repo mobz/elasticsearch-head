@@ -4260,11 +4260,15 @@
 		},
 
 		create_page: function( type, config, jEv ) {
-			if(! this.instances[type]) {
-				var page = this.instances[type] = new ui[type]( config );
-				this.$body.append( page );
+			if( jEv.target.classList.contains( "uiApp-headerNewMenuItem" ) ) {
+				this.showNew( type, config, jEv, i18n.text("Nav." + type ) );
+			} else {
+				if(! this.instances[type]) {
+					var page = this.instances[type] = new ui[type]( config );
+					this.$body.append( page );
+				}
+				this.show( type, jEv );
 			}
-			this.show( type, jEv );
 		},
 
 		show: function( id, jEv ) {
@@ -4314,10 +4318,26 @@
 			$tab.trigger('click');
 		},
 
+		newTab: function(text, events) {
+			var $el = $({tag: 'DIV', cls: 'uiApp-headerMenuItem pull-left', text: text, children: [
+				{ tag: 'A', text: ' [-]' }
+			]});
+
+			// Apply the events to the tab as given
+			$.each(events || {}, function (event_name, fn) {
+				if (event_name === 'close_click') {
+					$('a',$el).bind('click', fn);
+				} else {
+					$el.bind(event_name, fn);
+				}
+			});
+
+			$('.uiApp-headerMenu').append($el);
+			return $el;
+		},
+
 		_openAnyRequest_handler: function(jEv) { this.create_page("AnyRequest", { cluster: this.cluster }, jEv); },
-		_openNewAnyRequest_handler: function(jEv) { this.showNew("AnyRequest", { cluster: this.cluster }, jEv, i18n.text("Nav.AnyRequest")); return false; },
 		_openStructuredQuery_handler: function(jEv) { this.create_page("StructuredQuery", { cluster: this.cluster }, jEv); },
-		_openNewStructuredQuery_handler: function(jEv) { this.showNew("StructuredQuery", { cluster: this.cluster }, jEv, i18n.text("Nav.StructuredQuery")); return false; },
 		_openBrowser_handler: function(jEv) { this.create_page("Browser", { cluster: this.cluster }, jEv);  },
 		_openClusterOverview_handler: function(jEv) { this.create_page("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
 		_openIndexOverview_handler: function(jEv) { this.create_page("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
@@ -4335,33 +4355,15 @@
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Indices"), onclick: this._openIndexOverview_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.Browser"), onclick: this._openBrowser_handler },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.StructuredQuery"), onclick: this._openStructuredQuery_handler, children: [
-							{ tag: "A", text: ' [+]', onclick: this._openNewStructuredQuery_handler}
+							{ tag: "A", cls: "uiApp-headerNewMenuItem ", text: ' [+]' }
 						] },
 						{ tag: "DIV", cls: "uiApp-headerMenuItem pull-left", text: i18n.text("Nav.AnyRequest"), onclick: this._openAnyRequest_handler, children: [
-							{ tag: "A", text: ' [+]', onclick: this._openNewAnyRequest_handler}
+							{ tag: "A", cls: "uiApp-headerNewMenuItem ", text: ' [+]' }
 						] },
 					]}
 				]},
 				this.$body
 			]};
-		},
-
-		newTab: function(text, events) {
-			var $el = $({tag: 'DIV', cls: 'uiApp-headerMenuItem pull-left', text: text, children: [
-				{tag: 'A', text: ' [-]'}
-			]});
-
-			// Apply the events to the tab as given
-			$.each(events || {}, function (event_name, fn) {
-				if (event_name === 'close_click') {
-					$('a',$el).bind('click', fn);
-				} else {
-					$el.bind(event_name, fn);
-				}
-			});
-
-			$('.uiApp-headerMenu').append($el);
-			return $el;
 		}
 		
 	});
