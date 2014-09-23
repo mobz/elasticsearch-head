@@ -42,88 +42,66 @@
 			}
 		},
 
-		create_page: function( type, config, jEv ) {
+		navigateTo: function( type, config, jEv ) {
 			if( jEv.target.classList.contains( "uiApp-headerNewMenuItem" ) ) {
-				this.showNew( type, config, jEv, i18n.text("Nav." + type ) );
+				this.showNew( type, config, jEv );
 			} else {
-				if(! this.instances[type]) {
-					var page = this.instances[type] = new ui[type]( config );
-					this.$body.append( page );
+				var ref = type + "0";
+				if(! this.instances[ ref ]) {
+					this.createPage( type, 0, config );
 				}
-				this.show( type, jEv );
+				this.show( ref, jEv );
 			}
 		},
 
-		show: function( id, jEv ) {
+		createPage: function( type, id, config ) {
+			var page = this.instances[ type + id ] = new ui[ type ]( config );
+			this.$body.append( page );
+			return page;
+		},
+
+		show: function( ref, jEv ) {
 			$(jEv.target).closest("DIV.uiApp-headerMenuItem").addClass("active").siblings().removeClass("active");
 			for(var p in this.instances) {
-				this.instances[p][ p === id ? "show" : "hide" ]();
+				this.instances[p][ p === ref ? "show" : "hide" ]();
 			}
 		},
 
-		showNew: function(type, config, jEv, tab_text) {
-			var that = this,
-				type_name = '',
-				type_index = 0,
-				page, $tab;
+		showNew: function( type, config, jEv ) {
+			var ref, page, $tab,
+				type_index = 0;
 
-			// Loop through until we find an unused type name
-			while (type_name === '') {
-				type_index++;
-				if (!this.instances[type + type_index.toString()]) {
-					// Found an available type name, so put it together and add it to the UI
-					type_name = type + type_index.toString();
-					page = this.instances[type_name] = new ui[type](config);
-					this.$body.append( page );
+			while ( ! page ) {
+				ref = type + ( ++type_index );
+				if (! ( ref in this.instances ) ) {
+					page = this.createPage( type, type_index, config );
 				}
-			}
-
-			// Make sure we have text for the tab
-			if (tab_text) {
-				tab_text += ' ' + type_index.toString();
-			} else {
-				tab_text = type_name;
 			}
 
 			// Add the tab and its click handlers
-			$tab = this.newTab(tab_text, {
-				click: function (jEv) {
-					that.show(type_name, jEv);
-				},
-				close_click: function (jEv) {
-					$tab.remove();
-					page.remove();
-					delete that.instances[type_name];
-				}
-			});
-			
-			// Click the new tab to make it show
-			$tab.trigger('click');
-		},
-
-		newTab: function(text, events) {
-			var $el = $({tag: 'DIV', cls: 'uiApp-headerMenuItem pull-left', text: text, children: [
-				{ tag: 'A', text: ' [-]' }
-			]});
-
-			// Apply the events to the tab as given
-			$.each(events || {}, function (event_name, fn) {
-				if (event_name === 'close_click') {
-					$('a',$el).bind('click', fn);
-				} else {
-					$el.bind(event_name, fn);
-				}
+			$tab = $({
+				tag: "DIV",
+				cls: "uiApp-headerMenuItem pull-left",
+				text: i18n.text("Nav." + type ) + " " + type_index,
+				onclick: function( jEv ) { this.show( ref, jEv ); }.bind(this),
+				children: [
+					{ tag: "A", text: " [-]", onclick: function (jEv) {
+						$tab.remove();
+						page.remove();
+						delete this.instances[ ref ];
+					}.bind(this) }
+				]
 			});
 
-			$('.uiApp-headerMenu').append($el);
-			return $el;
+			$('.uiApp-headerMenu').append( $tab );
+			$tab.trigger("click");
 		},
 
-		_openAnyRequest_handler: function(jEv) { this.create_page("AnyRequest", { cluster: this.cluster }, jEv); },
-		_openStructuredQuery_handler: function(jEv) { this.create_page("StructuredQuery", { cluster: this.cluster }, jEv); },
-		_openBrowser_handler: function(jEv) { this.create_page("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterOverview_handler: function(jEv) { this.create_page("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
-		_openIndexOverview_handler: function(jEv) { this.create_page("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
+		_openAnyRequest_handler: function(jEv) { this.navigateTo("AnyRequest", { cluster: this.cluster }, jEv); },
+		_openStructuredQuery_handler: function(jEv) { this.navigateTo("StructuredQuery", { cluster: this.cluster }, jEv); },
+		_openBrowser_handler: function(jEv) { this.navigateTo("Browser", { cluster: this.cluster }, jEv);  },
+		_openClusterOverview_handler: function(jEv) { this.navigateTo("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
+		_openIndexOverview_handler: function(jEv) { this.navigateTo("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
 
 		_body_template: function() { return (
 			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }
