@@ -2903,7 +2903,7 @@
 							{ tag: "INPUT", type: "text", name: "base_uri", value: this.config.cluster.config.base_uri },
 							{ tag: "BR" },
 							{ tag: "INPUT", type: "text", name: "path", value: this.config.path },
-							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "DELETE"].map(ut.option_template) },
+							{ tag: "SELECT", name: "method", children: ["POST", "GET", "PUT", "HEAD", "DELETE"].map(ut.option_template) },
 							{ tag: "TEXTAREA", name: "body", rows: 20, text: JSON.stringify(this.config.query) },
 							{ tag: "BUTTON", css: { cssFloat: "right" }, type: "button", children: [ { tag: "B", text: i18n.text("AnyRequest.Request") } ], onclick: this._request_handler },
 							{ tag: "BUTTON", type: "button", text: i18n.text("AnyRequest.ValidateJSON"), onclick: this._validateJson_handler },
