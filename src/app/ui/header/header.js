@@ -41,7 +41,7 @@
 					items: menuItems
 				})
 			});
-			this.el = $( this._main_template() );
+			this.el = $.joey( this._main_template() );
 			this.nameEl = this.el.find(".uiHeader-name");
 			this.statEl = this.el.find(".uiHeader-status");
 			this._clusterState = this.config.clusterState;

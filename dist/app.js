@@ -3648,7 +3648,7 @@
 			this._super();
 			this.prefs = services.Preferences.instance();
 			this.cluster = this.config.cluster;
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 			this.cluster.get( "", this._node_handler );
 		},
 		
@@ -3665,9 +3665,9 @@
 		
 		_main_template: function() {
 			return { tag: "SPAN", cls: "uiClusterConnect", children: [
-				{ tag: "INPUT", type: "text", cls: "uiClusterConnect-uri", onkeyup: function( jEv ) {
-					if(jEv.which === 13) {
-						jEv.preventDefault();
+				{ tag: "INPUT", type: "text", cls: "uiClusterConnect-uri", onkeyup: function( ev ) {
+					if(ev.which === 13) {
+						ev.preventDefault();
 						this._reconnect_handler();
 					}
 				}.bind(this), id: this.id("baseUri"), value: this.cluster.base_uri },
@@ -4068,7 +4068,7 @@
 					items: menuItems
 				})
 			});
-			this.el = $( this._main_template() );
+			this.el = $.joey( this._main_template() );
 			this.nameEl = this.el.find(".uiHeader-name");
 			this.statEl = this.el.find(".uiHeader-status");
 			this._clusterState = this.config.clusterState;
@@ -4246,8 +4246,8 @@
 			});
 
 			this._header = new ui.Header({ cluster: this.cluster, clusterState: this._clusterState });
-			this.$body = $( this._body_template() );
-			this.el = $(this._main_template());
+			this.$body = $.joey( this._body_template() );
+			this.el = $.joey(this._main_template());
 			this.attach( parent );
 			this.instances = {};
 			this.el.find(".uiApp-headerMenuItem:first").click();
@@ -4259,15 +4259,15 @@
 			}
 		},
 
-		navigateTo: function( type, config, jEv ) {
-			if( jEv.target.classList.contains( "uiApp-headerNewMenuItem" ) ) {
-				this.showNew( type, config, jEv );
+		navigateTo: function( type, config, ev ) {
+			if( ev.target.classList.contains( "uiApp-headerNewMenuItem" ) ) {
+				this.showNew( type, config, ev );
 			} else {
 				var ref = type + "0";
 				if(! this.instances[ ref ]) {
 					this.createPage( type, 0, config );
 				}
-				this.show( ref, jEv );
+				this.show( ref, ev );
 			}
 		},
 
@@ -4277,8 +4277,8 @@
 			return page;
 		},
 
-		show: function( ref, jEv ) {
-			$(jEv.target).closest("DIV.uiApp-headerMenuItem").addClass("active").siblings().removeClass("active");
+		show: function( ref, ev ) {
+			$( ev.target ).closest("DIV.uiApp-headerMenuItem").addClass("active").siblings().removeClass("active");
 			for(var p in this.instances) {
 				this.instances[p][ p === ref ? "show" : "hide" ]();
 			}
@@ -4296,13 +4296,13 @@
 			}
 
 			// Add the tab and its click handlers
-			$tab = $({
+			$tab = $.joey({
 				tag: "DIV",
 				cls: "uiApp-headerMenuItem pull-left",
 				text: i18n.text("Nav." + type ) + " " + type_index,
-				onclick: function( jEv ) { this.show( ref, jEv ); }.bind(this),
+				onclick: function( ev ) { this.show( ref, ev ); }.bind(this),
 				children: [
-					{ tag: "A", text: " [-]", onclick: function (jEv) {
+					{ tag: "A", text: " [-]", onclick: function (ev) {
 						$tab.remove();
 						page.remove();
 						delete this.instances[ ref ];
@@ -4314,11 +4314,11 @@
 			$tab.trigger("click");
 		},
 
-		_openAnyRequest_handler: function(jEv) { this.navigateTo("AnyRequest", { cluster: this.cluster }, jEv); },
-		_openStructuredQuery_handler: function(jEv) { this.navigateTo("StructuredQuery", { cluster: this.cluster }, jEv); },
-		_openBrowser_handler: function(jEv) { this.navigateTo("Browser", { cluster: this.cluster }, jEv);  },
-		_openClusterOverview_handler: function(jEv) { this.navigateTo("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
-		_openIndexOverview_handler: function(jEv) { this.navigateTo("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, jEv); },
+		_openAnyRequest_handler: function(ev) { this.navigateTo("AnyRequest", { cluster: this.cluster }, ev ); },
+		_openStructuredQuery_handler: function(ev) { this.navigateTo("StructuredQuery", { cluster: this.cluster }, ev ); },
+		_openBrowser_handler: function(ev) { this.navigateTo("Browser", { cluster: this.cluster }, ev );  },
+		_openClusterOverview_handler: function(ev) { this.navigateTo("ClusterOverview", { cluster: this.cluster, clusterState: this._clusterState }, ev ); },
+		_openIndexOverview_handler: function(ev) { this.navigateTo("IndexOverview", { cluster: this.cluster, clusterState: this._clusterState }, ev ); },
 
 		_body_template: function() { return (
 			{ tag: "DIV", id: this.id("body"), cls: "uiApp-body" }
