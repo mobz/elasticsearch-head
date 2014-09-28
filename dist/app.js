@@ -1724,7 +1724,7 @@
 		open: function(jEv) {
 			this.el
 				.css( { visibility: "hidden" } )
-				.appendTo( $(this.config.parent) )
+				.appendTo( this.config.parent )
 				.css( this._getPosition(jEv) )
 				.css( { zIndex: (this.shared.stack.length ? (+this.shared.stack[this.shared.stack.length - 1].el.css("zIndex") + 10) : 100) } )
 				.css( { visibility: "visible", display: "block" } );
