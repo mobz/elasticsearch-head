@@ -15,7 +15,7 @@
 			this._super();
 			this.prefs = services.Preferences.instance();
 			this.history = this.prefs.get("anyRequest-history") || [ { type: "POST", path: this.config.path, query : JSON.stringify(this.config.query), transform: this.config.transform } ];
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 			this.base_uriEl = this.el.find("INPUT[name=base_uri]");
 			this.pathEl = this.el.find("INPUT[name=path]");
 			this.typeEl = this.el.find("SELECT[name=method]");
@@ -38,7 +38,7 @@
 			this.dataEl.val(item.query);
 			this.transformEl.val(item.transform);
 		},
-		_request_handler: function(jEv) {
+		_request_handler: function( ev ) {
 			if(! this._validateJson_handler()) {
 				return;
 			}
@@ -47,7 +47,7 @@
 					query = JSON.stringify(JSON.parse(this.dataEl.val())),
 					transform = this.transformEl.val(),
 					base_uri = this.base_uriEl.val();
-			if(jEv && jEv.originalEvent) { // if the user click request
+			if( ev ) { // if the user click request
 				if(this.timer) {
 					window.clearTimeout(this.timer); // stop any cron jobs
 				}
@@ -132,7 +132,7 @@
 			}
 			this.prevData = data;
 		},
-		_validateJson_handler: function(jEv) {
+		_validateJson_handler: function( ev ) {
 			/* if the textarea is empty, we replace its value by an empty JSON object : "{}" and the request goes on as usual */
 			var jsonData = this.dataEl.val().trim();
 			var j;
@@ -152,12 +152,9 @@
 			}
 			return true;
 		},
-		_showSection_handler: function(jEv) {
-			$(jEv.target).closest(".sidebar-section").children(".sidebar-subbody").slideToggle(200);
-		},
-		_historyClick_handler: function(jEv) {
-			var item = $(jEv.target).closest("LI").data("item");
-			this.setHistoryItem(item);
+		_historyClick_handler: function( ev ) {
+			var item = $( ev.target ).closest( "LI" ).data( "item" );
+			this.setHistoryItem( item );
 		},
 		_main_template: function() {
 			return { tag: "DIV", cls: "anyRequest", children: [
