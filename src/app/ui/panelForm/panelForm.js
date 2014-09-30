@@ -9,7 +9,7 @@
 		},
 		init: function(parent) {
 			this._super();
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 			this.attach( parent );
 		},
 		_main_template: function() {
@@ -19,7 +19,7 @@
 			return { tag: "LABEL", cls: "uiPanelForm-field", children: [
 				{ tag: "DIV", cls: "uiPanelForm-label", children: [ field.label, ut.require_template(field) ] },
 				field
-			]}
+			]};
 		}
 	});
 

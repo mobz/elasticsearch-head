@@ -1603,7 +1603,7 @@
 				label: "\u00a0",
 				menu: this.menu
 			});
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 		},
 		remove: function() {
 			this.menu.remove();
@@ -2207,7 +2207,7 @@
 		},
 		init: function(parent) {
 			this._super();
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 			this.attach( parent );
 		},
 		_main_template: function() {
@@ -2217,7 +2217,7 @@
 			return { tag: "LABEL", cls: "uiPanelForm-field", children: [
 				{ tag: "DIV", cls: "uiPanelForm-label", children: [ field.label, ut.require_template(field) ] },
 				field
-			]}
+			]};
 		}
 	});
 
@@ -2283,21 +2283,21 @@
 		},
 		init: function() {
 			this._super();
-			this.el = $( this._main_template() );
+			this.el = $.joey( this._main_template() );
 			this.body = this.el.children(".uiSidebarSection-body");
 			this.config.open && ( this.el.addClass("shown") && this.body.css("display", "block") );
 		},
-		_showSection_handler: function(jEv) {
-			var shown = $(jEv.target).closest(".uiSidebarSection")
+		_showSection_handler: function( ev ) {
+			var shown = $( ev.target ).closest(".uiSidebarSection")
 				.toggleClass("shown")
 					.children(".uiSidebarSection-body").slideToggle(200, function() { this.fire("animComplete", this); }.bind(this))
 				.end()
 				.hasClass("shown");
 			this.fire(shown ? "show" : "hide", this);
 		},
-		_showHelp_handler: function(jEv) {
+		_showHelp_handler: function( ev ) {
 			new ui.HelpPanel({ref: this.config.help});
-			jEv.stopPropagation();
+			ev.stopPropagation();
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: "uiSidebarSection", children: [

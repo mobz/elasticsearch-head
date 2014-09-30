@@ -24,7 +24,7 @@
 				label: "\u00a0",
 				menu: this.menu
 			});
-			this.el = $(this._main_template());
+			this.el = $.joey(this._main_template());
 		},
 		remove: function() {
 			this.menu.remove();
