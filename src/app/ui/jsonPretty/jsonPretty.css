@@ -7,15 +7,9 @@ UL.uiJsonPretty-array LI { padding: 0; margin: 0; }
 .expando.uiJsonPretty-minimised > SPAN.uiJsonPretty-name:before { content: "\25ba\a0"; top: 0; }
 .uiJsonPretty-minimised > UL SPAN.uiJsonPretty-name:before,
 .expando .uiJsonPretty-minimised > UL SPAN.uiJsonPretty-name:before { content: ""; }
-UL.uiJsonPretty-object LI:after,
-UL.uiJsonPretty-array LI:after { content: ','; }
-UL.uiJsonPretty-object LI:last-child:after,
-UL.uiJsonPretty-array LI:last-child:after { content: ''; }
 SPAN.uiJsonPretty-string,
 SPAN.uiJsonPretty-string A { color: green; }
 SPAN.uiJsonPretty-string A { text-decoration: underline;}
-SPAN.uiJsonPretty-string:before { content: '"'; }
-SPAN.uiJsonPretty-string:after { content: '"'; }
 SPAN.uiJsonPretty-number { color: blue; }
 SPAN.uiJsonPretty-null { color: red; }
 SPAN.uiJsonPretty-boolean { color: purple; }

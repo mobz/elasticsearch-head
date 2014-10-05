@@ -39,30 +39,47 @@
 				return this['value']('null', 'null');
 			},
 			"array": function (value) {
-				var results = value.map(function(v) {
-					return { tag: "LI", cls: this.expando(v), children: [ this['parse'](v) ] };
+				var results = [];
+				var lastItem = value.length - 1;
+				value.forEach(function( v, i ) {
+					results.push({ tag: "LI", cls: this.expando(v), children: [ this['parse'](v) ] });
+					if( i !== lastItem ) {
+						results.push(",");
+					}
 				}, this);
 				return [ "[ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-array", children: results } : null), "]" ];
 			},
 			"object": function (value) {
 				var results = [];
-				for (var member in value) {
-					results.push({ tag: "LI", cls: this.expando(value[member]), children:  [ this['value']('name', member), ': ', this['parse'](value[member]) ] });
-				}
+				var keys = Object.keys( value );
+				var lastItem = keys.length - 1;
+				keys.forEach( function( key, i ) {
+					var children = [ this['value']( 'name', '"' + key + '"' ), ": ", this['parse']( value[ key ]) ];
+					if( i !== lastItem ) {
+						children.push(",");
+					}
+					results.push( { tag: "LI", cls: this.expando( value[ key ] ), children: children } );
+				}, this);
 				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-object", children: results } : null ),  "}" ];
 			},
 			"number": function (value) {
 				return this['value']('number', value.toString());
 			},
 			"string": function (value) {
-				return this['value']('string', value.toString());
+				if (/^(http|https|file):\/\/[^\s]+$/.test(value)) {
+					return this['link']( value );
+				} else {
+					return this['value']('string', '"' + value.toString() + '"');
+				}
 			},
 			"boolean": function (value) {
 				return this['value']('boolean', value.toString());
 			},
+			"link": function( value ) {
+					return this['value']("string", { tag: "A", href: value, target: "_blank", text: '"' + value + '"' } );
+			},
 			"value": function (type, value) {
 				if (/^(http|https|file):\/\/[^\s]+$/.test(value)) {
-					return this['value'](type, { tag: "A", href: value, target: "_blank", text: value } );
 				}
 				return { tag: "SPAN", cls: "uiJsonPretty-" + type, text: value };
 			}
