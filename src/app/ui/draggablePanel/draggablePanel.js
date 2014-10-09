@@ -13,7 +13,7 @@
 			this._super();
 			this.body = $(this._body_template());
 			this.title = $(this._title_template());
-			this.el = $( this._main_template() );
+			this.el = $.joey( this._main_template() );
 			this.el.css( { width: this.config.width } );
 			this.dd = new app.ux.DragDrop({
 				pickupSelector: this.el.find(".uiPanel-titleBar"),

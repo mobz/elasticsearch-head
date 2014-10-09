@@ -19,27 +19,27 @@
 		init: function() {
 			this._super();
 		},
-		open: function(jEv) {
+		open: function( ev ) {
 			this.el
 				.css( { visibility: "hidden" } )
 				.appendTo( this.config.parent )
-				.css( this._getPosition(jEv) )
+				.css( this._getPosition( ev ) )
 				.css( { zIndex: (this.shared.stack.length ? (+this.shared.stack[this.shared.stack.length - 1].el.css("zIndex") + 10) : 100) } )
 				.css( { visibility: "visible", display: "block" } );
 			this.shared.stack.remove(this);
 			this.shared.stack.push(this);
 			this._setModal();
-			$(document).bind("keyup", this._close_handler);
-			this.fire("open", { source: this, event: jEv } );
+			$(document).bind("keyup", this._close_handler );
+			this.fire("open", { source: this, event: ev } );
 			return this;
 		},
-		close: function(jEv) {
+		close: function() {
 			var index = this.shared.stack.indexOf(this);
 			if(index !== -1) {
 				this.shared.stack.splice(index, 1);
 				this.el.css( { left: "-2999px" } ); // move the dialog to the left rather than hiding to prevent ie6 rendering artifacts
 				this._setModal();
-				this.fire("close", { source: this,  event: jEv } );
+				this.fire("close", this );
 				if(this.config.autoRemove) {
 					this.remove();
 				}
@@ -49,6 +49,7 @@
 		// close the panel and remove it from the dom, destroying it (you can not reuse the panel after calling remove)
 		remove: function() {
 			this.close();
+			$(document).unbind("keyup", this._close_handler );
 			this._super();
 		},
 		// starting at the top of the stack, find the first panel that wants a modal and put it just underneath, otherwise remove the modal
@@ -72,10 +73,10 @@
 				.mod(function(s) { return Math.max(5, s); })  // make sure the panel is not off the edge of the window
 				.asOffset();                                  // and return it as a {top, left} object
 		},
-		_close_handler: function(jEv) {
-			if(jEv.type === "keyup" && jEv.keyCode !== 27) { return; } // press esc key to close
+		_close_handler: function( ev ) {
+			if( ev.type === "keyup" && ev.keyCode !== 27) { return; } // press esc key to close
 			$(document).unbind("keyup", this._close_handler);
-			this.close(jEv);
+			this.close( ev );
 		}
 	});
 
