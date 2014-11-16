@@ -19,6 +19,7 @@ This will automatically download the latest version of elasticsearch-head from g
 
 h4. Running with built in server
 
+* enable "cors":http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-http.html by add @http.cors.enabled: true@ in elasticsearch configuration
 * @git clone git://github.com/mobz/elasticsearch-head.git@
 * @cd elasticsearch-head@
 * @npm install@
