@@ -1303,13 +1303,14 @@
 			this.clusterNodes = null;
 		},
 		refresh: function() {
-			var self = this, clusterState, status, nodeStats, clusterNodes; 
+			var self = this, clusterState, status, nodeStats, clusterNodes, clusterHealth;
 			function updateModel() {
-				if( clusterState && status && nodeStats && clusterNodes ) {
+				if( clusterState && status && nodeStats && clusterNodes && clusterHealth ) {
 					this.clusterState = clusterState;
 					this.status = status;
 					this.nodeStats = nodeStats;
 					this.clusterNodes = clusterNodes;
+					this.clusterHealth = clusterHealth;
 					this.fire( "data", this );
 				}
 			}
@@ -1329,6 +1330,10 @@
 				clusterNodes = data;
 				updateModel.call( self );
 			});
+			this.cluster.get("_cluster/health", function( data ) {
+				clusterHealth = data;
+				updateModel.call( self );
+			});
 		},
 		_clusterState_handler: function(state) {
 			this.clusterState = state;
@@ -1345,6 +1350,10 @@
 		_clusterNodes_handler: function(nodes) {
 			this.clusterNodes = nodes;
 			this.redraw("clusterNodes");
+		},
+		_clusterHealth_handler: function(health) {
+			this.clusterHealth = health;
+			this.redraw("status");
 		}
 	});
 
@@ -4089,7 +4098,7 @@
 			this._clusterState = this.config.clusterState;
 			this._clusterState.on("data", function( state ) {
 				var shards = state.status._shards;
-				var colour = shards.failed > 0 ? "red" : ( shards.total > shards.successful ? "yellow" : "green" );
+				var colour = state.clusterHealth.status;
 				var name = state.clusterState.cluster_name;
 				this.nameEl.text( name );
 				this.statEl
