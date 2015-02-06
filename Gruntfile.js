@@ -81,6 +81,9 @@ module.exports = function(grunt) {
 		connect: {
 			server: {
 				options: {
+                    // listen on all interfaces by default
+                    // remove the "hostname" key to default to localhost:<port>
+					hostname: null,
 					port: 9100,
 					base: '.',
 					keepalive: true
