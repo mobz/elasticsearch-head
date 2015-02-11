@@ -66,9 +66,11 @@ and folllow existing dev patterns, such as indenting with tabs
 
 h5. Contributing an Internationalisation
 
-# English (primary) by "Ben Birch":https://twitter.com/mobz
-# French by "David Pilato":https://twitter.com/dadoonet
-# Portuguese by "caiodangelo":https://github.com/caiodangelo
+
+* Chinese by "darkcount":https://github.com/hangxin1940
+* English (primary) by "Ben Birch":https://twitter.com/mobz
+* French by "David Pilato":https://twitter.com/dadoonet
+* Portuguese by "caiodangelo":https://github.com/caiodangelo
 
 To contribute an internationalisation
 
