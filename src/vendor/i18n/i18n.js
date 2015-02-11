@@ -69,7 +69,8 @@
 })();
 
 (function() {
-	var userLang = window.navigator.language || window.navigator.userLanguage;
+	var nav = window.navigator;
+	var userLang = ( nav.languages && nav.languages[0] ) || nav.language || nav.userLanguage;
 	var scripts = document.getElementsByTagName('script');
 	var data = scripts[ scripts.length - 1].dataset;
 	if( ! data["langs"] ) {
