@@ -47,7 +47,7 @@
 			this._clusterState = this.config.clusterState;
 			this._clusterState.on("data", function( state ) {
 				var shards = state.status._shards;
-				var colour = shards.failed > 0 ? "red" : ( shards.total > shards.successful ? "yellow" : "green" );
+				var colour = state.clusterHealth.status;
 				var name = state.clusterState.cluster_name;
 				this.nameEl.text( name );
 				this.statEl
