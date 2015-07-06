@@ -3361,13 +3361,13 @@
 			});
 			this._aliasRenderer = this.prefs.get( "clusterOverview-aliasRender" ) || "full";
 			this._aliasMenu = new ui.MenuButton({
-				label: "View Aliases",
+				label: i18n.text( "Preference.ViewAliases" ),
 				menu: new ui.SelectMenuPanel({
 					value: this._aliasRenderer,
 					items: [
-						{ value: "full", text: "Grouped" },
-						{ value: "list", text: "List" },
-						{ value: "none", text: "None" } ],
+						{ value: "full", text: i18n.text( "ViewAliases.Grouped" ) },
+						{ value: "list", text: i18n.text( "ViewAliases.List" ) },
+						{ value: "none", text: i18n.text( "ViewAliases.None" ) } ],
 					onSelect: function( panel, event ) {
 						this._aliasRenderer = event.value;
 						this.prefs.set( "clusterOverview-aliasRender", this._aliasRenderer );
@@ -3377,7 +3377,7 @@
 			});
 			this._indexFilter = new ui.TextField({
 				value: this.prefs.get("clusterOverview-indexFilter"),
-				placeholder: "Index Filter",
+				placeholder: i18n.text( "Overview.IndexFilter" ),
 				onchange: function( indexFilter ) {
 					this.prefs.set("clusterOverview-indexFilter", indexFilter.val() );
 					this.draw_handler();
