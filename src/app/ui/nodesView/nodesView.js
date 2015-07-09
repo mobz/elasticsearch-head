@@ -79,9 +79,28 @@
 			}).open();
 		},
 		_testAnalyser_handler: function(index) {
-			this.cluster.get(index.name + "/_analyze?text=" + prompt( i18n.text("IndexCommand.TextToAnalyze") ), function(r) {
-				alert(JSON.stringify(r, true, "  "));
+			var fields = new app.ux.FieldCollection({
+				fields: [
+					new ui.TextField({ label: i18n.text("TestAnalyzerForm.Analyzer"), name: "analyzer", require: false}),
+					new ui.TextField({ label: i18n.text("TestAnalyzerForm.Text"), name: "text", require: true})
+				]
 			});
+			var dialog = new ui.DialogPanel({
+				title: i18n.text("TestAnalyzerForm.Title"),
+				body: new ui.PanelForm({ fields: fields }),
+				onCommit: function( panel, args ) {
+					if (fields.validate()) {
+						var data = fields.getData();
+						var params = "text=" + data["text"];
+						if (data["analyzer"]) {
+							params += "&analyzer=" + data["analyzer"];
+						}
+						this.cluster.get(index.name + "/_analyze?" + params, function(r) {
+							alert(JSON.stringify(r, true, "  "));
+						});
+					}
+				}.bind(this)
+			}).open();
 		},
 		_deleteIndexAction_handler: function(index) {
 			if( prompt( i18n.text("AliasForm.DeleteAliasMessage", i18n.text("Command.DELETE"), index.name ) ) === i18n.text("Command.DELETE") ) {
