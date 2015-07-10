@@ -3454,7 +3454,7 @@
 						var routings = nodes[getIndexForNode(node)].routings;
 						var indexIndex = getIndexForIndex(routings, index);
 						var replicas = routings[indexIndex].replicas;
-						if(node === "Unassigned" || !status.indices[index].shards[shard]) {
+						if(node === "Unassigned" || !status.indices[index] || !status.indices[index].shards[shard]) {
 							replicas.push({ replica: replica });
 						} else {
 							replicas[shard] = {
