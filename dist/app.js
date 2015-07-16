@@ -1182,6 +1182,14 @@
 			} else if(op === "query_string") {
 				query["default_field"] = field;
 				query["query"] = value;
+			} else if(op === "boolean") {
+				op = "term";
+				if(value === "true") {
+				  value = true;
+				} else {
+					value = false;
+				}
+				query[field] = value;
 			} else if(op === "missing") {
 				op = "constant_score"
 				var missing = {}, filter = {};
@@ -3929,6 +3937,8 @@
 			} else if(spec.type === 'long' || spec.type === 'integer' || spec.type === 'float' ||
 					spec.type === 'byte' || spec.type === 'short' || spec.type === 'double') {
 				ops = ["term", "range", "fuzzy", "query_string", "missing"];
+			} else if(spec.type === 'boolean') {
+				ops = ["boolean", "missing"];
 			} else if(spec.type === 'date') {
 				ops = ["term", "range", "fuzzy", "query_string", "missing"];
 			} else if(spec.type === 'geo_point') {
@@ -3945,6 +3955,8 @@
 			op.siblings().remove(".qual,.range,.fuzzy");
 			if(opv === 'term' || opv === 'wildcard' || opv === 'prefix' || opv === "query_string" || opv === 'text') {
 				op.after({ tag: "INPUT", cls: "qual", type: "text" });
+			} else if(opv === 'boolean') {
+				op.after(this._boolean_template());
 			} else if(opv === 'range') {
 				op.after(this._range_template());
 			} else if(opv === 'fuzzy') {
@@ -3998,7 +4010,12 @@
 				{ tag: "SELECT", cls: "fuzzyop", children: ["max_expansions", "min_similarity"].map(ut.option_template) },
 				{ tag: "INPUT", cls: "fuzzyqual", type: "text" }
 			]};
+		},
+
+		_boolean_template: function() {
+			return { tag: "SELECT", cls: "qual", children: ["true", "false"].map(ut.option_template) };
 		}
+
 	});
 	
 })( this.jQuery, this.app, this.i18n );
