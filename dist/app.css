@@ -503,7 +503,6 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 
 .uiAnyRequest-request {
 	float: left;
-	width: 350px;
 	padding: 5px;
 	background: #d8e7ff;
 	background: -moz-linear-gradient(left, #d8e7ff, #e8f1ff);
@@ -513,6 +512,10 @@ SPAN.uiJsonPretty-boolean { color: purple; }
 .uiAnyRequest-request INPUT[type=text],
 .uiAnyRequest-request TEXTAREA {
 	width: 340px;
+}
+
+.uiAnyRequest-request TEXTAREA {
+	display: block;
 }
 
 .anyRequest INPUT[name=path] {
