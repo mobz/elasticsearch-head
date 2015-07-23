@@ -2168,7 +2168,12 @@
 				return (value && (/array|object/i).test(value.constructor.name)) ? "expando" : "";
 			},
 			"parse": function (member) {
-				return this[(member == null) ? 'null' : member.constructor.name.toLowerCase()](member);
+				// handle IE's lack of an objects 'name' attribute
+				if ( member != null ) {
+					return this[(member.constructor.name == undefined) ? typeof(member) : member.constructor.name.toLowerCase()](member);
+				} else {
+					return this['null'](member);
+				}
 			},
 			"null": function (value) {
 				return this['value']('null', 'null');
