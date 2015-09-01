@@ -2,7 +2,7 @@
   "name": "elasticsearch-head",
   "version": "0.0.0",
   "description": "Front end for an elasticsearch cluster",
-  "main": "index.html",
+  "main": "_site/index.html",
   "directories": {
     "test": "test"
   },
