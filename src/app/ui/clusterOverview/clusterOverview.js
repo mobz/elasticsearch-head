@@ -174,7 +174,7 @@
 				indexNames.push(name);
 			});
 			indexNames.sort().filter( indexFilter ).forEach(function(name) {
-				var indexObject = clusterState.routing_table.indices[name];console.log(name, indexObject);
+				var indexObject = clusterState.routing_table.indices[name];
 				$.each(indexObject.shards, function(name, shard) {
 					shard.forEach(function(replica){
 						var node = replica.node;
