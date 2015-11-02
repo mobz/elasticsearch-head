@@ -1318,7 +1318,7 @@
 				clusterState = data;
 				updateModel.call( self );
 			});
-			this.cluster.get("_status", function( data ) {
+			this.cluster.get("_stats", function( data ) {
 				status = data;
 				updateModel.call( self );
 			});
@@ -3209,8 +3209,8 @@
 		); },
 		_indexHeader_template: function( index ) {
 			var closed = index.state === "close";
-			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.index ? ut.byteSize_template( index.status.index.primary_size_in_bytes ) + " (" + ut.byteSize_template( index.status.index.size_in_bytes ) + ")" : "unknown" ) ); 
-			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.docs ? index.status.docs.num_docs.toLocaleString() + " (" + index.status.docs.max_doc.toLocaleString() + ")" : "unknown" ) );
+			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.total ? ut.byteSize_template( index.status.total.store.size_in_bytes ) + " (" + ut.byteSize_template( index.status.total.store.size_in_bytes ) + ")" : "unknown" ) );
+			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.total && index.status.total.docs ? index.status.total.docs.count.toLocaleString() + " (" + (index.status.total.docs.count + index.status.total.docs.deleted).toLocaleString() + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
 				{ tag: "H3", text: index.name },
 				{ tag: "DIV", text: line1 },
@@ -3444,8 +3444,8 @@
 				indexNames.push(name);
 			});
 			indexNames.sort().filter( indexFilter ).forEach(function(name) {
-				var index = clusterState.routing_table.indices[name];
-				$.each(index.shards, function(name, shard) {
+				var indexObject = clusterState.routing_table.indices[name];
+				$.each(indexObject.shards, function(name, shard) {
 					shard.forEach(function(replica){
 						var node = replica.node;
 						if(node === null) { node = "Unassigned"; }
@@ -3454,13 +3454,13 @@
 						var routings = nodes[getIndexForNode(node)].routings;
 						var indexIndex = getIndexForIndex(routings, index);
 						var replicas = routings[indexIndex].replicas;
-						if(node === "Unassigned" || !status.indices[index].shards[shard]) {
+						if(node === "Unassigned" || !indexObject.shards[shard]) {
 							replicas.push({ replica: replica });
 						} else {
 							replicas[shard] = {
 								replica: replica,
-								status: status.indices[index].shards[shard].filter(function(replica) {
-									return replica.routing.node === node;
+								status: indexObject.shards[shard].filter(function(replica) {
+									return replica.node === node;
 								})[0]
 							};
 						}
@@ -4065,7 +4065,7 @@
 			});
 			var quicks = [
 				{ text: i18n.text("Nav.Info"), path: "" },
-				{ text: i18n.text("Nav.Status"), path: "_status" },
+				{ text: i18n.text("Nav.Status"), path: "_stats" },
 				{ text: i18n.text("Nav.NodeStats"), path: "_cluster/nodes/stats" },
 				{ text: i18n.text("Nav.ClusterNodes"), path: "_cluster/nodes" },
 				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugin" },
