@@ -174,8 +174,8 @@
 				indexNames.push(name);
 			});
 			indexNames.sort().filter( indexFilter ).forEach(function(name) {
-				var index = clusterState.routing_table.indices[name];
-				$.each(index.shards, function(name, shard) {
+				var indexObject = clusterState.routing_table.indices[name];
+				$.each(indexObject.shards, function(name, shard) {
 					shard.forEach(function(replica){
 						var node = replica.node;
 						if(node === null) { node = "Unassigned"; }
@@ -184,13 +184,13 @@
 						var routings = nodes[getIndexForNode(node)].routings;
 						var indexIndex = getIndexForIndex(routings, index);
 						var replicas = routings[indexIndex].replicas;
-						if(node === "Unassigned" || !status.indices[index].shards[shard]) {
+						if(node === "Unassigned" || !indexObject.shards[shard]) {
 							replicas.push({ replica: replica });
 						} else {
 							replicas[shard] = {
 								replica: replica,
-								status: status.indices[index].shards[shard].filter(function(replica) {
-									return replica.routing.node === node;
+								status: indexObject.shards[shard].filter(function(replica) {
+									return replica.node === node;
 								})[0]
 							};
 						}

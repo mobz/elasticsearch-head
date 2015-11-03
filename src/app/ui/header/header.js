@@ -14,7 +14,7 @@
 			});
 			var quicks = [
 				{ text: i18n.text("Nav.Info"), path: "" },
-				{ text: i18n.text("Nav.Status"), path: "_status" },
+				{ text: i18n.text("Nav.Status"), path: "_stats" },
 				{ text: i18n.text("Nav.NodeStats"), path: "_cluster/nodes/stats" },
 				{ text: i18n.text("Nav.ClusterNodes"), path: "_cluster/nodes" },
 				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugin" },

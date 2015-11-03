@@ -31,7 +31,7 @@
 				clusterState = data;
 				updateModel.call( self );
 			});
-			this.cluster.get("_status", function( data ) {
+			this.cluster.get("_stats", function( data ) {
 				status = data;
 				updateModel.call( self );
 			});
