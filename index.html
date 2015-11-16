@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>elasticsearch-head</title>
+		<link rel="stylesheet" href="_site/base/reset.css">
+		<link rel="stylesheet" href="_site/vendor.css">
+		<link rel="stylesheet" href="_site/app.css">
+		<script src="_site/i18n.js" data-baseDir="_site/lang" data-langs="en,fr,pt,zh"></script>
+		<script src="_site/vendor.js"></script>
+		<script src="_site/app.js"></script>
+		<script>
+			window.onload = function() {
+				if(location.href.contains("/_plugin/")) {
+					var base_uri = location.href.replace(/_plugin\/.*/, '');
+				}
+				var args = location.search.substring(1).split("&").reduce(function(r, p) {
+					r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
+				}, {});
+				new app.App("body", {
+					id: "es",
+					base_uri: args["base_uri"] || base_uri,
+					auth_user : args["auth_user"] || "",
+					auth_password : args["auth_password"],
+					dashboard: args["dashboard"]
+				});
+			};
+		</script>
+		<link rel="icon" href="base/favicon.png" type="image/png">
+	</head>
+	<body></body>
+</html>

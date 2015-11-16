@@ -29,6 +29,15 @@ module.exports = function(grunt) {
 		},
 
 		copy: {
+			site_index: {
+				src: 'index.html',
+				dest: '_site/index.html',
+				options: {
+					process: function( src ) {
+						return src.replace(/_site\//g, "");
+					}
+				}
+			},
 			base: {
 				expand: true,
 				cwd: 'src/app/base/',
