@@ -86,7 +86,7 @@
 			] }
 		); },
 
-		_index_template: function( index ) { console.log(index); return (
+		_index_template: function( index ) { return (
 			{ tag: "TR", children: [
 				{ tag: "TD", children: [
 					{ tag: "H3", text: index.name }
