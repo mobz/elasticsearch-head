@@ -21,7 +21,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				facets: {},
+				//facets: {},
 				version: true
 			};
 			this.defaultClause = this.addClause();
@@ -170,16 +170,16 @@
 				this.defaultClause = this.addClause();
 			}
 		},
-		addFacet: function(facet) {
-			var facetId = "f-" + this.refuid++;
-			this.search.facets[facetId] = facet;
-			this.refmap[facetId] = { facetId: facetId, facet: facet };
-			return facetId;
-		},
-		removeFacet: function(facetId) {
-			delete this.search.facets[facetId];
-			delete this.refmap[facetId];
-		},
+		// addFacet: function(facet) {
+		// 	var facetId = "f-" + this.refuid++;
+		// 	this.search.facets[facetId] = facet;
+		// 	this.refmap[facetId] = { facetId: facetId, facet: facet };
+		// 	return facetId;
+		// },
+		// removeFacet: function(facetId) {
+		// 	delete this.search.facets[facetId];
+		// 	delete this.refmap[facetId];
+		// },
 		_setClause: function(value, field, op, bool) {
 			var clause = {}, query = {};
 			if(op === "match_all") {

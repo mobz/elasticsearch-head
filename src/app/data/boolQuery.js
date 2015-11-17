@@ -16,7 +16,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				facets: {}
+				// facets: {}
 			};
 			this.defaultClause = this.addClause();
 		},
@@ -61,7 +61,7 @@
 				filter["missing"] = missing
 				query["filter"] = filter;
 			} else {
-				query[field] = value;
+				query[field.substring(field.indexOf(".")+1)] = value;
 			}
 			clause[op] = query;
 			this.search.query.bool[bool].push(clause);
