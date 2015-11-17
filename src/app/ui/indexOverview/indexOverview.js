@@ -86,13 +86,13 @@
 			] }
 		); },
 
-		_index_template: function( index ) { return (
+		_index_template: function( index ) { console.log(index); return (
 			{ tag: "TR", children: [
 				{ tag: "TD", children: [
 					{ tag: "H3", text: index.name }
 				] },
-				{ tag: "TD", text: ut.byteSize_template( index.state.index.primary_size_in_bytes ) + "/" + ut.byteSize_template( index.state.index.size_in_bytes ) },
-				{ tag: "TD", text: ut.count_template( index.state.docs.num_docs ) }
+				{ tag: "TD", text: ut.byteSize_template( index.state.primaries.store.size_in_bytes ) + "/" + ut.byteSize_template( index.state.total.store.size_in_bytes ) },
+				{ tag: "TD", text: ut.count_template( index.state.primaries.docs.count ) }
 			] }
 		); },
 		_main_template: function() {
