@@ -856,7 +856,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				facets: {},
+				//facets: {},
 				version: true
 			};
 			this.defaultClause = this.addClause();
@@ -1005,16 +1005,16 @@
 				this.defaultClause = this.addClause();
 			}
 		},
-		addFacet: function(facet) {
-			var facetId = "f-" + this.refuid++;
-			this.search.facets[facetId] = facet;
-			this.refmap[facetId] = { facetId: facetId, facet: facet };
-			return facetId;
-		},
-		removeFacet: function(facetId) {
-			delete this.search.facets[facetId];
-			delete this.refmap[facetId];
-		},
+		// addFacet: function(facet) {
+		// 	var facetId = "f-" + this.refuid++;
+		// 	this.search.facets[facetId] = facet;
+		// 	this.refmap[facetId] = { facetId: facetId, facet: facet };
+		// 	return facetId;
+		// },
+		// removeFacet: function(facetId) {
+		// 	delete this.search.facets[facetId];
+		// 	delete this.refmap[facetId];
+		// },
 		_setClause: function(value, field, op, bool) {
 			var clause = {}, query = {};
 			if(op === "match_all") {
@@ -1144,7 +1144,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				facets: {}
+				// facets: {}
 			};
 			this.defaultClause = this.addClause();
 		},
@@ -1189,7 +1189,7 @@
 				filter["missing"] = missing
 				query["filter"] = filter;
 			} else {
-				query[field] = value;
+				query[field.substring(field.indexOf(".")+1)] = value;
 			}
 			clause[op] = query;
 			this.search.query.bool[bool].push(clause);
@@ -4016,7 +4016,7 @@
 			this.update();
 		},
 		update: function() {
-			this.cluster.get( "_status", this._update_handler );
+			this.cluster.get( "_stats", this._update_handler );
 		},
 		
 		_update_handler: function(data) {
@@ -4043,7 +4043,7 @@
 		},
 		
 		_option_template: function(name, index) {
-			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
+			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.primaries.docs.count ) };
 		}
 	});
 
@@ -4066,9 +4066,9 @@
 			var quicks = [
 				{ text: i18n.text("Nav.Info"), path: "" },
 				{ text: i18n.text("Nav.Status"), path: "_stats" },
-				{ text: i18n.text("Nav.NodeStats"), path: "_cluster/nodes/stats" },
-				{ text: i18n.text("Nav.ClusterNodes"), path: "_cluster/nodes" },
-				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugin" },
+				{ text: i18n.text("Nav.NodeStats"), path: "_nodes/stats" },
+				{ text: i18n.text("Nav.ClusterNodes"), path: "_nodes" },
+				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugins" },
 				{ text: i18n.text("Nav.ClusterState"), path: "_cluster/state" },
 				{ text: i18n.text("Nav.ClusterHealth"), path: "_cluster/health" },
 				{ text: i18n.text("Nav.Templates"), path: "_template" }
@@ -4216,8 +4216,8 @@
 				{ tag: "TD", children: [
 					{ tag: "H3", text: index.name }
 				] },
-				{ tag: "TD", text: ut.byteSize_template( index.state.index.primary_size_in_bytes ) + "/" + ut.byteSize_template( index.state.index.size_in_bytes ) },
-				{ tag: "TD", text: ut.count_template( index.state.docs.num_docs ) }
+				{ tag: "TD", text: ut.byteSize_template( index.state.primaries.store.size_in_bytes ) + "/" + ut.byteSize_template( index.state.total.store.size_in_bytes ) },
+				{ tag: "TD", text: ut.count_template( index.state.primaries.docs.count ) }
 			] }
 		); },
 		_main_template: function() {
