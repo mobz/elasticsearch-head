@@ -48,6 +48,8 @@
 
 	var coretype_map = {
 		"string" : "string",
+		"byte" : "number",
+		"short" : "number",
 		"long" : "number",
 		"integer" : "number",
 		"float" : "number",
@@ -102,7 +104,7 @@
 
 			function createField( mapping, index, type, path, name ) {
 				var dpath = [ index, type ].concat( path ).join( "." );
-				var field_name = mapping.index_name || name;
+				var field_name = mapping.index_name || path.join( "." );
 				var field = paths[ dpath ] = fields[ field_name ] || $.extend({
 					field_name : field_name,
 					core_type : coretype_map[ mapping.type ],

@@ -694,6 +694,8 @@
 
 	var coretype_map = {
 		"string" : "string",
+		"byte" : "number",
+		"short" : "number",
 		"long" : "number",
 		"integer" : "number",
 		"float" : "number",
@@ -748,7 +750,7 @@
 
 			function createField( mapping, index, type, path, name ) {
 				var dpath = [ index, type ].concat( path ).join( "." );
-				var field_name = mapping.index_name || name;
+				var field_name = mapping.index_name || path.join( "." );
 				var field = paths[ dpath ] = fields[ field_name ] || $.extend({
 					field_name : field_name,
 					core_type : coretype_map[ mapping.type ],
@@ -2421,17 +2423,7 @@
 			}
 		},
 		getSpec: function(fieldName) {
-			var fieldNameParts = fieldName.split('.');
-			var namePart = 0;
-			var spec = this.metadata.fields[fieldNameParts[namePart]];
-			while (typeof spec.fields !== "undefined") {
-				namePart++;
-				if (typeof spec.fields[fieldNameParts[namePart]] === "undefined") {
-					break;
-				}
-				spec =  spec.fields[fieldNameParts[namePart]];
-			}
-			return spec;
+			return this.metadata.fields[fieldName];
 		},
 		_selectAlias_handler: function(jEv) {
 			var indices = (jEv.target.selectedIndex === 0) ? [] : this.metadata.getIndices($(jEv.target).val());
@@ -2632,7 +2624,9 @@
 			] };
 		},
 		_filters_template: function() {
-			var fields = Object.keys( this.metadata.fields ).sort();
+			var _metadataFields = this.metadata.fields;
+			var fields = Object.keys( _metadataFields ).sort()
+				.filter(function(d) { return (_metadataFields[d].core_type !== undefined); });
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-filters", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Fields") },
 				{ tag: "DIV", children: fields.map( function(name ) {
