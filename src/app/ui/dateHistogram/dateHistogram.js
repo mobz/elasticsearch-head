@@ -30,20 +30,19 @@
 			}.bind(this));
 			this.query.search.size = 0;
 			this.query.on("results", this._stat_handler);
-			this.query.on("results", this._facet_handler);
+			this.query.on("results", this._aggs_handler);
 			this.buildHistogram();
 		},
 		buildHistogram: function(query) {
-			this.statFacet = this.query.addFacet({
-				statistical: { field: this.config.spec.field_name },
-				global: true
+			this.statAggs = this.query.addAggs({
+				stats: { field: this.config.spec.field_name }
 			});
 			this.query.query();
-			this.query.removeFacet(this.statFacet);
+			this.query.removeAggs(this.statAggs);
 		},
 		_stat_handler: function(query, results) {
-			if(! results.facets[this.statFacet]) { return; }
-			this.stats = results.facets[this.statFacet];
+			if(! results.aggregations[this.statAggs]) { return; }
+			this.stats = results.aggregations[this.statAggs];
 			// here we are calculating the approximate range  that will give us less than 121 columns
 			var rangeNames = [ "year", "year", "month", "day", "hour", "minute" ];
 			var rangeFactors = [100000, 12, 30, 24, 60, 60000 ];
@@ -55,23 +54,22 @@
 				this.intervalRange *= factor;
 				range = range / factor;
 			} while(range > 70);
-			this.dateFacet = this.query.addFacet({
+			this.dateAggs = this.query.addAggs({
 				date_histogram : {
 					field: this.config.spec.field_name,
-					interval: this.intervalName,
-					global: true
+					interval: this.intervalName
 				}
 			});
 			this.query.query();
-			this.query.removeFacet(this.dateFacet);
+			this.query.removeAggs(this.dateAggs);
 		},
-		_facet_handler: function(query, results) {
-			if(! results.facets[this.dateFacet]) { return; }
+		_aggs_handler: function(query, results) {
+			if(! results.aggregations[this.dateAggs]) { return; }
 			var buckets = [], range = this.intervalRange;
 			var min = Math.floor(this.stats.min / range) * range;
 			var prec = [ "year", "month", "day", "hour", "minute", "second" ].indexOf(this.intervalName);
-			results.facets[this.dateFacet].entries.forEach(function(entry) {
-				buckets[parseInt((entry.time - min) / range , 10)] = entry.count;
+			results.aggregations[this.dateAggs].buckets.forEach(function(entry) {
+				buckets[parseInt((entry.key - min) / range , 10)] = entry.doc_count;
 			}, this);
 			for(var i = 0; i < buckets.length; i++) {
 				buckets[i] = buckets[i] || 0;
@@ -98,7 +96,7 @@
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: "uiDateHistogram loading", css: { height: "50px" }, children: [
-				i18n.text("General.LoadingFacets")
+				i18n.text("General.LoadingAggs")
 			] }
 		); }
 	});

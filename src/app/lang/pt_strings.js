@@ -1,6 +1,6 @@
 i18n.setKeys({
 	"General.Elasticsearch": "Elasticsearch",
-	"General.LoadingFacets": "Carregando Facetas...",
+	"General.LoadingAggs": "Carregando Facetas...",
 	"General.Searching": "Buscando...",
 	"General.Search": "Busca",
 	"General.Help": "Ajuda",

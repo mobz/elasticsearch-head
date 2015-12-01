@@ -1,6 +1,6 @@
 i18n.setKeys({
 	"General.Elasticsearch": "Elasticsearch",
-	"General.LoadingFacets": "Carregando Facetas...",
+	"General.LoadingAggs": "Carregando Facetas...",
 	"General.Searching": "Buscando...",
 	"General.Search": "Busca",
 	"General.Help": "Ajuda",
@@ -51,7 +51,7 @@ i18n.setKeys({
 	"IndexInfoMenu.Metadata": "Metadados do índice",
 	"IndexCommand.TextToAnalyze": "Texto para analizar",
 	"IndexCommand.ShutdownMessage": "digite ''{0}'' para desligar {1}. Nó NÃO PODE ser reiniciado à partir dessa interface",
-	"IndexOverview.PageTitle": "Visão Geral dos Índices",
+	"IndexOverview.PageTitle": "Visão geral dos índices",
 	"IndexSelector.NameWithDocs": "{0} ({1} documentoss)",
 	"IndexSelector.SearchIndexForDocs": "Busca {0} por documentos onde:",
 	"FilterBrowser.OutputType": "Resultados: {0}",
@@ -77,14 +77,14 @@ i18n.setKeys({
 	"NodeInfoMenu.Title": "Informações",
 	"NodeInfoMenu.ClusterNodeInfo": "Informações do Nó do Cluster",
 	"NodeInfoMenu.NodeStats": "Estatísticas do Nó",
-	"NodeType.Client": "Nó Cliente",
+	"NodeType.Client": "Nó cliente",
 	"NodeType.Coord": "Coordenador",
-	"NodeType.Master": "Nó Mestre",
-	"NodeType.Tribe": "Nó Tribo",
-	"NodeType.Worker": "Nó Trabalhador",
-	"NodeType.Unassigned": "Não Atribuido",
+	"NodeType.Master": "Nó mestre",
+	"NodeType.Tribe": "Nó tribo",
+	"NodeType.Worker": "Nó trabalhador",
+	"NodeType.Unassigned": "Não atribuido",
 	"OptimizeForm.OptimizeIndex": "Otimizar {0}",
-	"OptimizeForm.MaxSegments": "Num. Máximo De Segmentos",
+	"OptimizeForm.MaxSegments": "# Máximo De Segmentos",
 	"OptimizeForm.ExpungeDeletes": "Apenas Expurgar Exclusões",
 	"OptimizeForm.FlushAfter": "Flush após Otimizar",
 	"OptimizeForm.WaitForMerge": "Esperar Por Merge",
@@ -94,9 +94,9 @@ i18n.setKeys({
 	"Output.CSV": "CSV",
 	"Output.ShowSource": "Mostrar consulta original",
 	"Preference.SortCluster": "Ordenar Cluster",
-	"Sort.ByName": "Por Nome",
-	"Sort.ByAddress": "Por Endereço",
-	"Sort.ByType": "Por Tipo",
+	"Sort.ByName": "Por nome",
+	"Sort.ByAddress": "Por endereço",
+	"Sort.ByType": "Por tipo",
 	"Preference.ViewAliases": "Ver Alias",
 	"ViewAliases.Grouped": "Agrupado",
 	"ViewAliases.List": "Lista",
@@ -114,8 +114,8 @@ i18n.setKeys({
 	"StructuredQuery.ShowRawJson": "Mostrar JSON bruto"
 });
 
-	i18n.setKeys({
-		"AnyRequest.TransformerHelp" : "\
+i18n.setKeys({
+	"AnyRequest.TransformerHelp" : "\
 		<p>O Transformador de Resultados pode ser usado para transformar os resultados de uma consulta de json bruto para um formato mais útil.</p>\
 		<p>O transformador deve possuir o corpo de uma função javascript. O retorno da função se torna o novo valor passado para o json printer</p>\
 		<p>Exemplo:<br>\
@@ -133,7 +133,7 @@ i18n.setKeys({
 		<code>var la = [ root.nodes[Object.keys(root.nodes)[0]].os.load_average[0] ]; return prev ? la.concat(prev) : la;</code> irá retornar a carga média no primeiro nó do cluster no último minuto\
 		Essa informação pode ser inserida no Gráfico para fazer um gráfico de carga do nó\
 		"
-	});
+});
 
 i18n.setKeys({
 	"AnyRequest.DisplayOptionsHelp" : "\
