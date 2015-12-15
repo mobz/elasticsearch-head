@@ -26,7 +26,9 @@
 			this.attach( parent );
 		},
 		_downloadLinkGenerator_handler: function() {
-			this._downloadLink.attr("href", "data:text/csv;chatset=utf-8," + window.encodeURIComponent( this._csvText ) );
+			var csvData = new Blob( [ this._csvText ], { type: 'text/csv' });
+			var csvURL = URL.createObjectURL( csvData );
+			this._downloadLink.attr( "href", csvURL );
 			this._downloadLink.show();
 		},
 		_parseResults: function( results ) {
