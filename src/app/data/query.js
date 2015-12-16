@@ -21,7 +21,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				facets: {},
+				aggs: {},
 				version: true
 			};
 			this.defaultClause = this.addClause();
@@ -170,15 +170,15 @@
 				this.defaultClause = this.addClause();
 			}
 		},
-		addFacet: function(facet) {
-			var facetId = "f-" + this.refuid++;
-			this.search.facets[facetId] = facet;
-			this.refmap[facetId] = { facetId: facetId, facet: facet };
-			return facetId;
+		addAggs: function(aggs) {
+			var aggsId = "f-" + this.refuid++;
+			this.search.aggs[aggsId] = aggs;
+			this.refmap[aggsId] = { aggsId: aggsId, aggs: aggs };
+			return aggsId;
 		},
-		removeFacet: function(facetId) {
-			delete this.search.facets[facetId];
-			delete this.refmap[facetId];
+		removeAggs: function(aggsId) {
+			delete this.search.aggs[aggsId];
+			delete this.refmap[aggsId];
 		},
 		_setClause: function(value, field, op, bool) {
 			var clause = {}, query = {};

@@ -134,6 +134,8 @@
 				ops = ["missing"];
 			} else if(spec.type === 'ip') {
 				ops = ["term", "range", "fuzzy", "query_string", "missing"];
+			} else if(spec.type === 'boolean') {
+				ops = ["term"]
 			}
 			select.after({ tag: "SELECT", cls: "op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
 			select.next().change();
@@ -184,9 +186,9 @@
 		
 		_range_template: function() {
 			return { tag: "SPAN", cls: "range", children: [
-				{ tag: "SELECT", cls: "lowop", children: ["from", "gt", "gte"].map(ut.option_template) },
+				{ tag: "SELECT", cls: "lowop", children: ["gt", "gte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "lowqual" },
-				{ tag: "SELECT", cls: "highop", children: ["to", "lt", "lte"].map(ut.option_template) },
+				{ tag: "SELECT", cls: "highop", children: ["lt", "lte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "highqual" }
 			]};
 		},

@@ -11,7 +11,7 @@
 			this.update();
 		},
 		update: function() {
-			this.cluster.get( "_status", this._update_handler );
+			this.cluster.get( "_stats", this._update_handler );
 		},
 		
 		_update_handler: function(data) {
@@ -38,7 +38,7 @@
 		},
 		
 		_option_template: function(name, index) {
-			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
+			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.primaries.docs.count ) };
 		}
 	});
 

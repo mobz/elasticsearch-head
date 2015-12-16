@@ -694,6 +694,8 @@
 
 	var coretype_map = {
 		"string" : "string",
+		"byte" : "number",
+		"short" : "number",
 		"long" : "number",
 		"integer" : "number",
 		"float" : "number",
@@ -748,7 +750,7 @@
 
 			function createField( mapping, index, type, path, name ) {
 				var dpath = [ index, type ].concat( path ).join( "." );
-				var field_name = mapping.index_name || name;
+				var field_name = mapping.index_name || path.join( "." );
 				var field = paths[ dpath ] = fields[ field_name ] || $.extend({
 					field_name : field_name,
 					core_type : coretype_map[ mapping.type ],
@@ -856,7 +858,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				facets: {},
+				aggs: {},
 				version: true
 			};
 			this.defaultClause = this.addClause();
@@ -1005,15 +1007,15 @@
 				this.defaultClause = this.addClause();
 			}
 		},
-		addFacet: function(facet) {
-			var facetId = "f-" + this.refuid++;
-			this.search.facets[facetId] = facet;
-			this.refmap[facetId] = { facetId: facetId, facet: facet };
-			return facetId;
+		addAggs: function(aggs) {
+			var aggsId = "f-" + this.refuid++;
+			this.search.aggs[aggsId] = aggs;
+			this.refmap[aggsId] = { aggsId: aggsId, aggs: aggs };
+			return aggsId;
 		},
-		removeFacet: function(facetId) {
-			delete this.search.facets[facetId];
-			delete this.refmap[facetId];
+		removeAggs: function(aggsId) {
+			delete this.search.aggs[aggsId];
+			delete this.refmap[aggsId];
 		},
 		_setClause: function(value, field, op, bool) {
 			var clause = {}, query = {};
@@ -1144,7 +1146,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				facets: {}
+				aggs: {}
 			};
 			this.defaultClause = this.addClause();
 		},
@@ -1189,7 +1191,7 @@
 				filter["missing"] = missing
 				query["filter"] = filter;
 			} else {
-				query[field] = value;
+				query[field.substring(field.indexOf(".")+1)] = value;
 			}
 			clause[op] = query;
 			this.search.query.bool[bool].push(clause);
@@ -2078,7 +2080,9 @@
 			this.attach( parent );
 		},
 		_downloadLinkGenerator_handler: function() {
-			this._downloadLink.attr("href", "data:text/csv;chatset=utf-8," + window.encodeURIComponent( this._csvText ) );
+			var csvData = new Blob( [ this._csvText ], { type: 'text/csv' });
+			var csvURL = URL.createObjectURL( csvData );
+			this._downloadLink.attr( "href", csvURL );
 			this._downloadLink.show();
 		},
 		_parseResults: function( results ) {
@@ -2421,17 +2425,7 @@
 			}
 		},
 		getSpec: function(fieldName) {
-			var fieldNameParts = fieldName.split('.');
-			var namePart = 0;
-			var spec = this.metadata.fields[fieldNameParts[namePart]];
-			while (typeof spec.fields !== "undefined") {
-				namePart++;
-				if (typeof spec.fields[fieldNameParts[namePart]] === "undefined") {
-					break;
-				}
-				spec =  spec.fields[fieldNameParts[namePart]];
-			}
-			return spec;
+			return this.metadata.fields[fieldName];
 		},
 		_selectAlias_handler: function(jEv) {
 			var indices = (jEv.target.selectedIndex === 0) ? [] : this.metadata.getIndices($(jEv.target).val());
@@ -2632,7 +2626,9 @@
 			] };
 		},
 		_filters_template: function() {
-			var fields = Object.keys( this.metadata.fields ).sort();
+			var _metadataFields = this.metadata.fields;
+			var fields = Object.keys( _metadataFields ).sort()
+				.filter(function(d) { return (_metadataFields[d].core_type !== undefined); });
 			return { tag: "DIV", cls: "uiQueryFilter-section uiQueryFilter-filters", children: [
 				{ tag: "HEADER", text: i18n.text("QueryFilter-Header-Fields") },
 				{ tag: "DIV", children: fields.map( function(name ) {
@@ -3209,8 +3205,8 @@
 		); },
 		_indexHeader_template: function( index ) {
 			var closed = index.state === "close";
-			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.total ? ut.byteSize_template( index.status.total.store.size_in_bytes ) + " (" + ut.byteSize_template( index.status.total.store.size_in_bytes ) + ")" : "unknown" ) );
-			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.total && index.status.total.docs ? index.status.total.docs.count.toLocaleString() + " (" + (index.status.total.docs.count + index.status.total.docs.deleted).toLocaleString() + ")" : "unknown" ) );
+			var line1 = closed ? "index: close" : ( "size: " + (index.status && index.status.primaries && index.status.total ? ut.byteSize_template( index.status.primaries.store.size_in_bytes ) + " (" + ut.byteSize_template( index.status.total.store.size_in_bytes ) + ")" : "unknown" ) );
+			var line2 = closed ? "\u00A0" : ( "docs: " + (index.status && index.status.primaries && index.status.primaries.docs && index.status.total && index.status.total.docs ? index.status.primaries.docs.count.toLocaleString() + " (" + (index.status.total.docs.count + index.status.total.docs.deleted).toLocaleString() + ")" : "unknown" ) );
 			return index.name ? { tag: "TH", cls: (closed ? "close" : ""), children: [
 				{ tag: "H3", text: index.name },
 				{ tag: "DIV", text: line1 },
@@ -3585,20 +3581,19 @@
 			}.bind(this));
 			this.query.search.size = 0;
 			this.query.on("results", this._stat_handler);
-			this.query.on("results", this._facet_handler);
+			this.query.on("results", this._aggs_handler);
 			this.buildHistogram();
 		},
 		buildHistogram: function(query) {
-			this.statFacet = this.query.addFacet({
-				statistical: { field: this.config.spec.field_name },
-				global: true
+			this.statAggs = this.query.addAggs({
+				stats: { field: this.config.spec.field_name }
 			});
 			this.query.query();
-			this.query.removeFacet(this.statFacet);
+			this.query.removeAggs(this.statAggs);
 		},
 		_stat_handler: function(query, results) {
-			if(! results.facets[this.statFacet]) { return; }
-			this.stats = results.facets[this.statFacet];
+			if(! results.aggregations[this.statAggs]) { return; }
+			this.stats = results.aggregations[this.statAggs];
 			// here we are calculating the approximate range  that will give us less than 121 columns
 			var rangeNames = [ "year", "year", "month", "day", "hour", "minute" ];
 			var rangeFactors = [100000, 12, 30, 24, 60, 60000 ];
@@ -3610,23 +3605,22 @@
 				this.intervalRange *= factor;
 				range = range / factor;
 			} while(range > 70);
-			this.dateFacet = this.query.addFacet({
+			this.dateAggs = this.query.addAggs({
 				date_histogram : {
 					field: this.config.spec.field_name,
-					interval: this.intervalName,
-					global: true
+					interval: this.intervalName
 				}
 			});
 			this.query.query();
-			this.query.removeFacet(this.dateFacet);
+			this.query.removeAggs(this.dateAggs);
 		},
-		_facet_handler: function(query, results) {
-			if(! results.facets[this.dateFacet]) { return; }
+		_aggs_handler: function(query, results) {
+			if(! results.aggregations[this.dateAggs]) { return; }
 			var buckets = [], range = this.intervalRange;
 			var min = Math.floor(this.stats.min / range) * range;
 			var prec = [ "year", "month", "day", "hour", "minute", "second" ].indexOf(this.intervalName);
-			results.facets[this.dateFacet].entries.forEach(function(entry) {
-				buckets[parseInt((entry.time - min) / range , 10)] = entry.count;
+			results.aggregations[this.dateAggs].buckets.forEach(function(entry) {
+				buckets[parseInt((entry.key - min) / range , 10)] = entry.doc_count;
 			}, this);
 			for(var i = 0; i < buckets.length; i++) {
 				buckets[i] = buckets[i] || 0;
@@ -3653,7 +3647,7 @@
 		},
 		_main_template: function() { return (
 			{ tag: "DIV", cls: "uiDateHistogram loading", css: { height: "50px" }, children: [
-				i18n.text("General.LoadingFacets")
+				i18n.text("General.LoadingAggs")
 			] }
 		); }
 	});
@@ -3935,6 +3929,8 @@
 				ops = ["missing"];
 			} else if(spec.type === 'ip') {
 				ops = ["term", "range", "fuzzy", "query_string", "missing"];
+			} else if(spec.type === 'boolean') {
+				ops = ["term"]
 			}
 			select.after({ tag: "SELECT", cls: "op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
 			select.next().change();
@@ -3985,9 +3981,9 @@
 		
 		_range_template: function() {
 			return { tag: "SPAN", cls: "range", children: [
-				{ tag: "SELECT", cls: "lowop", children: ["from", "gt", "gte"].map(ut.option_template) },
+				{ tag: "SELECT", cls: "lowop", children: ["gt", "gte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "lowqual" },
-				{ tag: "SELECT", cls: "highop", children: ["to", "lt", "lte"].map(ut.option_template) },
+				{ tag: "SELECT", cls: "highop", children: ["lt", "lte"].map(ut.option_template) },
 				{ tag: "INPUT", type: "text", cls: "highqual" }
 			]};
 		},
@@ -4016,7 +4012,7 @@
 			this.update();
 		},
 		update: function() {
-			this.cluster.get( "_status", this._update_handler );
+			this.cluster.get( "_stats", this._update_handler );
 		},
 		
 		_update_handler: function(data) {
@@ -4043,7 +4039,7 @@
 		},
 		
 		_option_template: function(name, index) {
-			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.docs.num_docs ) };
+			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.primaries.docs.count ) };
 		}
 	});
 
@@ -4066,9 +4062,9 @@
 			var quicks = [
 				{ text: i18n.text("Nav.Info"), path: "" },
 				{ text: i18n.text("Nav.Status"), path: "_stats" },
-				{ text: i18n.text("Nav.NodeStats"), path: "_cluster/nodes/stats" },
-				{ text: i18n.text("Nav.ClusterNodes"), path: "_cluster/nodes" },
-				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugin" },
+				{ text: i18n.text("Nav.NodeStats"), path: "_nodes/stats" },
+				{ text: i18n.text("Nav.ClusterNodes"), path: "_nodes" },
+				{ text: i18n.text("Nav.Plugins"), path: "_nodes/plugins" },
 				{ text: i18n.text("Nav.ClusterState"), path: "_cluster/state" },
 				{ text: i18n.text("Nav.ClusterHealth"), path: "_cluster/health" },
 				{ text: i18n.text("Nav.Templates"), path: "_template" }
@@ -4216,8 +4212,8 @@
 				{ tag: "TD", children: [
 					{ tag: "H3", text: index.name }
 				] },
-				{ tag: "TD", text: ut.byteSize_template( index.state.index.primary_size_in_bytes ) + "/" + ut.byteSize_template( index.state.index.size_in_bytes ) },
-				{ tag: "TD", text: ut.count_template( index.state.docs.num_docs ) }
+				{ tag: "TD", text: ut.byteSize_template( index.state.primaries.store.size_in_bytes ) + "/" + ut.byteSize_template( index.state.total.store.size_in_bytes ) },
+				{ tag: "TD", text: ut.count_template( index.state.primaries.docs.count ) }
 			] }
 		); },
 		_main_template: function() {

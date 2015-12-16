@@ -1,6 +1,6 @@
 i18n.setKeys({
 	"General.Elasticsearch": "Elasticsearch",
-	"General.LoadingFacets": "加载聚合查询...",
+	"General.LoadingAggs": "加载聚合查询...",
 	"General.Searching": "搜索中...",
 	"General.Search": "搜索",
 	"General.Help": "帮助",
