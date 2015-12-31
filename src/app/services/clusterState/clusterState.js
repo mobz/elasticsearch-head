@@ -27,7 +27,7 @@
 					this.fire( "data", this );
 				}
 			}
-			this.cluster.get("_cluster/state", function( data ) {
+			this.cluster.get("_cluster/state?filter_path=metadata.indices.*.settings.index.number_of_shards,metadata.indices.*.state,metadata.indices.*.aliases,routing_table", function( data ) {
 				clusterState = data;
 				updateModel.call( self );
 			});
