@@ -47,10 +47,10 @@ describe("app.services.ClusterState", function() {
 			test.cb.execOne();
 			expectAllDataToBeNull();
 			test.cb.execOne();
-			expect( c.clusterState ).toBe( dummyData );
-			expect( c.status ).toBe( dummyData );
-			expect( c.nodeStats ).toBe( dummyData );
-			expect( c.clusterNodes ).toBe( dummyData );
+			expect( c.clusterState ).toBe( null );
+			expect( c.status ).toBe( null );
+			expect( c.nodeStats ).toBe( null );
+			expect( c.clusterNodes ).toBe( null );
 		});
 
 		it("should fire a 'data' event when all data is ready", function() {
