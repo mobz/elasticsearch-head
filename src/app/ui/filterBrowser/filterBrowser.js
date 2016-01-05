@@ -102,7 +102,8 @@
 				} else {
 					value = row.find(".qual").val();
 				}
-				search.addClause(value, field, op, bool);
+				var use_field = field.slice(field.indexOf(".")+1);
+				search.addClause(value, use_field, op, bool);
 			});
 			if(this.el.find(".uiFilterBrowser-showSrc").attr("checked")) {
 				this.fire("searchSource", search.search);
