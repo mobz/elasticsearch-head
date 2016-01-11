@@ -31,6 +31,9 @@
 			return $.ajax( $.extend({
 				url: this.base_uri + params.path,
 				dataType: "json",
+				xhrFields:{ 
+					withCredentials: true
+				},
 				error: function(xhr, type, message) {
 					if("console" in window) {
 						console.log({ "XHR Error": type, "message": message });
