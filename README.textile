@@ -10,7 +10,8 @@ There are two main ways of running and installing elasticsearch-head
 
 h4. Running as a plugin of Elasticsearch
 
-* @sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head@
+* @sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head@  (ES 1.x)
+* @sudo elasticsearch/bin/plugin install mobz/elasticsearch-head@  (ES 2.x)
 * @open http://localhost:9200/_plugin/head/@
 
 This will automatically download the latest version of elasticsearch-head from github and run it as a plugin within the elasticsearch cluster. In this mode;
@@ -62,7 +63,7 @@ Then
 # @grunt dev@ # builds the distribution files, then watches the src directory for changes
 
 Changes to both _site and src directories *must* be committed, to allow people to 
-run elasticsearch-head without running dev tools and folllow existing dev patterns, 
+run elasticsearch-head without running dev tools and follow existing dev patterns, 
 such as indenting with tabs.
 
 h5. Contributing an Internationalisation
