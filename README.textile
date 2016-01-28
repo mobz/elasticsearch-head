@@ -11,7 +11,7 @@ There are two main ways of running and installing elasticsearch-head
 h4. Running as a plugin of Elasticsearch
 
 * @sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head@  (ES 1.x, ES 0.x)
-* @sudo elasticsearch/bin/plugin --install mobz/elasticsearch-head@  (ES 2.x)
+* @sudo elasticsearch/bin/plugin install mobz/elasticsearch-head@  (ES 2.x)
 * @open http://localhost:9200/_plugin/head/@
 
 This will automatically download the latest version of elasticsearch-head from github and run it as a plugin within the elasticsearch cluster. In this mode;
