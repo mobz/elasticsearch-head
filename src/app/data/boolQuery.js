@@ -16,7 +16,7 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				aggs: {}
+				// facets: {}
 			};
 			this.defaultClause = this.addClause();
 		},
