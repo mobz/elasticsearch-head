@@ -22,7 +22,10 @@ h4. Running as a plugin of Elasticsearch
 
 This will automatically download the latest version of elasticsearch-head from github and run it as a plugin within the elasticsearch cluster. In this mode;
 * elasticsearch-head automatically connects to the node that is running it
-* If you've installed the .deb package, then the plugin executable will be available at /usr/share/elasticsearch/bin/plugin.
+
+Note on different Elasticsearch installation path:
+* If you've installed the .deb package, then the plugin executable will be available at @/usr/share/elasticsearch/bin/plugin@.
+* If you've installed Elasticsearch via Homebrew, plugin executable will be available at @/usr/local/Cellar/elasticsearch/(elasticsearch version)/bin/plugin@.
 
 h4. Running with built in server
 
@@ -34,7 +37,7 @@ h4. Running with built in server
 * @open@ "http://localhost:9100/":http://localhost:9100/
 
 This will start a local webserver running on port 9100 serving elasticsearch-head
-* Best option if you are likely to connect to serveral different clusters
+* Best option if you are likely to connect to several different clusters
 
 h4. Alternatives
 
@@ -47,7 +50,7 @@ h4. URL Parameters
 Parameters may be appended to the url to set an initial state eg. @head/index.html?base_uri=http://node-01.example.com:9200@
 
 * @base_uri@ force elasticsearch-head to connect to a particular node.
-* @dashboard@ experimental feature to open elasticsearch-head in a mode suitable for dashboard / radiator. Accepts one parameter @dashboard=cluster@ 
+* @dashboard@ experimental feature to open elasticsearch-head in a mode suitable for dashboard / radiator. Accepts one parameter @dashboard=cluster@
 * @auth_user@ adds basic auth credentials to http requests ( requires "elasticsearch-http-basic":https://github.com/karussell/elasticsearch-http-basic plugin or a reverse proxy )
 * @auth_password@ basic auth password as above (note: without "additional security layers":http://security.stackexchange.com/questions/988/is-basic-auth-secure-if-done-over-https, passwords are sent over the network *in the clear* )
 
@@ -83,7 +86,7 @@ h5. Contributing an Internationalisation
 To contribute an internationalisation
 
 # Follow "Contributing" instructions above
-# Find your 2-character "ISO 639-1 language code":http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes 
+# Find your 2-character "ISO 639-1 language code":http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 # edit _site/index.html to add your 2 letter language code to the data-langs attribute of this line @<script src="_site/i18n.js" data-baseDir="_site/lang" data-langs="en,fr,your_lang_here"></script>@
 # make a copy of @src/app/langs/en_strings.js@ prefixed with your language code
 # convert english strings and fragments to your language. "Formatting Rules":http://docs.oracle.com/javase/tutorial/i18n/format/messageintro.html
