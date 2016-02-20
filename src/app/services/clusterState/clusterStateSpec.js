@@ -47,6 +47,8 @@ describe("app.services.ClusterState", function() {
 			test.cb.execOne();
 			expectAllDataToBeNull();
 			test.cb.execOne();
+			expectAllDataToBeNull();
+			test.cb.execOne();
 			expect( c.clusterState ).toBe( dummyData );
 			expect( c.status ).toBe( dummyData );
 			expect( c.nodeStats ).toBe( dummyData );
