@@ -4,92 +4,8 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
-	clean: {
-	    _site: {
-		src: ['_site']
-	    }
-	},
-	concat: {
-	    vendorjs: {
-		src: fileSets.vendorJs,
-		dest: '_site/vendor.js'
-	    },
-	    vendorcss: {
-		src: fileSets.vendorCss,
-		dest: '_site/vendor.css'
-	    },
-	    appjs: {
-		src: fileSets.srcJs,
-		dest: '_site/app.js'
-	    },
-	    appcss: {
-		src: fileSets.srcCss,
-		dest: '_site/app.css'
-	    }
-	},
-
-	copy: {
-	    base: {
-		expand: true,
-		cwd: 'src/app/base/',
-		src: [ '*.gif', '*.png', '*.css' ],
-		dest: '_site/base/'
-	    },
-	    iconFonts: {
-		expand: true,
-		cwd: 'src/vendor/font-awesome/fonts/',
-		src: '**',
-		dest: '_site/fonts'
-	    },
-	    i18n: {
-		src: 'src/vendor/i18n/i18n.js',
-		dest: '_site/i18n.js'
-	    },
-	    lang: {
-		expand: true,
-		cwd: 'src/app/lang/',
-		src: '**',
-		dest: '_site/lang/'
-	    }
-	},
-
-	jasmine: {
-	    task: {
-		src: [ fileSets.vendorJs, 'src/vendor/i18n/i18n.js', 'src/app/lang/en_strings.js', fileSets.srcJs ],
-		options: {
-		    specs: 'src/app/**/*Spec.js',
-		    helpers: 'test/spec/*Helper.js',
-		    display: "short",
-		    summary: true
-		}
-	    }
-	},
-
-	watch: {
-	    "scripts": {
-		files: ['src/**/*', 'test/spec/*' ],
-		tasks: ['default'],
-		options: {
-		    spawn: false
-		}
-	    },
-	    "grunt": {
-		files: [ 'Gruntfile.js' ]
-	    }
-	},
-
-	connect: {
-	    server: {
-		options: {
-		    port: 9100,
-		    base: '.',
-		    keepalive: true
-		}
-	    }
-	},
-
 	deb_package: {
-	    tasks: ['deb_package'],
+	    task: ['debian_package'],
 	    options: {
 	    maintainer: "Konstantin Tushakov ktu@tradeshift.com",
 	    version: "2.0.0",
@@ -100,36 +16,36 @@ module.exports = function(grunt) {
 	    category: "devel",
 	    build_number: "1",
 	    dependencies: [],           // List of the package dependencies 
-	    tmp_dir: '.tmp/',            // The task working dir 
+	    tmp_dir: './.tmp/',            // The task working dir 
 	    output: './output/'         // Where your .deb should be created 
 	    },
 	    build: {
-	    // Here you define what you want in your package 
-	    files: [{
-		expand: true,
-	        cwd: './_site',
-	        src: '**/*',
-	        dest: '/usr/share/elasticsearch/plugins/head/_site'
-	    }],
+		    files: [{
+		        cwd: './_site',
+		        src: '**/*',
+		        dest: '/usr/share/elasticsearch/plugins/head/_site'
+		    },
+		    {
+			cwd: './src/',
+			src: '**/*',
+			dest: '/usr/share/elasticsearch/plugins/head/src/'
+		    },
+		    {
+			cwd: './test/',
+			src: '**/*',
+			dest: '/usr/share/elasticsearch/plugins/head/test/'
+		    },
+		    {
+			src: ['plugin-descriptor.properties', 'README.textile', 'index.html'],
+			dest: '/usr/share/elasticsearch/plugins/head/'
+		    }],
 	    }
 	}
 
     });
 
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-debian-package');
+    grunt.loadNpmTasks('grunt-deb');
 
-
-    // Default task(s).
-    grunt.registerTask('default', ['clean', 'concat', 'copy', 'jasmine']);
-    grunt.registerTask('server', ['connect:server']);
-    grunt.registerTask('dev', [ 'default', 'watch' ]);
-    grunt.registerTask('deb_package');
-
+    grunt.registerTask('debian_package', ['deb_package']);
 
 };
