@@ -18,7 +18,7 @@
   "gitHead": "0c2ac0b5723b493e4454baa7398f386ecb829412",
   "readmeFilename": "README.textile",
   "devDependencies": {
-    "grunt": "0.4.5",
+    "grunt": "~0.4.5",
     "grunt-contrib-concat": "0.4.0",
     "grunt-contrib-watch": "0.5.1",
     "grunt-contrib-connect": "0.3.0",
@@ -26,6 +26,8 @@
     "grunt-contrib-clean": "0.5.0",
     "grunt-contrib-jasmine": "0.6.4",
     "karma": "0.12.16",
-    "grunt-karma": "0.8.3"
+    "grunt-karma": "0.8.3",
+    "grunt-debian-package": "~0.1.11",
+    "grunt-deb": "~0.2.3"
   }
 }
