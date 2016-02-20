@@ -1,4 +1,4 @@
-(function( app ) {
+	(function( app ) {
 
 	var services = app.ns("services");
 	var ux = app.ns("ux");

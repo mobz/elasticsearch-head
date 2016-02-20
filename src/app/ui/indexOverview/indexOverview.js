@@ -60,7 +60,7 @@
 						var data = fields.getData();
 						var name = data["_name"];
 						delete data["_name"];
-						this.config.cluster.put( name, JSON.stringify({ settings: { index: data } }), function(d) {
+						this.config.cluster.put( encodeURIComponent( name ), JSON.stringify({ settings: { index: data } }), function(d) {
 							dialog.close();
 							alert(JSON.stringify(d));
 							this._clusterState.refresh();
