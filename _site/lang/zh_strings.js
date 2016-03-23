@@ -25,6 +25,7 @@ i18n.setKeys({
 	"AnyRequest.Pretty": "易读",
 	"AnyRequest.Query" : "查询",
 	"AnyRequest.Request": "提交请求",
+	"AnyRequest.Confirm": "此操作无法恢复，确认执行?",
 	"AnyRequest.Requesting": "请求中...",
 	"AnyRequest.ValidateJSON": "验证 JSON",
 	"Browser.Title": "数据浏览",
