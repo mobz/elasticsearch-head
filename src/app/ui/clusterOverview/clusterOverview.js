@@ -89,6 +89,21 @@
 					}.bind(this)
 				})
 			});
+			this._indicesSort = this.prefs.get( "clusterOverview-indicesSort") || "desc";
+			this._indicesSortMenu = new ui.MenuButton({
+				label: i18n.text( "Preference.SortIndices" ),
+				menu: new ui.SelectMenuPanel({
+					value: this._indicesSort,
+					items: [
+						{ value: "desc", text: i18n.text( "SortIndices.Descending" ) },
+						{ value: "asc", text: i18n.text( "SortIndices.Ascending" ) } ],
+					onSelect: function( panel, event ) {
+						this._indicesSort = event.value;
+						this.prefs.set( "clusterOverview-indicesSort", this._indicesSort );
+						this.draw_handler();
+					}.bind(this)
+				})
+			});
 			this._aliasRenderer = this.prefs.get( "clusterOverview-aliasRender" ) || "full";
 			this._aliasMenu = new ui.MenuButton({
 				label: i18n.text( "Preference.ViewAliases" ),
@@ -173,7 +188,9 @@
 			$.each(clusterState.routing_table.indices, function(name, index){
 				indexNames.push(name);
 			});
-			indexNames.sort().filter( indexFilter ).forEach(function(name) {
+			indexNames.sort();
+			if (this._indicesSort === "desc") indexNames.reverse();
+			indexNames.filter( indexFilter ).forEach(function(name) {
 				var indexObject = clusterState.routing_table.indices[name];
 				$.each(indexObject.shards, function(name, shard) {
 					shard.forEach(function(replica){
@@ -269,6 +286,7 @@
 					label: i18n.text("Overview.PageTitle"),
 					left: [
 						this._nodeSortMenu,
+						this._indicesSortMenu,
 						this._aliasMenu,
 						this._indexFilter
 					],
