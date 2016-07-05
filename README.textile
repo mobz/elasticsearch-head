@@ -11,8 +11,8 @@ There are two main ways of running and installing elasticsearch-head
 h4. Running as a plugin of Elasticsearch
 
 * Install elasticsearch-head:
-	- for Elasticsearch 5.x:
-		site plugins are not supported. Run elasticsearch-head "as a standalone server":#running-with-built-in-server
+  - for Elasticsearch 5.x:
+    site plugins are not supported. Run elasticsearch-head "as a standalone server":#running-with-built-in-server
   - for Elasticsearch 2.x - 4.x:
     @sudo elasticsearch/bin/plugin install mobz/elasticsearch-head@
   - for Elasticsearch 1.x:
@@ -31,7 +31,7 @@ Note on different Elasticsearch installation path:
 
 h4. Running with built in server
 
-* enable "cors":http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-http.html by adding @http.cors.enabled: true@ in elasticsearch configuration
+* enable "cors":http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-http.html by adding @http.cors.enabled: true@ in elasticsearch configuration. Don't forget to also set @http.cors.allow-origin@ because no origin allowed by default. @http.cors.allow-origin: "*"@ is valid value, however it's considered as a security risk as your cluster is open to cross origin from *anywhere*. Check Elasticsearch documentation on this parameter:  https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html#modules-http
 * @git clone git://github.com/mobz/elasticsearch-head.git@
 * @cd elasticsearch-head@
 * @npm install@
