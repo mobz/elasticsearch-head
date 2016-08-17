@@ -84,7 +84,7 @@ h5. Contributing an Internationalisation
 * English (primary) by "Ben Birch":https://twitter.com/mobz
 * French by "David Pilato":https://twitter.com/dadoonet
 * Portuguese by "caiodangelo":https://github.com/caiodangelo
-* Turkish by "Cemre Mengu": https://github.com/cemremengu
+* Turkish by "Cemre Mengu":https://github.com/cemremengu
 
 To contribute an internationalisation
 
