@@ -27,7 +27,7 @@ This will automatically download the latest version of elasticsearch-head from g
 
 Note on different Elasticsearch installation path:
 * If you've installed the .deb package, then the plugin executable will be available at @/usr/share/elasticsearch/bin/plugin@.
-* If you've installed Elasticsearch via Homebrew, plugin executable will be available at @/usr/local/Cellar/elasticsearch/(elasticsearch version)/bin/plugin@.
+* If you've installed Elasticsearch via Homebrew, plugin executable will be available at @/usr/local/Cellar/elasticsearch/(elasticsearch version)/libexec/bin/plugin@.
 
 h4. Running with built in server
 
