@@ -35,7 +35,7 @@
 				status = data;
 				updateModel.call( self );
 			});
-			this.cluster.get("_nodes/stats?all=true", function( data ) {
+			this.cluster.get("_nodes/stats", function( data ) {
 				nodeStats = data;
 				updateModel.call( self );
 			});
