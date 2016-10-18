@@ -694,6 +694,8 @@
 
 	var coretype_map = {
 		"string" : "string",
+		"keyword" : "string",
+		"text" : "string",
 		"byte" : "number",
 		"short" : "number",
 		"long" : "number",
@@ -853,7 +855,6 @@
 			this.indices = [];
 			this.types = [];
 			this.search = {
-				fields : [ "_parent", "_source" ],
 				query: { bool: { must: [], must_not: [], should: [] } },
 				from: 0,
 				size: this.config.size,

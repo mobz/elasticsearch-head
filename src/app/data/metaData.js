@@ -48,6 +48,8 @@
 
 	var coretype_map = {
 		"string" : "string",
+		"keyword" : "string",
+		"text" : "string",
 		"byte" : "number",
 		"short" : "number",
 		"long" : "number",
