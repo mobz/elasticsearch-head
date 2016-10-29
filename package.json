@@ -27,5 +27,8 @@
     "grunt-contrib-jasmine": "0.6.4",
     "karma": "0.12.16",
     "grunt-karma": "0.8.3"
+  },
+  "dependencies": {
+    "grunt-cli": "^0.1.13"
   }
 }
