@@ -4,3 +4,6 @@
 *.sublime-workspace
 .project
 node_modules
+*~
+output/*
+.#.*
