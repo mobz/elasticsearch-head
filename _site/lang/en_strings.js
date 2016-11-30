@@ -25,6 +25,7 @@ i18n.setKeys({
 	"AnyRequest.Pretty": "Pretty",
 	"AnyRequest.Query" : "Query",
 	"AnyRequest.Request": "Request",
+	"AnyRequest.Confirm": "This operation cannot be restored, confirm execution?",
 	"AnyRequest.Requesting": "Requesting...",
 	"AnyRequest.ValidateJSON": "Validate JSON",
 	"Browser.Title": "Browser",
