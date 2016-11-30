@@ -15,9 +15,9 @@
 		_results_handler: function(query, res) {
 			this._getSummary(res);
 			this._getMeta(res);
-			var sort = query.search.sort[0] || { "_score": { reverse: false }};
+			var sort = query.search.sort[0] || { "_score": { order: "asc" }};
 			var sortField = Object.keys(sort)[0];
-			this.sort = { column: sortField, dir: (sort[sortField].reverse ? "asc" : "desc") };
+			this.sort = { column: sortField, dir: sort[sortField].order };
 			this._getData(res, this.config.metadata);
 			this.fire("data", this);
 		},
