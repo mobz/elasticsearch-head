@@ -71,7 +71,7 @@ Then
 # clone your fork to your machine
 # @cd elasticsearch-head@
 # @npm install@ # downloads node dev dependencies
-# @grunt dev@ # builds the distribution files, then watches the src directory for changes
+# @grunt dev@ # builds the distribution files, then watches the src directory for changes (if you have an warning like "Warning: Task "clean" failed. Use --force to continue.", well use --force ;) )
 
 Changes to both _site and src directories *must* be committed, to allow people to 
 run elasticsearch-head without running dev tools and follow existing dev patterns, 

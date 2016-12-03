@@ -12,6 +12,10 @@
 			this.config.cluster.get("_cluster/state", function(data) {
 				this.metaData = new app.data.MetaData({state: data});
 				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy ui.FilterBrowser
+			}.bind(this), function() {
+				var fakeState = {routing_table:{indices:{}}, metadata:{indices:{}}, mappings:{indices:{}}};
+				this.metaData = new app.data.MetaData({state: fakeState});
+				this.fire("ready", this.metaData, {originalData: fakeState});
 			}.bind(this));
 		}
 	});

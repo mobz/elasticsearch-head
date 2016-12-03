@@ -40,8 +40,10 @@
 					}
 				}
 			}
-			for(var type in data[this.config.index].mappings) {
-				scan_properties([type], data[this.config.index].mappings[type]);
+			if (data[this.config.index]){
+				for(var type in data[this.config.index].mappings) {
+					scan_properties([type], data[this.config.index].mappings[type]);
+				}
 			}
 
 			filters.sort( function(a, b) {

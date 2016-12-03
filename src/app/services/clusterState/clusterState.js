@@ -30,6 +30,9 @@
 			this.cluster.get("_cluster/state", function( data ) {
 				clusterState = data;
 				updateModel.call( self );
+			},function() {
+				clusterState = {routing_table:{indices:{}}, metadata:{indices:{}}, mappings:{indices:{}}};
+				updateModel.call( self );
 			});
 			this.cluster.get("_stats", function( data ) {
 				status = data;
