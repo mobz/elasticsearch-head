@@ -828,9 +828,39 @@
 		},
 		init: function() {
 			this._super();
+			var _cluster = this.config.cluster;
 			this.config.cluster.get("_cluster/state", function(data) {
 				this.metaData = new app.data.MetaData({state: data});
-				this.fire("ready", this.metaData,  { originalData: data }); // TODO originalData needed for legacy ui.FilterBrowser
+				this.fire("ready", this.metaData,  { originalData: data, "k": 1 }); // TODO originalData needed for legacy ui.FilterBrowser
+			}.bind(this), function() {
+				
+				var _this = this;
+				
+				_cluster.get("_all", function( data ) {
+					clusterState = {routing_table:{indices:{}}, metadata:{indices:{}}};
+					
+					for(var k in data) {
+						clusterState["routing_table"]["indices"][k] = {"shards":{"1":[{
+                            "state":"UNASSIGNED",
+                            "primary":false,
+                            "node":"unknown",
+                            "relocating_node":null,
+                            "shard":'?',
+                            "index":k
+                        }]}};
+						
+
+						clusterState["metadata"]["indices"][k] = {};
+						clusterState["metadata"]["indices"][k]["mappings"] = data[k]["mappings"];
+						clusterState["metadata"]["indices"][k]["aliases"] = $.makeArray(Object.keys(data[k]["aliases"]));
+						clusterState["metadata"]["indices"][k]["settings"] = data[k]["settings"];
+						clusterState["metadata"]["indices"][k]["fields"] = {};
+					}
+					
+					_this.metaData = new app.data.MetaData({state: clusterState});
+					_this.fire("ready", _this.metaData, {originalData: clusterState});
+				});				
+
 			}.bind(this));
 		}
 	});
@@ -1280,10 +1310,10 @@
 				}
 			},  params) );
 		},
-		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
-		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
-		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
-		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
+		"get": function(path, success, error) { return this.request( { type: "GET", path: path, success: success, error: error } ); },
+		"post": function(path, data, success, error) { return this.request( { type: "POST", path: path, data: data, success: success, error: error } ); },
+		"put": function(path, data, success, error) { return this.request( { type: "PUT", path: path, data: data, success: success, error: error } ); },
+		"delete": function(path, data, success, error) { return this.request( { type: "DELETE", path: path, data: data, success: success, error: error } ); }
 	});
 
 })( this.jQuery, this.app );
@@ -1317,9 +1347,35 @@
 					this.fire( "data", this );
 				}
 			}
-			this.cluster.get("_cluster/state", function( data ) {
+			var _cluster = this.cluster;
+			_cluster.get("_cluster/state", function( data ) {
 				clusterState = data;
 				updateModel.call( self );
+			},function() {
+				
+				_cluster.get("_all", function( data ) {
+					clusterState = {routing_table:{indices:{}}, metadata:{indices:{}}};
+					
+					for(var k in data) {
+						clusterState["routing_table"]["indices"][k] = {"shards":{"1":[{
+                            "state":"UNASSIGNED",
+                            "primary":false,
+                            "node":"unknown",
+                            "relocating_node":null,
+                            "shard":'?',
+                            "index":k
+                        }]}};
+						
+
+						clusterState["metadata"]["indices"][k] = {};
+						clusterState["metadata"]["indices"][k]["mappings"] = data[k]["mappings"];
+						clusterState["metadata"]["indices"][k]["aliases"] = $.makeArray(Object.keys(data[k]["aliases"]));
+						clusterState["metadata"]["indices"][k]["settings"] = data[k]["settings"];
+					}
+					
+					updateModel.call( self );
+				});
+				
 			});
 			this.cluster.get("_stats", function( data ) {
 				status = data;
@@ -3855,8 +3911,10 @@
 					}
 				}
 			}
-			for(var type in data[this.config.index].mappings) {
-				scan_properties([type], data[this.config.index].mappings[type]);
+			if (data[this.config.index]){
+				for(var type in data[this.config.index].mappings) {
+					scan_properties([type], data[this.config.index].mappings[type]);
+				}
 			}
 
 			filters.sort( function(a, b) {

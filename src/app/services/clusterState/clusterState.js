@@ -27,9 +27,35 @@
 					this.fire( "data", this );
 				}
 			}
-			this.cluster.get("_cluster/state", function( data ) {
+			var _cluster = this.cluster;
+			_cluster.get("_cluster/state", function( data ) {
 				clusterState = data;
 				updateModel.call( self );
+			},function() {
+				
+				_cluster.get("_all", function( data ) {
+					clusterState = {routing_table:{indices:{}}, metadata:{indices:{}}};
+					
+					for(var k in data) {
+						clusterState["routing_table"]["indices"][k] = {"shards":{"1":[{
+                            "state":"UNASSIGNED",
+                            "primary":false,
+                            "node":"unknown",
+                            "relocating_node":null,
+                            "shard":'?',
+                            "index":k
+                        }]}};
+						
+
+						clusterState["metadata"]["indices"][k] = {};
+						clusterState["metadata"]["indices"][k]["mappings"] = data[k]["mappings"];
+						clusterState["metadata"]["indices"][k]["aliases"] = $.makeArray(Object.keys(data[k]["aliases"]));
+						clusterState["metadata"]["indices"][k]["settings"] = data[k]["settings"];
+					}
+					
+					updateModel.call( self );
+				});
+				
 			});
 			this.cluster.get("_stats", function( data ) {
 				status = data;

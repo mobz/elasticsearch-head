@@ -38,10 +38,10 @@
 				}
 			},  params) );
 		},
-		"get": function(path, success) { return this.request( { type: "GET", path: path, success: success } ); },
-		"post": function(path, data, success) { return this.request( { type: "POST", path: path, data: data, success: success } ); },
-		"put": function(path, data, success) { return this.request( { type: "PUT", path: path, data: data, success: success } ); },
-		"delete": function(path, data, success) { return this.request( { type: "DELETE", path: path, data: data, success: success } ); }
+		"get": function(path, success, error) { return this.request( { type: "GET", path: path, success: success, error: error } ); },
+		"post": function(path, data, success, error) { return this.request( { type: "POST", path: path, data: data, success: success, error: error } ); },
+		"put": function(path, data, success, error) { return this.request( { type: "PUT", path: path, data: data, success: success, error: error } ); },
+		"delete": function(path, data, success, error) { return this.request( { type: "DELETE", path: path, data: data, success: success, error: error } ); }
 	});
 
 })( this.jQuery, this.app );
