@@ -47,6 +47,10 @@ h5. Running from the filesystem
 
 elastisearch-head is a standalone webapp written in good-ol' html5. This means, you can put it up on any webserver, run it directly from the filesystem, use it on an iPad, or put it on a floppy disk and carry it with you.
 
+h5. Running from Docker
+* enable "cors":http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-http.html by add @http.cors.enabled: true@ in elasticsearch configuration
+* docker run -d --name=elasticsearch-head -p 9100:9100 ehlers320/elasticsearch-head
+
 h4. URL Parameters
 
 Parameters may be appended to the url to set an initial state eg. @head/index.html?base_uri=http://node-01.example.com:9200@
