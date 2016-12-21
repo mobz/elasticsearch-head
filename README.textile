@@ -41,6 +41,18 @@ h4. Running with built in server
 This will start a local webserver running on port 9100 serving elasticsearch-head
 * Best option if you are likely to connect to several different clusters
 
+h4. Running with docker
+
+* enable "cors":http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-http.html by adding @http.cors.enabled: true@ in elasticsearch configuration. Don't forget to also set @http.cors.allow-origin@ because no origin allowed by default. @http.cors.allow-origin: "*"@ is valid value, however it's considered as a security risk as your cluster is open to cross origin from *anywhere*. Check Elasticsearch documentation on this parameter:  https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html#modules-http
+* start elasticsearch-head
+  - for Elasticsearch 5.x:
+    docker run -p 9100:9100 mobz/elasticsearch-head:5
+  - for Elasticsearch 2.x - 4.x:
+    docker run -p 9100:9100  mobz/elasticsearch-head:2
+  - for Elasticsearch 1.x:
+    docker run -p 9100:9100  mobz/elasticsearch-head:1
+* @open@ "http://localhost:9100/":http://localhost:9100/
+
 h4. Alternatives
 
 h5. Running from the filesystem
