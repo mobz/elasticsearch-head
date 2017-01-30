@@ -1,11 +1,8 @@
 # docker build -t mobz/elasticsearch-head:5-alpine -f Dockerfile-alpine .
 
 FROM node:alpine
-RUN npm install -g grunt
-RUN npm install -g grunt-cli
-RUN npm install    grunt grunt-http-server
 WORKDIR /usr/src/app
-RUN mv /node_modules .
+RUN npm install http-server
 COPY . .
 EXPOSE 9100
-CMD grunt --gruntfile Gruntfile-alpine.js http-server:dev
+CMD node_modules/http-server/bin/http-server _site -p 9100
