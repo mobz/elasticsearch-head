@@ -97,6 +97,7 @@ h5. Contributing an Internationalisation
 * French by "David Pilato":https://twitter.com/dadoonet
 * Portuguese by "caiodangelo":https://github.com/caiodangelo
 * Turkish by "Cemre Mengu":https://github.com/cemremengu
+* Japanese by "Satoshi Kimura":https://github.com/satoshi-kimura
 
 To contribute an internationalisation
 
