@@ -6,6 +6,7 @@
 	 */
 
 	var keys = {};
+	var locale = undefined;
 
 	var format = function(message, args) {
 		var substitute = function() {
@@ -15,9 +16,9 @@
 				return substr; // simple substitution eg {0}
 			}
 			switch(format.shift()) {
-				case "number" : return (new Number(substr)).toLocaleString();
-				case "date" : return (new Date(+substr)).toLocaleDateString(); // date and time require milliseconds since epoch
-				case "time" : return (new Date(+substr)).toLocaleTimeString(); //  eg i18n.text("Key", +(new Date())); for current time
+				case "number" : return (new Number(substr)).toLocaleString(locale);
+				case "date" : return (new Date(+substr)).toLocaleDateString(locale); // date and time require milliseconds since epoch
+				case "time" : return (new Date(+substr)).toLocaleTimeString(locale); //  eg i18n.text("Key", +(new Date())); for current time
 			}
 			var styles = format.join("").split("|").map(function(style) {
 				return style.match(/(-?[\.\d]+)(#|<)([^{}]*)/);
@@ -39,6 +40,10 @@
 	};
 
 	this.i18n = {
+
+		setLocale: function(loc){
+			locale = loc;
+		},
 
 		setKeys: function(strings) {
 			for(var key in strings) {
@@ -87,6 +92,8 @@
 		s.async = false;
 		script0.parentNode.appendChild(s);
 		script0 = s;
+
+		i18n.setLocale(lang);
 	}
 
 	install( langs.shift() ); // always install primary language
