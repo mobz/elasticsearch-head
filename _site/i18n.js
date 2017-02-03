@@ -69,8 +69,11 @@
 })();
 
 (function() {
+	var args = location.search.substring(1).split("&").reduce(function(r, p) {
+		r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
+	}, {});
 	var nav = window.navigator;
-	var userLang = ( nav.languages && nav.languages[0] ) || nav.language || nav.userLanguage;
+	var userLang = args["lang"] || ( nav.languages && nav.languages[0] ) || nav.language || nav.userLanguage;
 	var scripts = document.getElementsByTagName('script');
 	var data = scripts[ scripts.length - 1].dataset;
 	if( ! data["langs"] ) {
