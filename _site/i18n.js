@@ -6,6 +6,7 @@
 	 */
 
 	var keys = {};
+	var locale = undefined;
 
 	var format = function(message, args) {
 		var substitute = function() {
@@ -15,9 +16,9 @@
 				return substr; // simple substitution eg {0}
 			}
 			switch(format.shift()) {
-				case "number" : return (new Number(substr)).toLocaleString();
-				case "date" : return (new Date(+substr)).toLocaleDateString(); // date and time require milliseconds since epoch
-				case "time" : return (new Date(+substr)).toLocaleTimeString(); //  eg i18n.text("Key", +(new Date())); for current time
+				case "number" : return (new Number(substr)).toLocaleString(locale);
+				case "date" : return (new Date(+substr)).toLocaleDateString(locale); // date and time require milliseconds since epoch
+				case "time" : return (new Date(+substr)).toLocaleTimeString(locale); //  eg i18n.text("Key", +(new Date())); for current time
 			}
 			var styles = format.join("").split("|").map(function(style) {
 				return style.match(/(-?[\.\d]+)(#|<)([^{}]*)/);
@@ -39,6 +40,10 @@
 	};
 
 	this.i18n = {
+
+		setLocale: function(loc){
+			locale = loc;
+		},
 
 		setKeys: function(strings) {
 			for(var key in strings) {
@@ -69,8 +74,11 @@
 })();
 
 (function() {
+	var args = location.search.substring(1).split("&").reduce(function(r, p) {
+		r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
+	}, {});
 	var nav = window.navigator;
-	var userLang = ( nav.languages && nav.languages[0] ) || nav.language || nav.userLanguage;
+	var userLang = args["lang"] || ( nav.languages && nav.languages[0] ) || nav.language || nav.userLanguage;
 	var scripts = document.getElementsByTagName('script');
 	var data = scripts[ scripts.length - 1].dataset;
 	if( ! data["langs"] ) {
@@ -84,6 +92,8 @@
 		s.async = false;
 		script0.parentNode.appendChild(s);
 		script0 = s;
+
+		i18n.setLocale(lang);
 	}
 
 	install( langs.shift() ); // always install primary language

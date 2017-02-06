@@ -75,6 +75,7 @@ Parameters may be appended to the url to set an initial state eg. @head/index.ht
 * @dashboard@ experimental feature to open elasticsearch-head in a mode suitable for dashboard / radiator. Accepts one parameter @dashboard=cluster@
 * @auth_user@ adds basic auth credentials to http requests ( requires "elasticsearch-http-basic":https://github.com/karussell/elasticsearch-http-basic plugin or a reverse proxy )
 * @auth_password@ basic auth password as above (note: without "additional security layers":http://security.stackexchange.com/questions/988/is-basic-auth-secure-if-done-over-https, passwords are sent over the network *in the clear* )
+* @lang@ force elasticsearch-head to use specified ui language (eg: en, fr, pt, zh, tr, ja)
 
 h4. Contributing
 
