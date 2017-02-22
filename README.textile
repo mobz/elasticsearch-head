@@ -41,6 +41,18 @@ h4. Running with built in server
 This will start a local webserver running on port 9100 serving elasticsearch-head
 * Best option if you are likely to connect to several different clusters
 
+h4. Running with the local proxy
+
+This is an _experimental feature_ which creates a local proxy for many remote elasticsearch clusters
+
+* configure clusters in proxy/clusters
+* create a file per remote cluster you want to connect to ( see @localhost9200.json@ as example )
+* requires node >= 6.0 
+* @npm install@
+* @npm run proxy@
+
+At the moment it's not very useful since it can't be used with browser front-ends (no CORS), but you can use curl!
+
 h4. Alternatives
 
 h5. Running from the filesystem
