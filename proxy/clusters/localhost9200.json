@@ -1,0 +1,9 @@
+{
+	"name": "localhost:9200",
+	"enabled": true,
+	"recipe": "http-proxy",
+	"bind": 9101,
+	"settings": {
+		"target": "http://localhost:9200"
+	}
+}

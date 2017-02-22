@@ -39,6 +39,18 @@ h4. Running as a plugin of Elasticsearch (deprecated)
 
 This will automatically download the appropriate version of elasticsearch-head from github and run it as a plugin within the elasticsearch cluster. In this mode elasticsearch-head automatically connects to the node that is running it
 
+h4. Running with the local proxy
+
+This is an _experimental feature_ which creates a local proxy for many remote elasticsearch clusters
+
+* configure clusters in proxy/clusters
+* create a file per remote cluster you want to connect to ( see @localhost9200.json@ as example )
+* requires node >= 6.0 
+* @npm install@
+* @npm run proxy@
+
+At the moment it's not very useful since it can't be used with browser front-ends (no CORS), but you can use curl!
+
 h4. Alternatives
 
 * File System: elastisearch-head is a standalone webapp written in good-ol' html5. This means, you can put it up on any webserver, run it directly from the filesystem. It'll even fit on a floppy disk.
