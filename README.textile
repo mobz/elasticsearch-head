@@ -49,7 +49,7 @@ This is an _experimental feature_ which creates a local proxy for many remote el
 * @npm install@
 * @npm run proxy@
 
-At the moment it's not very useful since it can't be used with browser front-ends (no CORS), but you can use curl!
+At the moment it only works with @grunt server@ running on http://localhost:9100
 
 h4. Alternatives
 
