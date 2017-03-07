@@ -2889,6 +2889,7 @@
 					.children().find(":last-child").each(function(i, j) { j.scrollIntoView(false); }).end()
 					.scrollLeft(0);
 			}
+			if (type === 'GET') { query = null; }
 			this.config.cluster.request({
 				url: base_uri + path,
 				type: type,
