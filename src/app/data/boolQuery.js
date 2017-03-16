@@ -52,14 +52,12 @@
 			var clause = {}, query = {};
 			if(op === "match_all") {
 			} else if(op === "query_string") {
-				query["default_field"] = field;
+				query["default_field"] = field.substring(field.indexOf(".")+1);
 				query["query"] = value;
 			} else if(op === "missing") {
-				op = "constant_score"
-				var missing = {}, filter = {};
-				missing["field"] = field;
-				filter["missing"] = missing
-				query["filter"] = filter;
+				op = "exists";
+				bool = "must_not";
+				query["field"] = field.substring(field.indexOf(".")+1);
 			} else {
 				query[field.substring(field.indexOf(".")+1)] = value;
 			}
