@@ -239,7 +239,9 @@
 				node.data_node = !( cluster && cluster.attributes && cluster.attributes.data === "false" );
 				for(var i = 0; i < indices.length; i++) {
 					node.routings[i] = node.routings[i] || { name: indices[i].name, replicas: [] };
-					node.routings[i].max_number_of_shards = indices[i].metadata.settings["index.number_of_shards"];
+					if (indices[i].metadata.settings) {
+						node.routings[i].max_number_of_shards = indices[i].metadata.settings["index.number_of_shards"];
+					}
 					node.routings[i].open = indices[i].state === "open";
 				}
 			});
