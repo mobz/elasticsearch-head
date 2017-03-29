@@ -13,7 +13,7 @@ h4. Running with built in server
 * @git clone git://github.com/mobz/elasticsearch-head.git@
 * @cd elasticsearch-head@
 * @npm install@
-* @grunt server@
+* @npm run start@
 
 * @open@ "http://localhost:9100/":http://localhost:9100/
 
