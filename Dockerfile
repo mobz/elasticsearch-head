@@ -1,4 +1,4 @@
-FROM node
+FROM node:alpine
 MAINTAINER Niko Bellic <niko.bellic@kakaocorp.com>
 
 RUN mkdir -p /usr/src/app
