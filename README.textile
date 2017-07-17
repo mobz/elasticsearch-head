@@ -28,6 +28,11 @@ h4. Running with docker
   
 * @open@ "http://localhost:9100/":http://localhost:9100/
 
+h4. Running as a Chrome extension
+
+* Install "ElasticSearch Head":https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm/ from the Chrome Web Store.
+* Click the extension icon in the toolbar of your web browser.
+
 h4. Running as a plugin of Elasticsearch (deprecated)
 
 * for Elasticsearch 5.x: site plugins are not supported. Run "as a standalone server":#running-with-built-in-server
