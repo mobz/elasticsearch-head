@@ -50,7 +50,7 @@ i18n.setKeys({
 	"IndexInfoMenu.Status": "Indeks Durumu",
 	"IndexInfoMenu.Metadata": "Indeks Metaveri",
 	"IndexCommand.TextToAnalyze": "Analiz edilecek metin",
-	"IndexCommand.ShutdownMessage": "{1} kapatmak için ''{0}'' yazın . Nod bu arayüzden tekrar BAŞLATILAMAZ",
+	"IndexCommand.ShutdownMessage": "{1} kapatmak için ''{0}'' yazın . Node bu arayüzden tekrar BAŞLATILAMAZ",
 	"IndexOverview.PageTitle": "Indeksler Genel Bakış",
 	"IndexSelector.NameWithDocs": "{0} ({1} döküman)",
 	"IndexSelector.SearchIndexForDocs": "{0} indeksinde ara:",
@@ -63,9 +63,9 @@ i18n.setKeys({
 	"Nav.Browser": "Görüntüle",
 	"Nav.ClusterHealth": "Küme Durumu",
 	"Nav.ClusterState": "Küme Statüsü",
-	"Nav.ClusterNodes": "Nod Bilgileri",
+	"Nav.ClusterNodes": "Node Bilgileri",
 	"Nav.Info": "Bilgi",
-	"Nav.NodeStats": "Nod İstatistikleri",
+	"Nav.NodeStats": "Node İstatistikleri",
 	"Nav.Overview": "Genel Bakış",
 	"Nav.Indices": "Indeksler",
 	"Nav.Plugins": "Eklentiler",
@@ -75,13 +75,13 @@ i18n.setKeys({
 	"NodeActionsMenu.Title": "İşlemler",
 	"NodeActionsMenu.Shutdown": "Kapat...",
 	"NodeInfoMenu.Title": "Bilgi",
-	"NodeInfoMenu.ClusterNodeInfo": "Küme Nod Bilgileri",
-	"NodeInfoMenu.NodeStats": "Nod İstatistikleri",
-	"NodeType.Client": "Client Nod",
+	"NodeInfoMenu.ClusterNodeInfo": "Küme Node Bilgileri",
+	"NodeInfoMenu.NodeStats": "Node İstatistikleri",
+	"NodeType.Client": "Client Node",
 	"NodeType.Coord": "Coordinator",
-	"NodeType.Master": "Master Nod",
-	"NodeType.Tribe": "Tribe Nod",
-	"NodeType.Worker": "Worker Nod",
+	"NodeType.Master": "Master Node",
+	"NodeType.Tribe": "Tribe Node",
+	"NodeType.Worker": "Worker Node",
 	"NodeType.Unassigned": "Sahipsiz",
 	"OptimizeForm.OptimizeIndex": "{0} Optimize Et",
 	"OptimizeForm.MaxSegments": "Maksimum Segment Sayısı",
@@ -133,8 +133,8 @@ i18n.setKeys({
 		</ul>\
 		<p>Sorgu tekrarlama çalışırken, prev isimli ekstra bir parametre dönüştürücü fonksiyonuna verilir. Bu sayede karşılaştırmalar ve toplu grafik gösterimleri yapılabilir.</p>\
 		<p>Örnek:<br>\
-		<code>var la = [ root.nodes[Object.keys(root.nodes)[0]].os.load_average[0] ]; return prev ? la.concat(prev) : la;</code> önceki dakika boyunca kümede bulunan ilk nod üzerindeki averaj yükü verir.\
-		Bu sonuç nod için yük grafiği yaratılmasında kullanılabilir.\
+		<code>var la = [ root.nodes[Object.keys(root.nodes)[0]].os.load_average[0] ]; return prev ? la.concat(prev) : la;</code> önceki dakika boyunca kümede bulunan ilk node üzerindeki averaj yükü verir.\
+		Bu sonuç node için yük grafiği yaratılmasında kullanılabilir.\
 		"
 });
 
