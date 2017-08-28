@@ -32,7 +32,7 @@
 		},
 
 		remove: function() {
-			this.el.remove();
+			if ( this.el !== null ) { this.el.remove(); }
 			this.fire("removed", this );
 			this.removeAllObservers();
 			this.el = null;
