@@ -2,7 +2,8 @@ const http = require("http");
 
 const CORS_SETTINGS = {
 	origin: "http://localhost:9100",
-	methods: "GET PUT POST DELETE OPTIONS HEAD"
+	methods: "GET PUT POST DELETE OPTIONS HEAD",
+	headers: "Authorization, Content-Type"
 }
 
 
@@ -26,6 +27,7 @@ clusters.forEach( cluster => {
 
 					res.setHeader("Access-Control-Allow-Origin", CORS_SETTINGS.origin );
 					res.setHeader("Access-Control-Allow-Methods", CORS_SETTINGS.methods );
+					res.setHeader("Access-Control-Allow-Headers", CORS_SETTINGS.headers );
 
 					if (req.method === 'OPTIONS') {
 						res.writeHead(200);
