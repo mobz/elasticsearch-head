@@ -3103,28 +3103,28 @@
 			}.bind(this));
 		},
 		_optimizeIndex_handler: function(index) {
-                        var fields = new app.ux.FieldCollection({
-                                fields: [
-                                        new ui.TextField({ label: i18n.text("OptimizeForm.MaxSegments"), name: "max_num_segments", value: "1", require: true }),
-                                        new ui.CheckField({ label: i18n.text("OptimizeForm.ExpungeDeletes"), name: "only_expunge_deletes", value: false }),
-                                        new ui.CheckField({ label: i18n.text("OptimizeForm.FlushAfter"), name: "flush", value: true }),
-                                        new ui.CheckField({ label: i18n.text("OptimizeForm.WaitForMerge"), name: "wait_for_merge", value: false })
-                                ]
-                        });
-                        var dialog = new ui.DialogPanel({
-                                title: i18n.text("OptimizeForm.OptimizeIndex", index.name),
-                                body: new ui.PanelForm({ fields: fields }),
-                                onCommit: function( panel, args ) {
-                                        if(fields.validate()) {
-                                                this.cluster.post(encodeURIComponent( index.name ) + "/_optimize", fields.getData(), function(r) {
-                                                        alert(JSON.stringify(r));
-                                                });
-                                                dialog.close();
-                                        }
-                                }.bind(this)
-                        }).open();
-                },
-                _forceMergeIndex_handler: function(index) {
+			var fields = new app.ux.FieldCollection({
+				fields: [
+					new ui.TextField({ label: i18n.text("OptimizeForm.MaxSegments"), name: "max_num_segments", value: "1", require: true }),
+					new ui.CheckField({ label: i18n.text("OptimizeForm.ExpungeDeletes"), name: "only_expunge_deletes", value: false }),
+					new ui.CheckField({ label: i18n.text("OptimizeForm.FlushAfter"), name: "flush", value: true }),
+					new ui.CheckField({ label: i18n.text("OptimizeForm.WaitForMerge"), name: "wait_for_merge", value: false })
+				]
+			});
+			var dialog = new ui.DialogPanel({
+				title: i18n.text("OptimizeForm.OptimizeIndex", index.name),
+				body: new ui.PanelForm({ fields: fields }),
+				onCommit: function( panel, args ) {
+					if(fields.validate()) {
+						this.cluster.post(encodeURIComponent( index.name ) + "/_optimize", fields.getData(), function(r) {
+							alert(JSON.stringify(r));
+						});
+						dialog.close();
+					}
+				}.bind(this)
+			}).open();
+		},
+		_forceMergeIndex_handler: function(index) {
                         var fields = new app.ux.FieldCollection({
                                 fields: [
                                         new ui.TextField({ label: i18n.text("ForceMergeForm.MaxSegments"), name: "max_num_segments", value: "1", require: true }),
@@ -3145,8 +3145,7 @@
                                         }
                                 }.bind(this)
                         }).open();
-                },
-
+		},
 		_testAnalyser_handler: function(index) {
 			this.cluster.get(encodeURIComponent( index.name ) + "/_analyze?text=" + encodeURIComponent( prompt( i18n.text("IndexCommand.TextToAnalyze") ) ), function(r) {
 				alert(JSON.stringify(r, true, "  "));
@@ -3774,7 +3773,8 @@
 		_node_handler: function(data) {
 			if(data) {
 				this.prefs.set("app-base_uri", this.cluster.base_uri);
-				this.cluster.setVersion(data.version.number);
+				if(data.version && data.version.number)
+					this.cluster.setVersion(data.version.number);
 			}
 		},
 		
