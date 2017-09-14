@@ -18,6 +18,7 @@
 		_node_handler: function(data) {
 			if(data) {
 				this.prefs.set("app-base_uri", this.cluster.base_uri);
+				this.cluster.setVersion(data.version.number);
 			}
 		},
 		
