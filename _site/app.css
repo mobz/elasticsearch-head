@@ -275,6 +275,7 @@ TABLE.table H3 {
 .uiTable-body {
 	overflow-y: scroll;
 	overflow-x: auto;
+	max-height: 200px;
 }
 
 .uiTable-headers {
