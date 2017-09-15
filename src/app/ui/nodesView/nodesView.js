@@ -78,6 +78,28 @@
 				}.bind(this)
 			}).open();
 		},
+		_forceMergeIndex_handler: function(index) {
+                        var fields = new app.ux.FieldCollection({
+                                fields: [
+                                        new ui.TextField({ label: i18n.text("ForceMergeForm.MaxSegments"), name: "max_num_segments", value: "1", require: true }),
+                                        new ui.CheckField({ label: i18n.text("ForceMergeForm.ExpungeDeletes"), name: "only_expunge_deletes", value: false }),
+                                        new ui.CheckField({ label: i18n.text("ForceMergeForm.FlushAfter"), name: "flush", value: true })
+                                ]
+                        });
+                        var dialog = new ui.DialogPanel({
+                                title: i18n.text("ForceMergeForm.ForceMergeIndex", index.name),
+                                body: new ui.PanelForm({ fields: fields }),
+                                onCommit: function( panel, args ) {
+                                        if(fields.validate()) {
+
+                                                this.cluster.post(encodeURIComponent( index.name ) + "/_forcemerge?"+jQuery.param(fields.getData()), null, function(r) {
+                                                        alert(JSON.stringify(r));
+                                                });
+                                                dialog.close();
+                                        }
+                                }.bind(this)
+                        }).open();
+		},
 		_testAnalyser_handler: function(index) {
 			this.cluster.get(encodeURIComponent( index.name ) + "/_analyze?text=" + encodeURIComponent( prompt( i18n.text("IndexCommand.TextToAnalyze") ) ), function(r) {
 				alert(JSON.stringify(r, true, "  "));
@@ -205,7 +227,7 @@
 							{ text: i18n.text("IndexActionsMenu.NewAlias"), onclick: function() { this._newAliasAction_handler(index); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Refresh"), onclick: function() { this._postIndexAction_handler("_refresh", index, false); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Flush"), onclick: function() { this._postIndexAction_handler("_flush", index, false); }.bind(this) },
-							{ text: i18n.text("IndexActionsMenu.Optimize"), onclick: function () { this._optimizeIndex_handler(index); }.bind(this) },
+							{ text: this.cluster.versionAtLeast("5.0.0.") ? i18n.text("IndexActionsMenu.ForceMerge") : i18n.text("IndexActionsMenu.Optimize"), onclick: this.cluster.versionAtLeast("5.0.0.") ? function () { this._forceMergeIndex_handler(index); }.bind(this) : function () { this._optimizeIndex_handler(index); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Snapshot"), disabled: closed, onclick: function() { this._postIndexAction_handler("_gateway/snapshot", index, false); }.bind(this) },
 							{ text: i18n.text("IndexActionsMenu.Analyser"), onclick: function() { this._testAnalyser_handler(index); }.bind(this) },
 							{ text: (index.state === "close") ? i18n.text("IndexActionsMenu.Open") : i18n.text("IndexActionsMenu.Close"), onclick: function() { this._postIndexAction_handler((index.state === "close") ? "_open" : "_close", index, true); }.bind(this) },
