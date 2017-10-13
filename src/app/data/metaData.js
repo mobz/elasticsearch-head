@@ -148,7 +148,7 @@
 				var mapping = state.metadata.indices[index].mappings;
 				for (var type in mapping) {
 					indices[index].types.push(type);
-					if ( type in types) {
+					if ( types.hasOwnProperty(type) ) { // Firefox object has proto named watch, conflicted
 						types[type].indices.push(index);
 					} else {
 						types[type] = {
