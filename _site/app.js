@@ -1300,6 +1300,9 @@
 		request: function( params ) {
 			return $.ajax( $.extend({
 				url: this.base_uri + params.path,
+				headers: {
+					"Content-Type": "application/json"
+				},
 				contentType: "application/json",
 				dataType: "json",
 				error: function(xhr, type, message) {
