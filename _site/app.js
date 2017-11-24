@@ -1,3 +1,21 @@
+// convert LosslessNumber to Decimal
+function reviver (key, value) {
+  if (value && value.isLosslessNumber) {
+    return new Decimal(value.toString())
+  }
+  return value
+}
+
+// convert Decimal to LosslessNumber
+function replacer (key, value) {
+  if (value instanceof Decimal) {
+    return new LosslessJSON.LosslessNumber(value.toString());
+  }
+  else {
+    return value;
+  }
+}
+
 (function() {
 
 	var window = this,
@@ -1104,7 +1122,7 @@
 			this.data = res.hits.hits.map(function(hit) {
 				var row = (function(path, spec, row) {
 					for(var prop in spec) {
-						if(acx.isObject(spec[prop])) {
+						if (spec[prop].constructor.name != "Decimal" && acx.isObject(spec[prop])) {
 							arguments.callee(path.concat(prop), spec[prop], row);
 						} else if(acx.isArray(spec[prop])) {
 							if(spec[prop].length) {
@@ -2257,6 +2275,9 @@
 					results.push( { tag: "LI", cls: this.expando( value[ key ] ), children: children } );
 				}, this);
 				return [ "{ ", ((results.length > 0) ? { tag: "UL", cls: "uiJsonPretty-object", children: results } : null ),  "}" ];
+			},
+			"decimal": function(value) {
+				return this['value']('number', value.toString())
 			},
 			"number": function (value) {
 				return this['value']('number', value.toString());
