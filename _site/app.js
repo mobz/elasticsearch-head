@@ -1307,7 +1307,7 @@
 						console.log({ "XHR Error": type, "message": message });
 					}
 				}
-			},  params) );
+			},  JSON.Stringfy(params)) );
 		},
 		"get": function(path, success, error) { return this.request( { type: "GET", path: path, success: success, error: error } ); },
 		"post": function(path, data, success, error) { return this.request( { type: "POST", path: path, data: data, success: success, error: error } ); },
