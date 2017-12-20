@@ -6883,7 +6883,7 @@ jQuery.extend({
 		isLocal: rlocalProtocol.test( ajaxLocParts[ 1 ] ),
 		global: true,
 		type: "GET",
-		contentType: "application/x-www-form-urlencoded",
+		contentType: "application/json",
 		processData: true,
 		async: true,
 		/*
