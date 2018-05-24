@@ -2,7 +2,7 @@ const http = require("http");
 
 const CORS_SETTINGS = {
 	origin: "http://localhost:9100",
-	methods: "GET PUT POST DELETE OPTIONS HEAD",
+	methods: "GET, PUT, POST, DELETE, OPTIONS, HEAD",
 	headers: "Authorization, Content-Type"
 }
 
