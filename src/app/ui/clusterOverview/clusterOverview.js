@@ -17,6 +17,12 @@
 	}
 
 	function nodeSort_addr( a, b ) {
+		if (!a.cluster.transport_address) {
+			return -1;
+		}
+		if (!b.cluster.transport_address) {
+			return 1;
+		}
 		if (!(a.cluster && b.cluster)) {
 			return 0;
 		}
