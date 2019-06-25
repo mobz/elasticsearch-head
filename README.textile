@@ -35,7 +35,7 @@ h4. Running as a Chrome extension
 
 h4. Running as a plugin of Elasticsearch (deprecated)
 
-* for Elasticsearch 5.x: site plugins are not supported. Run "as a standalone server":#running-with-built-in-server
+* for Elasticsearch 5.x, 6.x, and 7.x: site plugins are not supported. Run "as a standalone server":#running-with-built-in-server
 * for Elasticsearch 2.x: @sudo elasticsearch/bin/plugin install mobz/elasticsearch-head@
 * for Elasticsearch 1.x: @sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head/1.x@
 * for Elasticsearch 0.x: @sudo elasticsearch/bin/plugin -install mobz/elasticsearch-head/0.9@
