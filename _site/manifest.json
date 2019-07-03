@@ -1,0 +1,25 @@
+{  
+    "manifest_version": 2,
+    "name": "elasticsearch-head",  
+    "version": "1.0.8",
+    "background": { 
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "icons": {
+      "16": "base/favicon.png"
+    },
+    "content_security_policy": "script-src 'self' 'sha256-Rpn+rjJuXCjZBPOPhhVloRXuzAUBRnAas+6gKVDohs0=' 'unsafe-eval'; object-src 'self';",
+    "description": "Chrome Extension containing the excellent ElasticSearch Head application.",  
+    "browser_action": {  
+      "default_icon": "base/favicon.png" ,
+      "default_title": "es-head"
+    },
+    "content_scripts":[{
+        "all_frames": false,
+        "matches":["*://*/"],
+        "js":["background.js"],
+        "run_at": "document_end"
+    }]
+  } 
+  
