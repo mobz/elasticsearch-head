@@ -3786,8 +3786,12 @@
 		//点击连接按钮
 		_reconnect_handler: function() {
 			var base_uri = this.el.find(".uiClusterConnect-uri").val();
-			
-			var url=base_uri.substring(0,base_uri.indexOf("?")-1)
+			var url;
+			if(base_uri.indexOf("?")!==-1){
+				url=base_uri.substring(0,base_uri.indexOf("?")-1)
+			}else{
+				url=base_uri;
+			}
 			var argstr=base_uri.substring(base_uri.indexOf("?")+1,base_uri.length-1)
 			
 			let args = argstr.split("&").reduce(function(r, p) {
