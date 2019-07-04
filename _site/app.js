@@ -3792,7 +3792,7 @@
 			}else{
 				url=base_uri;
 			}
-			var argstr=base_uri.substring(base_uri.indexOf("?")+1,base_uri.length-1)
+			var argstr=base_uri.substring(base_uri.indexOf("?")+1)
 			
 			let args = argstr.split("&").reduce(function(r, p) {
 					r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
