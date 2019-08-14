@@ -3775,7 +3775,7 @@
 			this.el = $.joey(this._main_template());
 			this.cluster.get( "", this._node_handler );
 		},
-		
+
 		_node_handler: function(data) {
 			if(data) {
 				this.prefs.set("app-base_uri", this.cluster.base_uri);
@@ -3783,7 +3783,7 @@
 					this.cluster.setVersion(data.version.number);
 			}
 		},
-		
+
 		_reconnect_handler: function() {
 			var base_uri = this.el.find(".uiClusterConnect-uri").val();
 			var url;
@@ -3792,18 +3792,18 @@
 			} else {
 				url = base_uri;
 			}
-			var argstr = base_uri.substring(base_uri.indexOf("?")+1, base_uri.length-1);			
+			var argstr = base_uri.substring(base_uri.indexOf("?")+1, base_uri.length);
 			var args = argstr.split("&").reduce(function(r, p) {
-				r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); 
+				r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]);
 				return r;
-			}, {});		
+			}, {});
 			$("body").empty().append(new app.App("body", { id: "es",
 				base_uri: url,
 			 	auth_user : args["auth_user"] || "",
 			 	auth_password : args["auth_password"] || ""
 			}));
 		},
-		
+
 		_main_template: function() {
 			return { tag: "SPAN", cls: "uiClusterConnect", children: [
 				{ tag: "INPUT", type: "text", cls: "uiClusterConnect-uri", onkeyup: function( ev ) {
