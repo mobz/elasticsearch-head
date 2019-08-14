@@ -59,6 +59,10 @@ module.exports = function(grunt) {
 				cwd: 'src/app/lang/',
 				src: '**',
 				dest: '_site/lang/'
+			},
+			chrome: {
+				src: 'src/chrome_ext/*.*',
+				dest: '_site/'
 			}
 		},
 

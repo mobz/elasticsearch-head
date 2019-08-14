@@ -3783,27 +3783,25 @@
 					this.cluster.setVersion(data.version.number);
 			}
 		},
-		//点击连接按钮
+		
 		_reconnect_handler: function() {
 			var base_uri = this.el.find(".uiClusterConnect-uri").val();
 			var url;
-			if(base_uri.indexOf("?")!==-1){
-				url=base_uri.substring(0,base_uri.indexOf("?")-1)
-			}else{
-				url=base_uri;
+			if(base_uri.indexOf("?") !== -1) {
+				url = base_uri.substring(0, base_uri.indexOf("?")-1);
+			} else {
+				url = base_uri;
 			}
-			var argstr=base_uri.substring(base_uri.indexOf("?")+1)
-			
-			let args = argstr.split("&").reduce(function(r, p) {
-					r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); return r;
-				}, {});
-		
-			$("body").empty().append(new app.App("body", 
-			{ id: "es",
-			 base_uri: url,
-			 auth_user : args["auth_user"]||"",
-			 auth_password : args["auth_password"]||""
-			 }));
+			var argstr = base_uri.substring(base_uri.indexOf("?")+1, base_uri.length-1);			
+			var args = argstr.split("&").reduce(function(r, p) {
+				r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]); 
+				return r;
+			}, {});		
+			$("body").empty().append(new app.App("body", { id: "es",
+				base_uri: url,
+			 	auth_user : args["auth_user"] || "",
+			 	auth_password : args["auth_password"] || ""
+			}));
 		},
 		
 		_main_template: function() {
