@@ -32,6 +32,7 @@ h4. Running as a Chrome extension
 
 * Install "ElasticSearch Head":https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm/ from the Chrome Web Store.
 * Click the extension icon in the toolbar of your web browser.
+* Note that you don't need to "enable CORS":#enable-cors-in-elasticsearch with this method.
 
 h4. Running as a plugin of Elasticsearch (deprecated)
 
@@ -68,7 +69,7 @@ By default elasticsearch exposes a http rest API on port 9200 which elasticsearc
 
 h4. Enable CORS in elasticsearch
 
-When not running as a plugin of elasticsearch (which is not even possible from version 5) you must enable "CORS":http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-http.html in elasticsearch otherwise your browser will rejects requests which appear insecure.
+When not running as a Chrome extension or as a plugin of elasticsearch (which is not even possible from version 5), you must enable "CORS":https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-http.html in elasticsearch, or else your browser will reject elasticsearch-head's requests due to violation of the same-origin policy.
 
 In elasticsearch configuration;
 
