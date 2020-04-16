@@ -125,6 +125,7 @@ h5. Contributing an Internationalisation
 * Portuguese by "caiodangelo":https://github.com/caiodangelo
 * Turkish by "Cemre Mengu":https://github.com/cemremengu
 * Japanese by "Satoshi Kimura":https://github.com/satoshi-kimura
+* Vietnamese by "Du Tran":https://github.com/quangdutran
 
 To contribute an internationalisation
 
