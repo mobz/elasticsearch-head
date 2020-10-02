@@ -1217,7 +1217,11 @@
 				query["query"] = value;
 			} else if(op === "missing") {
 				op = "exists";
-				bool = "must_not";
+				if (bool === "must_not") {
+					bool = "must"
+				} else if (bool === "must") {
+					bool = "must_not"
+				}
 				query["field"] = field.substring(field.indexOf(".")+1);
 			} else {
 				query[field.substring(field.indexOf(".")+1)] = value;
