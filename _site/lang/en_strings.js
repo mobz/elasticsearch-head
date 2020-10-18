@@ -51,6 +51,7 @@ i18n.setKeys({
 	"IndexInfoMenu.Status": "Index Status",
 	"IndexInfoMenu.Metadata": "Index Metadata",
 	"IndexCommand.TextToAnalyze": "Text to Analyse",
+	"IndexCommand.AnalyzerToUse": "Name of Analyzer (built-in or customized)",
 	"IndexCommand.ShutdownMessage": "type ''{0}'' to shutdown {1}. Node can NOT be restarted from this interface",
 	"IndexOverview.PageTitle": "Indices Overview",
 	"IndexSelector.NameWithDocs": "{0} ({1} docs)",
