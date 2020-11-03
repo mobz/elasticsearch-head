@@ -80,7 +80,7 @@
 	var nav = window.navigator;
 	var userLang = args["lang"] || ( nav.languages && nav.languages[0] ) || nav.language || nav.userLanguage;
 	var scripts = document.getElementsByTagName('script');
-	var data = scripts[ scripts.length - 1].dataset;
+	var data = [].find.call(scripts, elm => elm.dataset && elm.dataset.langs).dataset;
 	if( ! data["langs"] ) {
 		return;
 	}
