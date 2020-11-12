@@ -29,6 +29,8 @@
     "grunt-contrib-jasmine": "1.0.3",
     "karma": "1.3.0",
     "grunt-karma": "2.0.0",
-    "http-proxy": "1.16.x"
+    "http-proxy": "1.16.x",
+    "decimal.js": "^7.3.0",
+    "lossless-json": "^1.0.1"
   }
 }
