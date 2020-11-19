@@ -1,8 +1,15 @@
 # docker build -t mobz/elasticsearch-head:5-alpine -f Dockerfile-alpine .
 
 FROM node:alpine
+
+# wrap Node.js process with tini to handle stop signal
+RUN apk add --no-cache --update tini
+
 WORKDIR /usr/src/app
 RUN npm install http-server
 COPY . .
+
 EXPOSE 9100
-CMD node_modules/http-server/bin/http-server _site -p 9100
+
+ENTRYPOINT ["tini", "--"]
+CMD ["node_modules/http-server/bin/http-server", "_site", "-p", "9100"]
