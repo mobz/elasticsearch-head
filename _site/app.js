@@ -2429,7 +2429,7 @@
 				var height = parent.height() || ( $(document).height() - parent.offset().top - 41 ); // 41 = height in px of .uiTable-tools + uiTable-header
 				var width = parent.width();
 				this.el.width( width );
-				this.body.width( width ).height( height );
+				this.body.width( width );
 			}
 			this._super(parent);
 		},
