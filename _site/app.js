@@ -3662,7 +3662,7 @@
 						this._refreshButton
 					]
 				}),
-				{ tag: "DIV", cls: "uiClusterOverview-table" }
+				{ tag: "DIV", cls: "uiClusterOverview-table", css: { overflow: "auto" } }
 			] };
 		}
 	});
